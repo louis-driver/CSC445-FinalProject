@@ -11,6 +11,10 @@ public class Node
     private Node sibling11;
     private boolean isEdge;
 
+    //Creates a node that has a value for:
+    // color: a state to determine whose piece is on the node
+    // ID: the position of the node on the Abalone board
+    // isEdge: if the node is valid place for a playing piece
     public Node(int color, int ID, boolean edge)
     {
         this.color = color;
@@ -18,6 +22,8 @@ public class Node
         isEdge = edge; 
     }
 
+    //Sets the sibling node in a given direction based on 
+    // a clock face. 
     public void setSibling(Node Node, int sibNum)
     {
         if(sibNum == 1)
@@ -34,11 +40,16 @@ public class Node
             sibling11 = Node;
     }
 
+    //Defines which color the node should be in a
+    // GUI. 0 for background, 1 for Player1's piece color,
+    // and 2 for Player2's piece color.
     public void setColor(int color)
     {
         this.color = color;
     }
 
+    //Returns the sibling node for a given clock
+    // orientation
     public Node getSibling(int sibNum)
     {
     if(sibNum == 1)
@@ -60,6 +71,9 @@ public class Node
         return color;
     }
 
+    //Specifies if the node is a playable location (false)
+    // or one signifying a point may be scored (true) 
+    // when a piece reaches this node on the Abalone board.
     public boolean isEdge()
     {
         return isEdge;
