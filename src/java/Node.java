@@ -50,7 +50,7 @@ public class Node
     else if(sibNum == 7)
         return sibling7;
     else if(sibNum == 9)
-        return sibling5;
+        return sibling9;
     else
         return sibling11;
     }
@@ -58,6 +58,11 @@ public class Node
     public int getColor()
     {
         return color;
+    }
+
+    public int getID()
+    {
+        return positionID;
     }
 
     public boolean isEdge()
