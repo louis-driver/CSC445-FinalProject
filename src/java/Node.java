@@ -61,7 +61,7 @@ public class Node
     else if(sibNum == 7)
         return sibling7;
     else if(sibNum == 9)
-        return sibling5;
+        return sibling9;
     else
         return sibling11;
     }
@@ -70,15 +70,24 @@ public class Node
     {
         return color;
     }
+    
+    
+    //Returns the positionID of the node
+    
+    public int getID()
+    {
+        return positionID;
+    }
 
     //Specifies if the node is a playable location (false)
     // or one signifying a point may be scored (true) 
     // when a piece reaches this node on the Abalone board.
+
     public boolean isEdge()
     {
         return isEdge;
     }
-
+   
 }
 
 
