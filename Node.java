@@ -79,6 +79,14 @@ public class Node
     {
         return color;
     }
+    
+    
+    //Returns the positionID of the node
+    
+    public int getID()
+    {
+        return positionID;
+    }
 
     public Ellipse2D getPiece()
     {
@@ -93,11 +101,12 @@ public class Node
     //Specifies if the node is a playable location (false)
     // or one signifying a point may be scored (true) 
     // when a piece reaches this node on the Abalone board.
+
     public boolean isEdge()
     {
         return isEdge;
     }
-
+   
 }
 
 
