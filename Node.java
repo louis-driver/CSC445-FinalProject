@@ -1,3 +1,6 @@
+
+import java.awt.geom.Ellipse2D;
+
 public class Node
 {
 
@@ -10,9 +13,10 @@ public class Node
     private Node sibling9;
     private Node sibling11;
     private boolean isEdge;
+    private Ellipse2D.Double piece;
 
     //Creates a node that has a value for:
-    // color: a state to determine whose piece is on the node
+    // color: a state to determine whose piece is on the node; 0=board, 1=white/player1, 2=black/player2
     // ID: the position of the node on the Abalone board
     // isEdge: if the node is valid place for a playing piece
     public Node(int color, int ID, boolean edge)
@@ -48,6 +52,11 @@ public class Node
         this.color = color;
     }
 
+    public void setPiece(Ellipse2D.Double piece)
+    {
+        this.piece = piece;
+    }
+
     //Returns the sibling node for a given clock
     // orientation
     public Node getSibling(int sibNum)
@@ -61,7 +70,7 @@ public class Node
     else if(sibNum == 7)
         return sibling7;
     else if(sibNum == 9)
-        return sibling5;
+        return sibling9;
     else
         return sibling11;
     }
@@ -69,6 +78,16 @@ public class Node
     public int getColor()
     {
         return color;
+    }
+
+    public Ellipse2D getPiece()
+    {
+        return piece;
+    }
+
+    public int getPosition()
+    {
+        return positionID;
     }
 
     //Specifies if the node is a playable location (false)
