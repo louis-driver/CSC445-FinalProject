@@ -1,6 +1,6 @@
 
-public class NodeTest {
-    
+public class NodeTest
+{
     public static void main(String[] args)
     {
         Node node1 = new Node(1, 1, false);
@@ -11,8 +11,6 @@ public class NodeTest {
 
         System.out.println(node1.getColor());
         System.out.println(node1.getSibling(1).getColor());
-
-
     }
 }
 
