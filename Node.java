@@ -80,9 +80,7 @@ public class Node
         return color;
     }
     
-    
     //Returns the positionID of the node
-    
     public int getID()
     {
         return positionID;
@@ -91,11 +89,6 @@ public class Node
     public Ellipse2D getPiece()
     {
         return piece;
-    }
-
-    public int getPosition()
-    {
-        return positionID;
     }
 
     //Specifies if the node is a playable location (false)
