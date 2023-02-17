@@ -3,7 +3,6 @@ import java.awt.geom.Ellipse2D;
 
 public class Node
 {
-
     private int color;
     private int positionID;
     private Node sibling1;
@@ -52,6 +51,7 @@ public class Node
         this.color = color;
     }
 
+    //Defines the piece size and location within a graphics window
     public void setPiece(Ellipse2D.Double piece)
     {
         this.piece = piece;
@@ -71,10 +71,15 @@ public class Node
         return sibling7;
     else if(sibNum == 9)
         return sibling9;
-    else
+    else if(sibNum == 11)
         return sibling11;
+    else
+        return null;
     }
 
+    //Returns an int representation of a node's color
+    // 0 for background, 1 for Player1's piece color,
+    // and 2 for Player2's piece color.
     public int getColor()
     {
         return color;
@@ -86,6 +91,8 @@ public class Node
         return positionID;
     }
 
+    //Returns the Ellipse2D representation of the
+    // node for graphical display
     public Ellipse2D getPiece()
     {
         return piece;
@@ -94,12 +101,10 @@ public class Node
     //Specifies if the node is a playable location (false)
     // or one signifying a point may be scored (true) 
     // when a piece reaches this node on the Abalone board.
-
     public boolean isEdge()
     {
         return isEdge;
     }
-   
 }
 
 
