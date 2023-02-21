@@ -75,6 +75,71 @@ public class AbaloneGraph
 
     private void setSiblings()
     {
+        boolean incrementing = true;
+        int rowSize = 6;
+        int numRows = 11;
+        int currPosition = 0;
+
+        //TODO test sibling nodes to see if they start null so I can only set those with actual siblings
+        for (int i = 0; i < numRows; ++i)
+        {
+            for (int j = 0; j < rowSize; ++j)
+            {
+                if (rowSize == 11)
+                    incrementing = false;
+
+                if (incrementing)
+                {
+                    graph[currPosition].setSibling(graph[currPosition+rowSize], 7);
+                    graph[currPosition].setSibling(graph[currPosition+rowSize+1], 5);
+
+                    if (rowSize==6)
+                    {
+                        graph[currPosition].setSibling(null, 1);
+                        graph[currPosition].setSibling(null, 11);
+                    }
+                    else if (j==0)
+                    {
+                        graph[currPosition].setSibling(graph[currPosition-rowSize+1], 1);
+                        graph[currPosition].setSibling(graph[currPosition+1], 3);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize+1], 5);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize], 7);
+                        graph[currPosition].setSibling(null, 9);
+                        graph[currPosition].setSibling(null, 11);
+                    }
+                    else if (j==rowSize-1)
+                    {
+                        graph[currPosition].setSibling(null, 1);
+                        graph[currPosition].setSibling(null, 3);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize+1], 5);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize], 7);
+                        graph[currPosition].setSibling(graph[currPosition-1], 9);
+                        graph[currPosition].setSibling(graph[currPosition+1], 11);
+                    }
+                    else if (rowSize!=6)
+                    {
+                        graph[currPosition].setSibling(graph[currPosition-rowSize+1], 1);
+                        graph[currPosition].setSibling(graph[currPosition+1], 3);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize+1], 5);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize], 7);
+                        graph[currPosition].setSibling(graph[currPosition-1], 9);
+                        graph[currPosition].setSibling(graph[currPosition+1], 11);
+                    }
+
+                }
+                else //I.e. Player1/Bottom side of the board
+                {
+
+                }
+
+                System.out.println(graph[currPosition]);
+                ++currPosition;
+            }
+            if (incrementing)
+                ++rowSize;
+            else
+                --rowSize;
+        }
 
     }
 
