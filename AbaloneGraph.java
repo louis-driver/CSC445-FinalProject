@@ -9,7 +9,7 @@ public class AbaloneGraph
     public static void main(String[] args)
     {
         AbaloneGraph graph = new AbaloneGraph();
-        for (int i = 0; i < 30; ++i)
+        for (int i = 0; i < 91; ++i)
             graph.printSiblings(i);
     }
 
@@ -129,7 +129,33 @@ public class AbaloneGraph
                         graph[currPosition].setSibling(graph[currPosition+1], 11);
                     }
                 }
-                //TODO create the opposite of the functionality above for the decreasing rowSize and specialty for rowSize 11
+                else if (rowSize==11)
+                {
+                    //Node on left edge of board
+                    if (j==0)
+                    {
+                        graph[currPosition].setSibling(graph[currPosition-rowSize+1], 1);
+                        graph[currPosition].setSibling(graph[currPosition+1], 3);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize+1], 5);
+                    }
+                    //Node on right edge of board
+                    else if (j==rowSize-1)
+                    {
+                        graph[currPosition].setSibling(graph[currPosition+rowSize], 7);
+                        graph[currPosition].setSibling(graph[currPosition-1], 9);
+                        graph[currPosition].setSibling(graph[currPosition-rowSize], 11);
+                    }
+                    //Non-edge node
+                    else
+                    {
+                        graph[currPosition].setSibling(graph[currPosition-rowSize+1], 1);
+                        graph[currPosition].setSibling(graph[currPosition+1], 3);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize+1], 5);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize], 7);
+                        graph[currPosition].setSibling(graph[currPosition-1], 9);
+                        graph[currPosition].setSibling(graph[currPosition-rowSize], 11);
+                    }
+                }
                 else //I.e. Player1/Bottom side of the board
                 {
                     //Sibling nodes visually above are always set when rowSize is decreasing
@@ -146,7 +172,13 @@ public class AbaloneGraph
                     // side in addition to siblings 1 and 11
                     else if (rowSize==6 && j==rowSize-1)
                     {
-                        graph[currPosition].setSibling(graph[currPosition+1], 9);
+                        graph[currPosition].setSibling(graph[currPosition-1], 9);
+                    }
+                    //Siblings 5 and 7 (i.e. the visually lower nodes) are null
+                    else if (rowSize==6)
+                    {
+                        graph[currPosition].setSibling(graph[currPosition+1], 3);
+                        graph[currPosition].setSibling(graph[currPosition-1], 9);
                     }
                     //Siblings 7 and 9 are null as the node is on the left edge of the graph
                     else if (j==0)
