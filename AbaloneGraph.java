@@ -1,10 +1,6 @@
 public class AbaloneGraph
 {
     private Node[] graph = new Node[91];
-    //Create array or arraylist of 91 nodes for the entire board
-    // 61 of the nodes will be playable nodes, the other 30 are border nodes
-
-    //iterate through list of nodes, then assign the sibling nodes to each one
 
     public static void main(String[] args)
     {
@@ -17,9 +13,9 @@ public class AbaloneGraph
     {
         createGraph();
         this.setSiblings();
-        this.printNodes();
     }
 
+    //Creates all nodes in the abalone board graph
     private void createGraph()
     {
         boolean incrementing = true;
@@ -76,6 +72,7 @@ public class AbaloneGraph
         }
     }
 
+    //Sets all siblings for each node
     private void setSiblings()
     {
         boolean incrementing = true;
@@ -83,7 +80,6 @@ public class AbaloneGraph
         int numRows = 11;
         int currPosition = 0;
 
-        //TODO null siblings need not be set
         for (int i = 0; i < numRows; ++i)
         {
             for (int j = 0; j < rowSize; ++j)
