@@ -128,14 +128,47 @@ public class AbaloneGraph
                         graph[currPosition].setSibling(graph[currPosition-1], 9);
                         graph[currPosition].setSibling(graph[currPosition+1], 11);
                     }
-
                 }
+                //TODO create the opposite of the functionality above for the decreasing rowSize and specialty for rowSize 11
                 else //I.e. Player1/Bottom side of the board
                 {
+                    //Sibling nodes visually above are always set when rowSize is decreasing
+                    graph[currPosition].setSibling(graph[currPosition-rowSize], 11);
+                    graph[currPosition].setSibling(graph[currPosition-rowSize-1], 1);
 
+                    //The left-most node of the starting row only has its sibling on the right
+                    // side in addition to siblings 1 and 11
+                    if (rowSize==6 && j==0)
+                    {
+                        graph[currPosition].setSibling(graph[currPosition+1], 3);
+                    }
+                    //The right-most node of the starting row only has its sibling on the left
+                    // side in addition to siblings 1 and 11
+                    else if (rowSize==6 && j==rowSize-1)
+                    {
+                        graph[currPosition].setSibling(graph[currPosition+1], 9);
+                    }
+                    //Siblings 7 and 9 are null as the node is on the left edge of the graph
+                    else if (j==0)
+                    {
+                        graph[currPosition].setSibling(graph[currPosition+1], 3);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize], 5);
+                    }
+                    //Siblings 3 and 5 are null as the node is on the right edge of the graph
+                    else if (j==rowSize-1)
+                    {
+                        graph[currPosition].setSibling(graph[currPosition+rowSize-1], 7);
+                        graph[currPosition].setSibling(graph[currPosition-1], 9);
+                    }
+                    //All siblings are set as the node is not along an edge
+                    else if (rowSize!=6)
+                    {
+                        graph[currPosition].setSibling(graph[currPosition+1], 3);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize], 5);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize-1], 7);
+                        graph[currPosition].setSibling(graph[currPosition-1], 9);
+                    }
                 }
-
-                System.out.println(graph[currPosition]);
                 ++currPosition;
             }
             if (incrementing)
