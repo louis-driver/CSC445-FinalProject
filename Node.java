@@ -105,6 +105,12 @@ public class Node
     {
         return isEdge;
     }
+
+    public String toString()
+    {
+        String result = "Position: " + getID() + " Color: " + getColor() + " IsEdge: " + isEdge();
+        return result;
+    }
 }
 
 
