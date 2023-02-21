@@ -64,13 +64,12 @@ public class AbaloneGraph
                 }
 
                 System.out.println(graph[currPosition]);
-                if (incrementing)
-                    ++rowSize;
-                else
-                    --rowSize;
-
                 ++currPosition;
             }
+            if (incrementing)
+                ++rowSize;
+            else
+                --rowSize;
         }
     }
 
