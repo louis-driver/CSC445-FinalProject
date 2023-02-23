@@ -207,6 +207,20 @@ public class AbaloneGraph
 
     }
 
+    //Returns the node from a given position in the graph array
+    public Node getNode(int position)
+    {
+        return graph[position];
+    }
+
+    //TODO implement a function that determines whether or not the path following two nodes is a valid Abalone move
+    public boolean isValidMove()
+    {
+        boolean validity = false;
+        //implement checks
+        return validity;
+    }
+
     public void printNodes()
     {
         for (Node n : graph)
