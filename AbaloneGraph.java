@@ -221,6 +221,29 @@ public class AbaloneGraph
         return validity;
     }
 
+    //TODO update each node along the path of the moving pieces
+    public void makeMove(Node first, Node last, int direction)
+    {
+        //traverse a path updating nodes until the last node is updated
+        boolean updated = false;
+        Node currNode = first;
+        int prevDirection = (direction+6) % 6; //used to reference previous nodes
+        while (!updated)
+        {
+            //Set currNode to the previous node's color if it is not the first node
+            if (currNode != first) 
+                currNode.setColor(currNode.getSibling(prevDirection).getColor());
+            //Set the current node's color to the board's color if it is the first node in the path
+            else
+                currNode.setColor(0);
+            
+            if (currNode == last)
+                updated = true;
+            if (currNode.getSibling(direction) != null)
+                currNode = currNode.getSibling(direction);
+        }
+    }
+
     public void printNodes()
     {
         for (Node n : graph)
