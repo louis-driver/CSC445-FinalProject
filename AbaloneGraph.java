@@ -7,6 +7,7 @@ public class AbaloneGraph
         AbaloneGraph graph = new AbaloneGraph();
         for (int i = 0; i < 91; ++i)
             graph.printSiblings(i);
+        System.out.println(graph.direction(graph.getNode(0), graph.getNode(1)));
     }
 
     public AbaloneGraph()
@@ -238,5 +239,26 @@ public class AbaloneGraph
         }
         System.out.println();
     }
+
+    public int direction(Node n1, Node n2)
+    {
+        int sibNum = -1;
+        for(int i=1; i<12; i+=2)
+        {
+            if(n1.getSibling(i)!= null && n1.getSibling(i).equals(n2))
+            {
+                sibNum = i;
+            }
+        } 
+        return sibNum;
+
+    }
+
+    public int destination(Node first, Node second)
+    {
+        return 1;
+
+    }
+
 
 }
