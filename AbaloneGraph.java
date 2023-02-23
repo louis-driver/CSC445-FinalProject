@@ -214,14 +214,6 @@ public class AbaloneGraph
         return graph[position];
     }
 
-    //TODO implement a function that determines whether or not the path following two nodes is a valid Abalone move
-    public boolean isValidMove()
-    {
-        boolean validity = false;
-        //implement checks
-        return validity;
-    }
-
     //TODO update each node along the path of the moving pieces
     public void makeMove(Node first, Node last, int direction)
     {
@@ -263,6 +255,8 @@ public class AbaloneGraph
         System.out.println();
     }
 
+    //Returns the direction to traverse between two sibling nodes
+    //Returns -1 if the nodes are not siblings
     public int getDirection(Node n1, Node n2)
     {
         int sibNum = -1;
@@ -276,12 +270,4 @@ public class AbaloneGraph
         return sibNum;
 
     }
-
-    public int destination(Node first, Node second)
-    {
-        return 1;
-
-    }
-
-
 }
