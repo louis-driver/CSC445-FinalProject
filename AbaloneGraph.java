@@ -214,10 +214,9 @@ public class AbaloneGraph
         return graph[position];
     }
 
-    //TODO update each node along the path of the moving pieces
+    //Traverses a path updating nodes until all nodes in the path are updated
     public void makeMove(Node first, Node last, int direction)
     {
-        //traverse a path updating nodes until the last node is updated
         boolean updated = false;
         Node currNode = first;
         int prevDirection = (direction+6) % 6; //used to reference previous nodes
