@@ -214,8 +214,9 @@ public class AbaloneGraph
         return graph[position];
     }
 
-    //Traverses a path updating nodes until all nodes in the path are updated
-    public void makeMove(Node first, Node last, int direction)
+    //Traverses a one piece wide path updating nodes until all nodes in the path are updated
+    //Assumes the path between the first and last node is valid
+    public void makeMoveThin(Node first, Node last, int direction)
     {
         boolean updated = false;
         Node currNode = first;
