@@ -216,7 +216,7 @@ public class AbaloneGraph
 
     //Traverses a one piece wide path updating nodes until all nodes in the path are updated
     //Assumes the path between the first and last node is valid
-    public void makeMoveThin(Node first, Node last, int direction)
+    public void makeInlineMove(Node first, Node last, int direction)
     {
         boolean updated = false;
         Node currNode = first;
@@ -235,6 +235,20 @@ public class AbaloneGraph
             if (currNode.getSibling(direction) != null)
                 currNode = currNode.getSibling(direction);
         }
+    }
+
+    //Takes an array of nodes to be moved in a given direction
+    // The node array should be three nodes or less
+    public void makeBroadsideMove(Node[] nodes, int direction)
+    {
+        //TODO move all nodes in a given direction
+    }
+
+    //Determines if a broadside move can be made for a given array of nodes
+    // The node array should be three nodes or less
+    public boolean canMoveBroadside(Node[] nodes, int direction)
+    {
+        //TODO implement check
     }
 
     public void printNodes()
@@ -268,6 +282,5 @@ public class AbaloneGraph
             }
         } 
         return sibNum;
-
     }
 }
