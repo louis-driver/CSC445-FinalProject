@@ -5,12 +5,12 @@ public class AbaloneGraph
     public static void main(String[] args)
     {
         AbaloneGraph graph = new AbaloneGraph();
-        for (int i = 0; i < 91; ++i)
-            graph.printSiblings(i);
+        //for (int i = 0; i < 91; ++i)
+            //graph.printSiblings(i);
 
         //Test pushing nodes 7 and 14 
         int direction = graph.getDirection(graph.getNode(7), graph.getNode(14));
-        graph.makeMove(graph.getNode(7), graph.getNode(22), direction);
+        graph.makeInlineMove(graph.getNode(7), graph.getNode(22), direction);
         System.out.println(graph.getNode(7)); //should have color: 0
         System.out.println(graph.getNode(14)); //color: 2
         System.out.println(graph.getNode(22)); //color: 2
@@ -220,25 +220,10 @@ public class AbaloneGraph
         return graph[position];
     }
 
-    //TODO set any edge nodes back to background color
-    /*  A Method that moves all pieces in a line that assumes the move is legal
-        If the move results in a point, the method returns true
-        -Node first is the first node clicked by a player, 
-        -Node last is the destination node for the last piece in the line to be pushed to
-        -Direction is the siblings which should be traversed in the line */
-    public boolean makeMove(Node first, Node last, int direction)
+    //Traverses a one piece wide path updating nodes until all nodes in the path are updated
+    //Assumes the path between the first and last node is valid
+    public void makeInlineMove(Node first, Node last, int direction)
     {
-        boolean isPoint = false;
-        int playerColor = 1;
-        int opponentColor = 2;
-        if (first.getColor() == 2)
-        {
-            playerColor = 2;
-            opponentColor = 1;
-        }
-
-        //Traverse a path backwards, updating nodes until the first node is updated
-        // Path is traversed backwards to call on the previous node's colors
         boolean updated = false;
         Node currNode = last;
         int prevDirection = (direction+6) % 6; //used to reference previous nodes
@@ -251,26 +236,28 @@ public class AbaloneGraph
             //Set the current node's color to the board's color if it is the first node in the path
             else
                 first.setColor(0);
-            
-            //Checks if the opponent's pice was pushed off an edge, if so a point is recorded
-            //Resets the edge back to the board color
-            if (currNode.isEdge() && currNode.getColor()==opponentColor)
-            {
-                isPoint = true;
-                currNode.setColor(0);
-            }
-            //No point is awarded if a player push your own pieces off the edge
-            else if (currNode.isEdge() && currNode.getColor()==playerColor)
-            {
-                currNode.setColor(0);
-            }
-
+                
             if (currNode == first)
                 updated = true;
             if (currNode.getSibling(direction) != null)
                 currNode = currNode.getSibling(prevDirection);
         }
-        return isPoint;
+    }
+
+    //Takes an array of nodes to be moved in a given direction
+    // The node array should be three nodes or less
+    public void makeBroadsideMove(Node[] nodes, int direction)
+    {
+        //TODO move all nodes in a given direction
+    }
+
+    //Determines if a broadside move can be made for a given array of nodes
+    // The node array should be three nodes or less
+    public boolean canMoveBroadside(Node[] nodes, int direction)
+    {
+        boolean canMove = false;
+        //TODO implement check
+        return canMove;
     }
 
     public void printNodes()
