@@ -15,34 +15,25 @@ public class AbaloneGraph
         // System.out.println(graph.getNode(14)); //color: 2
         // System.out.println(graph.getNode(22)); //color: 2
 
-        //Test boradside move
-
+        //Test broadside move
         Node node1 = graph.getNode(24);
         Node node2 = graph.getNode(25);
         //Node node3 = graph.getNode(36);
-
         int direction = 5;
-
         Node Sib1 = node1.getSibling(direction);
         Node Sib2 = node2.getSibling(direction);
         //Node Sib3 = node3.getSibling(direction);
-
         System.out.println(node1);
         System.out.println(node2);
         //System.out.println(node3);
-        
         System.out.println(Sib1);
         System.out.println(Sib2);
         //System.out.println(Sib3);
-  
         Node[] nodes = {node1, node2, null};
         graph.makeBroadsideMove(nodes, 5);
-
-        
         System.out.println(node1);
         System.out.println(node2);
         //System.out.println(node3);
-
         System.out.println(Sib1);
         System.out.println(Sib2);
        // System.out.println(Sib3);
@@ -342,18 +333,21 @@ public class AbaloneGraph
         return sibNum;
     }
 
-    public Node destination(Node first, Node second)
+    //Returns the destination of the last node in an in line move if it is valid 
+    //returns the second node if node is move is not valid 
+    public Node destination(Node first, Node second, int direction)
     {
-        int direction = getDirection(first, second);
         Node next = first.getSibling(direction);
         int firstColor = first.getColor();
         int secondColor = second.getColor();
         int numPieces = 1;
-        int numOps =0;
+        int numOps = 0;
 
+        //Returns the second node if the two nodes arent siblings 
         if(direction==-1)
             return second;
-
+        //Iterates through spaces held by players color until a opposite color, empty soace, or edge is found
+        //Counts number of pieces in a row of the color whose turn it is
         while(next!=null && next.getColor()==firstColor)
         {
             next = next.getSibling(direction);
@@ -372,13 +366,13 @@ public class AbaloneGraph
             }
             return next;
         }
-
+        //Counts number of opponents pieces
         while(next.getColor()==secondColor)
         {
             next = next.getSibling(direction);
             numOps +=1;
         }
-
+        //If number of opponents pieces is less than players pieces return the last opponents node in the row
         if(numPieces>numOps && numPieces<3)
         {
             int count=0;
@@ -389,7 +383,7 @@ public class AbaloneGraph
             }
             return next;
         }
-
-        return second;
+        else 
+            return second;
     }
 }
