@@ -6,22 +6,26 @@ import javax.swing.JPanel;
 //This is a JPanel that represents an Abalone board during play
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import javax.swing.*;
+import java.util.*;
 
 public class AbalonePanel extends JPanel
 {
     AbaloneGraph graph; 
     Polygon hexExterior;
     Polygon hexInterior;
-    int[] startHeights = new int[9];
-    int[] lowerHeights = new int[10];
+    int[] startHeights = new int[11];
+    int[] lowerHeights = new int[11];
+    int[] startXCoords = new int[11];
+    Ellipse2D.Double[] boardSpaces = new Ellipse2D.Double[91];
 
     //Test Main class
     public static void main(String[] args)
     {
         
-        int frameWidth = 1000;
-        int frameHeight = 1000;
+        int frameWidth = 600;
+        int frameHeight = 600;
         JFrame frame = new JFrame();
         AbaloneGraph graph = new AbaloneGraph();
         AbalonePanel panel = new AbalonePanel(graph);
@@ -34,9 +38,9 @@ public class AbalonePanel extends JPanel
         frame.setVisible(true);
     }
 
-    public AbalonePanel(AbaloneGraph graph)
+    public AbalonePanel(AbaloneGraph g)
     {
-        this.graph = graph;
+        this.graph = g;
     }
 
     //Iterates through the graph to assign board spaces proportional to the size
@@ -63,14 +67,87 @@ public class AbalonePanel extends JPanel
         int heightGap = height / 9;
         int rowGap = (int) (heightGap / 15.0);
         int pieceHeight = heightGap - 2*rowGap;
-        startHeights[0] = upperY + rowGap;
-        lowerHeights[0] = startHeights[0] + pieceHeight;
-        for (int i = 1; i < startHeights.length; ++i)
+        startHeights[1] = upperY + rowGap;
+        lowerHeights[1] = startHeights[0] + pieceHeight;
+        for (int i = 2; i < startHeights.length; ++i)
         {
             startHeights[i] = startHeights[i-1] + heightGap;
             lowerHeights[i] = lowerHeights[i-1] + heightGap; 
         }
+
+        //Find starting x coordinates for each row
+        int upperX = hexInterior.xpoints[2];
+        int middleX = hexInterior.xpoints[3];
+
+        //TODO do math to find more accurate hexagon locations
+        int xGap = (int) ((upperX - middleX) / 11.0);
+        startXCoords[1] = upperX;
+        for (int i = 2; i < startXCoords.length; ++i)
+        {
+            startXCoords[i] = startXCoords[i-1] - (int) (xGap*2.5);
+        }
+        System.out.println(Arrays.toString(startXCoords));
+
+
         //TODO use startHeights and pieceHeights to set each pieces' height
+        int numNodes = 91;
+        boolean incrementing = true;
+        int rowSize = 6;
+        int numRows = 11;
+        int currPosition = 0;
+
+         
+        /* for (int i=0; i<numNodes; ++i)
+        {
+            Ellipse2D.Double boardSpace = new Ellipse2D.Double(0,0, pieceHeight, pieceHeight);
+            graph.getNode(i).setPiece(boardSpace);
+        } */
+
+        for (int i = 0; i < numRows; ++i)
+        {
+            int currX = startXCoords[i];
+            for (int j = 0; j < rowSize; ++j)
+            {
+                currX = startXCoords[i] + (j-1)* (xGap + pieceHeight);
+                if (rowSize == 11)
+                    incrementing = false;
+
+                if (incrementing && !graph.getNode(currPosition).isEdge())
+                {
+                    
+                    //System.out.print("node assigned ");
+                    //System.out.println("CurrX: " + currX + " CurrPosition:" + currPosition);
+                    boardSpaces[currPosition] = new Ellipse2D.Double(currX, (double) startHeights[i], pieceHeight, pieceHeight);
+                   
+                    //System.out.println(boardSpaces[currPosition].getBounds());
+                }
+                else //I.e. Player1/Bottom side of the board
+                {
+                    boardSpaces[currPosition] = new Ellipse2D.Double(0,0, pieceHeight, pieceHeight);
+                    //boardSpaces[i] = boardSpace;
+                    //System.out.println(boardSpaces[currPosition].getBounds());
+                }
+                ++currPosition;
+                //prevX = currX;
+            }
+            if (incrementing)
+                ++rowSize;
+            else
+                --rowSize;
+        }
+        
+        for (int i = 0; i < 91; ++i)
+        {
+            //System.out.println("i" + i + ": " + graph.getPiece(i));
+            graph.setPiece(i, boardSpaces[i]);
+            //System.out.println(i + ": " + boardSpaces[i].getBounds());
+            if (graph.getPiece(i) != null)
+            {
+                Shape Space = graph.getPiece(i);
+                //System.out.println("i" + i + ": " +Space.getBounds());
+                //g2.fill(boardSpace);
+            }
+        }
         //Create array to represent starting x coordinate of each row
         //Calculate the gap between board spaces
 
@@ -96,9 +173,11 @@ public class AbalonePanel extends JPanel
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
 
         createHexagons();
         assignBoardSpaces();
+
         g.setColor(Color.BLACK);
         g.fillPolygon(hexExterior);
         g.setColor(Color.GRAY);
@@ -112,6 +191,19 @@ public class AbalonePanel extends JPanel
         for (int he : lowerHeights)
         {
             g.drawLine(0, he, this.getWidth(), he);
+        }
+
+
+        g.setColor(Color.green);
+        for (int i = 0; i < 91; ++i)
+        {
+           //System.out.println("i" + i + ": " + graph.getPiece(i));
+            if (graph.getPiece(i) != null)
+            {
+                Shape boardSpace = graph.getPiece(i);
+                //System.out.println("i" + i + ": " +boardSpace.getBounds());
+                g2.fill(boardSpace);
+            }
         }
     }
 
