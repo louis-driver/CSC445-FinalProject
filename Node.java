@@ -95,7 +95,7 @@ public class Node
     // node for graphical display
     public Ellipse2D getPiece()
     {
-        return piece;
+        return this.piece;
     }
 
     //Specifies if the node is a playable location (false)

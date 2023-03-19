@@ -1,3 +1,4 @@
+import java.awt.geom.*;
 public class AbaloneGraph
 {
     private Node[] graph = new Node[91];
@@ -218,6 +219,16 @@ public class AbaloneGraph
     public Node getNode(int position)
     {
         return graph[position];
+    }
+
+    public Ellipse2D getPiece(int position)
+    {
+        return graph[position].getPiece();
+    }
+
+    public void setPiece(int position, Ellipse2D.Double piece)
+    {
+        graph[position].setPiece(piece);
     }
 
     //Traverses a one piece wide path updating nodes until all nodes in the path are updated
