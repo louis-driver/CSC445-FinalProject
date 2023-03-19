@@ -11,8 +11,10 @@ import javax.swing.*;
 public class AbalonePanel extends JPanel
 {
     AbaloneGraph graph; 
-    Polygon hexagon1;
-    Polygon hexagon2;
+    Polygon hexExterior;
+    Polygon hexInterior;
+    int[] startHeights = new int[9];
+    int[] lowerHeights = new int[10];
 
     //Test Main class
     public static void main(String[] args)
@@ -35,13 +37,42 @@ public class AbalonePanel extends JPanel
     public AbalonePanel(AbaloneGraph graph)
     {
         this.graph = graph;
-
     }
 
-    //Iterates through the graph to assign locations proportional to the size
+    //Iterates through the graph to assign board spaces proportional to the size
     // of the panel.
-    private void assignPieceLocations()
+    private void assignBoardSpaces()
     {
+        //get height and width of the interior hexagon
+        Rectangle rect = hexInterior.getBounds();
+        int width = (int) rect.getWidth();
+        int height = (int) rect.getHeight();
+        // Find an upper and lower x coordinates
+        int upperY = hexInterior.ypoints[0];
+        int lowerY = hexInterior.ypoints[0];
+        for (int i = 1; i < hexInterior.npoints; ++i)
+        {
+            //Use opposite value as swing creates coordinates from the upper left corner
+            if (hexInterior.ypoints[i] < upperY)
+                upperY = hexInterior.ypoints[i];
+            if (hexInterior.ypoints[i] > lowerY)
+                lowerY = hexInterior.ypoints[i];
+        }
+
+        //Create array of ints that represent the starting height for each row
+        int heightGap = height / 9;
+        int rowGap = (int) (heightGap / 15.0);
+        int pieceHeight = heightGap - 2*rowGap;
+        startHeights[0] = upperY + rowGap;
+        lowerHeights[0] = startHeights[0] + pieceHeight;
+        for (int i = 1; i < startHeights.length; ++i)
+        {
+            startHeights[i] = startHeights[i-1] + heightGap;
+            lowerHeights[i] = lowerHeights[i-1] + heightGap; 
+        }
+        //TODO use startHeights and pieceHeights to set each pieces' height
+        //Create array to represent starting x coordinate of each row
+        //Calculate the gap between board spaces
 
     }
 
@@ -52,13 +83,13 @@ public class AbalonePanel extends JPanel
         int radius1 = this.getHeight()/2;
         if (this.getWidth()/2 < radius1)
             radius1 = this.getWidth()/2;
-        hexagon1 = createHexagon(center1, radius1);
+        hexExterior = createHexagon(center1, radius1);
         // Create interior hexagon
         Point center2 = new Point(this.getWidth()/2, this.getHeight()/2);
         int radius2 = (int) (this.getHeight()/2.4);
         if (this.getWidth()/2.5 < radius2)
             radius2 = (int) (this.getWidth()/2.4);
-        hexagon2 = createHexagon(center2, radius2);
+        hexInterior = createHexagon(center2, radius2);
         // Create interior spaces for pieces
     }
 
@@ -67,10 +98,21 @@ public class AbalonePanel extends JPanel
         super.paintComponent(g);
 
         createHexagons();
+        assignBoardSpaces();
         g.setColor(Color.BLACK);
-        g.fillPolygon(hexagon1);
+        g.fillPolygon(hexExterior);
         g.setColor(Color.GRAY);
-        g.fillPolygon(hexagon2);
+        g.fillPolygon(hexInterior);
+        g.setColor(Color.red);
+        for (int he : startHeights)
+        {
+            g.drawLine(0, he, this.getWidth(), he);
+        }
+        g.setColor(Color.blue);
+        for (int he : lowerHeights)
+        {
+            g.drawLine(0, he, this.getWidth(), he);
+        }
     }
 
     private Polygon createHexagon(Point center, int radius)
