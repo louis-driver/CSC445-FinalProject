@@ -15,6 +15,8 @@ public class AbalonePanel extends JPanel
     AbaloneGraph graph; 
     Polygon hexExterior;
     Polygon hexInterior;
+    Polygon exteriorShadow;
+    Polygon interiorHighlight;
     int[] startHeights = new int[11];
     int[] lowerHeights = new int[11];
     int[] startXCoords = new int[11];
@@ -52,16 +54,13 @@ public class AbalonePanel extends JPanel
         Rectangle rect = hexInterior.getBounds();
         int width = (int) rect.getWidth();
         int height = (int) rect.getHeight();
-        // Find an upper and lower x coordinates
+        // Find an upper and lower y coordinates
         int upperY = hexInterior.ypoints[0];
-        int lowerY = hexInterior.ypoints[0];
         for (int i = 1; i < hexInterior.npoints; ++i)
         {
-            //Use opposite value as swing creates coordinates from the upper left corner
+            //Use lower value as swing creates coordinates from the upper left corner
             if (hexInterior.ypoints[i] < upperY)
                 upperY = hexInterior.ypoints[i];
-            if (hexInterior.ypoints[i] > lowerY)
-                lowerY = hexInterior.ypoints[i];
         }
 
         //Create array of ints that represent the starting height for each row
@@ -140,18 +139,21 @@ public class AbalonePanel extends JPanel
     private void createHexagons()
     {
         // Create large hexagon
-        Point center1 = new Point(this.getWidth()/2, this.getHeight()/2);
-        int radius1 = this.getHeight()/2;
+        Point center = new Point(this.getWidth()/2, this.getHeight()/2);
+        Point offCenterLow = new Point(center.x+4, center.y+2);
+        Point offCenterHigh = new Point(center.x-4, center.y-2);
+        int radius1 = (int) (this.getHeight()/1.9);
         if (this.getWidth()/2 < radius1)
             radius1 = this.getWidth()/2;
-        hexExterior = createHexagon(center1, radius1);
+        hexExterior = createHexagon(center, radius1);
         // Create interior hexagon
-        Point center2 = new Point(this.getWidth()/2, this.getHeight()/2);
         int radius2 = (int) (this.getHeight()/2.4);
         if (this.getWidth()/2.5 < radius2)
             radius2 = (int) (this.getWidth()/2.4);
-        hexInterior = createHexagon(center2, radius2);
-        // Create interior spaces for pieces
+        hexInterior = createHexagon(center, radius2);
+        // Create offset hexagon as a shadow
+        exteriorShadow = createHexagon(offCenterLow, radius1);
+        interiorHighlight = createHexagon(offCenterHigh, radius2);
     }
 
     public void paintComponent(Graphics g)
@@ -165,8 +167,12 @@ public class AbalonePanel extends JPanel
         createHexagons();
         assignBoardSpaces();
 
+        g.setColor(Color.black);
+        g.fillPolygon(exteriorShadow);
         g.setColor(boardDark);
         g.fillPolygon(hexExterior);
+        g.setColor(Color.white);
+        g.fillPolygon(interiorHighlight);
         g.setColor(boardColor);
         g.fillPolygon(hexInterior);
         g.setColor(Color.red);
