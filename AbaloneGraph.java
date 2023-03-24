@@ -199,8 +199,8 @@ public class AbaloneGraph
                 else //I.e. Player1/Bottom side of the board
                 {
                     //Sibling nodes visually above are always set when rowSize is decreasing
-                    graph[currPosition].setSibling(graph[currPosition-rowSize], 11);
-                    graph[currPosition].setSibling(graph[currPosition-rowSize-1], 1);
+                    graph[currPosition].setSibling(graph[currPosition-rowSize], 1);
+                    graph[currPosition].setSibling(graph[currPosition-rowSize-1], 11);
 
                     //The left-most node of the starting row only has its sibling on the right
                     // side in addition to siblings 1 and 11
