@@ -277,7 +277,7 @@ public class AbaloneGraph
         //System.out.println("PrevDirection:" + prevDirection);
         while (!updated)
         {
-            System.out.println("PrevDirection:" + prevDirection + " CurrNode: " + currNode);
+            //System.out.println("PrevDirection:" + prevDirection + " CurrNode: " + currNode);
             //Set currNode to the previous node's color if it is not the first node
             if (currNode != first) 
                 currNode.setColor(currNode.getSibling(prevDirection).getColor());
