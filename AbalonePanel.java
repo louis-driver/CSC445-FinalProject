@@ -1,4 +1,5 @@
 import javax.swing.JPanel;
+import javax.swing.event.MouseInputAdapter;
 
 //Louis Driver
 // Source for hexagon: https://stackoverflow.com/questions/35853902/drawing-hexagon-using-java-error
@@ -6,6 +7,7 @@ import javax.swing.JPanel;
 //This is a JPanel that represents an Abalone board during play
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import javax.swing.*;
 import java.util.*;
@@ -13,6 +15,7 @@ import java.util.*;
 public class AbalonePanel extends JPanel
 {
     AbaloneGraph graph; 
+    int graphSize = 91;
     Polygon hexExterior;
     Polygon hexInterior;
     Polygon exteriorShadow;
@@ -20,6 +23,8 @@ public class AbalonePanel extends JPanel
     int[] startHeights = new int[11];
     int[] lowerHeights = new int[11];
     int[] startXCoords = new int[11];
+    Node firstClicked;
+    Node secondClicked;
 
     //Test Main class
     public static void main(String[] args)
@@ -44,6 +49,7 @@ public class AbalonePanel extends JPanel
     public AbalonePanel(AbaloneGraph g)
     {
         this.graph = g;
+        this.addMouseListener(new MoveAdapter());
     }
 
     //Iterates through the graph to assign board spaces proportional to the size
@@ -93,7 +99,6 @@ public class AbalonePanel extends JPanel
 
 
         //TODO use startHeights and pieceHeights to set each pieces' height
-        int numNodes = 91;
         boolean incrementing = true;
         int rowSize = 6;
         int numRows = 11;
@@ -209,5 +214,76 @@ public class AbalonePanel extends JPanel
             hexagon.addPoint(x, y);
         }
         return hexagon;
+    }
+
+    private class MoveAdapter extends MouseInputAdapter
+    {
+        public MoveAdapter()
+        {
+            super();
+        }
+
+        public void mouseClicked(MouseEvent e)
+        {
+            double clickedX = e.getX();
+            double clickedY = e.getY();
+            
+            int i = 0;
+            boolean nodeFound = false;
+            int nodePosition = -1;
+            // Finds the point that was clicked if one was clicked
+            while (!nodeFound && i < graphSize)
+            {
+                if(graph.getPiece(i).contains(clickedX, clickedY))
+                {
+                    nodePosition = i;
+                    nodeFound = true;
+                }
+                ++i;
+            }
+
+            // Prints the node that was clicked if one is found
+            if (nodePosition != -1)
+                System.out.println("(" + graph.getNode(nodePosition) +  ") \n");
+
+            if (SwingUtilities.isLeftMouseButton(e) && nodePosition != -1)
+            {
+                // do stuff for left click
+                firstClicked = graph.getNode(nodePosition);
+            }
+            if (SwingUtilities.isRightMouseButton(e) && nodePosition != -1)
+            {
+                // do stuff for rigt click
+                secondClicked = graph.getNode(nodePosition);
+            }
+            if (firstClicked != null && secondClicked != null)
+            {
+                try
+                {
+                    
+                    int direction = graph.getDirection(firstClicked, secondClicked);
+                    if (direction != -1)
+                    {
+                        System.out.println("Direction:" + direction);
+                        Node last = graph.destination(firstClicked, secondClicked, direction);
+                        System.out.println("First: " + firstClicked);
+                        System.out.println("Last:" + last);
+                        graph.makeInlineMove(firstClicked, last, direction);
+                        repaint();
+                        System.out.println("Move Made");
+                    }
+                }
+                catch (RuntimeException ex)
+                {
+                    System.out.println(ex);
+                    //System.out.println("Invalid Move");
+                }
+                finally
+                {
+                    firstClicked = null;
+                    secondClicked = null;
+                }
+            }
+        }
     }
 }
