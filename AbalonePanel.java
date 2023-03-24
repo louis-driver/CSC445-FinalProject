@@ -21,7 +21,6 @@ public class AbalonePanel extends JPanel
     Polygon exteriorShadow;
     Polygon interiorHighlight;
     int[] startHeights = new int[11];
-    int[] lowerHeights = new int[11];
     int[] startXCoords = new int[11];
     Node firstClicked;
     Node secondClicked;
@@ -56,54 +55,40 @@ public class AbalonePanel extends JPanel
     // of the panel.
     private void assignBoardSpaces()
     {
-        //get height and width of the interior hexagon
         Rectangle rect = hexInterior.getBounds();
-        int width = (int) rect.getWidth();
         int height = (int) rect.getHeight();
-        // Find an upper and lower y coordinates
-        int upperY = hexInterior.ypoints[0];
-        for (int i = 1; i < hexInterior.npoints; ++i)
-        {
-            //Use lower value as swing creates coordinates from the upper left corner
-            if (hexInterior.ypoints[i] < upperY)
-                upperY = hexInterior.ypoints[i];
-        }
-
+        int upperY = hexInterior.ypoints[4];
         //Create array of ints that represent the starting height for each row
-        int heightGap = height / 9;
-        int rowGap = (int) (heightGap / 15.0);
+        int heightGap = (int) (height / 9.0);
+        int rowGap = (int) (heightGap / 14.0);
         int pieceHeight = heightGap - 2*rowGap;
         startHeights[1] = upperY + rowGap;
-        lowerHeights[1] = startHeights[0] + pieceHeight;
         for (int i = 2; i < startHeights.length; ++i)
         {
             startHeights[i] = startHeights[i-1] + heightGap;
-            lowerHeights[i] = lowerHeights[i-1] + heightGap; 
         }
 
-        //Starting x coordinates for each row
+        //Find starting x coordinates for each row
         int upperX = hexInterior.xpoints[2];
         int middleX = hexInterior.xpoints[3];
         //TODO do math to find more accurate hexagon locations
         int xGap = (int) ((upperX - middleX) / 11.0);
         startXCoords[1] = upperX;
+        //Set upper half of hexagon
         for (int i = 2; i < 6; ++i)
         {
             startXCoords[i] = startXCoords[i-1] - (int) (xGap*2.5);
         }
+        //Lower half of hexagon
         for (int i = 6; i < startXCoords.length; ++i)
         {
             startXCoords[i] = startXCoords[i-1] + (int) (xGap*2.5);
         }
-        //System.out.println(Arrays.toString(startXCoords));
 
-
-        //TODO use startHeights and pieceHeights to set each pieces' height
         boolean incrementing = true;
         int rowSize = 6;
         int numRows = 11;
         int currPosition = 0;
-
         for (int i = 0; i < numRows; ++i)
         {
             int currX = startXCoords[i];
@@ -115,18 +100,14 @@ public class AbalonePanel extends JPanel
 
                 if (!graph.getNode(currPosition).isEdge())
                 {
-                    
-                    //System.out.print("node assigned ");
                     //System.out.println("CurrX: " + currX + " CurrPosition:" + currPosition);
                     Ellipse2D.Double boardSpace = new Ellipse2D.Double(currX, (double) startHeights[i], pieceHeight, pieceHeight);
                     graph.setPiece(currPosition, boardSpace);
-                    //System.out.println(boardSpaces[currPosition].getBounds());
                 }
-                else //I.e. Player1/Bottom side of the board
+                else //I.e. an edge of the board
                 {
                     Ellipse2D.Double boardSpace = new Ellipse2D.Double(0,0, pieceHeight, pieceHeight);
                     graph.setPiece(currPosition, boardSpace);
-                    //System.out.println(boardSpaces[currPosition].getBounds());
                 }
                 ++currPosition;
             }
@@ -135,10 +116,6 @@ public class AbalonePanel extends JPanel
             else
                 --rowSize;
         }
-        
-        //Create array to represent starting x coordinate of each row
-        //Calculate the gap between board spaces
-
     }
 
     private void createHexagons()
@@ -158,6 +135,7 @@ public class AbalonePanel extends JPanel
         hexInterior = createHexagon(center, radius2);
         // Create offset hexagon as a shadow
         exteriorShadow = createHexagon(offCenterLow, radius1);
+        // Create offset hexagon as a highlight
         interiorHighlight = createHexagon(offCenterHigh, radius2);
     }
 
@@ -172,6 +150,7 @@ public class AbalonePanel extends JPanel
         createHexagons();
         assignBoardSpaces();
 
+        //Draw hexagons of the board
         g.setColor(Color.black);
         g.fillPolygon(exteriorShadow);
         g.setColor(boardDark);
@@ -180,19 +159,9 @@ public class AbalonePanel extends JPanel
         g.fillPolygon(interiorHighlight);
         g.setColor(boardColor);
         g.fillPolygon(hexInterior);
-        g.setColor(Color.red);
-        for (int he : startHeights)
-        {
-            g.drawLine(0, he, this.getWidth(), he);
-        }
-        g.setColor(Color.blue);
-        for (int he : lowerHeights)
-        {
-            g.drawLine(0, he, this.getWidth(), he);
-        }
 
-
-        for (int i = 0; i < 91; ++i)
+        //Draw spaces where pieces are/can be
+        for (int i = 0; i < graphSize; ++i)
         {
             if (graph.getNode(i).getColor() == 0)
                 g2.setColor(boardDark);
@@ -244,7 +213,7 @@ public class AbalonePanel extends JPanel
 
             // Prints the node that was clicked if one is found
             if (nodePosition != -1)
-                System.out.println("(" + graph.getNode(nodePosition) +  ") \n");
+                System.out.println("(" + graph.getNode(nodePosition) +  ")");
 
             if (SwingUtilities.isLeftMouseButton(e) && nodePosition != -1)
             {
@@ -275,8 +244,8 @@ public class AbalonePanel extends JPanel
                 }
                 catch (RuntimeException ex)
                 {
-                    System.out.println(ex);
-                    //System.out.println("Invalid Move");
+                    //System.out.println(ex);
+                    System.out.println("Invalid Move");
                 }
                 finally
                 {
