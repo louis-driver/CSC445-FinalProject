@@ -16,6 +16,7 @@ public class AbaloneGraph
         // System.out.println(graph.getNode(14)); //color: 2
         // System.out.println(graph.getNode(22)); //color: 2
 
+        /*
         //Test broadside move
         Node node1 = graph.getNode(24);
         Node node2 = graph.getNode(25);
@@ -37,7 +38,18 @@ public class AbaloneGraph
         //System.out.println(node3);
         System.out.println(Sib1);
         System.out.println(Sib2);
-       // System.out.println(Sib3);
+       // System.out.println(Sib3); */
+       
+       graph.printSiblings(9);
+       graph.printSiblings(26);
+       Node firstClicked = graph.getNode(25);
+       Node secondClicked = graph.getNode(26);
+       int direction = graph.getDirection(firstClicked, secondClicked);
+       System.out.println("Direction:" + direction);
+       Node last = graph.destination(firstClicked, secondClicked, direction);
+       System.out.println("Last:" + last);
+       graph.makeInlineMove(firstClicked, last, direction);
+       System.out.println("Move Made");
 
     }
 
@@ -154,7 +166,7 @@ public class AbaloneGraph
                         graph[currPosition].setSibling(graph[currPosition-rowSize+1], 1);
                         graph[currPosition].setSibling(graph[currPosition+1], 3);
                         graph[currPosition].setSibling(graph[currPosition-1], 9);
-                        graph[currPosition].setSibling(graph[currPosition+1], 11);
+                        graph[currPosition].setSibling(graph[currPosition-rowSize], 11);
                     }
                 }
                 else if (rowSize==11)
@@ -261,10 +273,11 @@ public class AbaloneGraph
     {
         boolean updated = false;
         Node currNode = last;
-        int prevDirection = (direction+6) % 6; //used to reference previous nodes
+        int prevDirection = (direction+6) % 12; //used to reference previous nodes
+        //System.out.println("PrevDirection:" + prevDirection);
         while (!updated)
         {
-            System.out.println(currNode);
+            System.out.println("PrevDirection:" + prevDirection + " CurrNode: " + currNode);
             //Set currNode to the previous node's color if it is not the first node
             if (currNode != first) 
                 currNode.setColor(currNode.getSibling(prevDirection).getColor());
@@ -274,7 +287,7 @@ public class AbaloneGraph
                 
             if (currNode == first)
                 updated = true;
-            if (currNode.getSibling(direction) != null)
+            //if (currNode.getSibling(prevDirection) != null)
                 currNode = currNode.getSibling(prevDirection);
         }
     }
@@ -363,18 +376,21 @@ public class AbaloneGraph
         {
             next = next.getSibling(direction);
             numPieces +=1;
+            //System.out.println("NumPieces:" + numPieces);
         }
 
-        //if reach edge or empty space return edge or empty space node
-        //number of peices in a row must be less than 4
+        //If edge or empty space is reached, return edge or empty space node
+        //Number of pieces in a row must be less than 4
         if((next==null || next.getColor()==0) && numPieces<=3)
         {
             int count = 0;
+            /*
             while(count<numPieces)
             {
-                next = first.getSibling(direction);
-                count ++;
-            }
+                next = next.getSibling(direction);
+                count++;
+            }*/
+            //System.out.println("Next:" + next);
             return next;
         }
         //Counts number of opponents pieces
