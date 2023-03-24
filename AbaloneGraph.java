@@ -190,8 +190,8 @@ public class AbaloneGraph
                     {
                         graph[currPosition].setSibling(graph[currPosition-rowSize+1], 1);
                         graph[currPosition].setSibling(graph[currPosition+1], 3);
-                        graph[currPosition].setSibling(graph[currPosition+rowSize+1], 5);
-                        graph[currPosition].setSibling(graph[currPosition+rowSize], 7);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize], 5);
+                        graph[currPosition].setSibling(graph[currPosition+rowSize-1], 7);
                         graph[currPosition].setSibling(graph[currPosition-1], 9);
                         graph[currPosition].setSibling(graph[currPosition-rowSize], 11);
                     }
