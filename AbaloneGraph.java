@@ -358,59 +358,58 @@ public class AbaloneGraph
     }
 
     //Returns the destination of the last node in an in line move if it is valid 
-    //returns the second node if node is move is not valid 
+    // Returns null if the move is not valid 
     public Node destination(Node first, Node second, int direction)
     {
         Node next = first.getSibling(direction);
-        int firstColor = first.getColor();
-        int secondColor = second.getColor();
-        int numPieces = 1;
-        int numOps = 0;
+        int playerColor = first.getColor();
+        int opponentColor = 1;
+        if (playerColor == 1)
+            opponentColor = 2;
+        int numPlayers = 1;
+        int numOpponents = 0;
 
-        //Returns the second node if the two nodes arent siblings 
+        //Returns null if the two nodes arent siblings 
         if(direction==-1)
-            return second;
+            return null;
         //Iterates through spaces held by players color until a opposite color, empty soace, or edge is found
         //Counts number of pieces in a row of the color whose turn it is
-        while(next!=null && next.getColor()==firstColor)
+        while(next!=null && next.getColor()==playerColor)
         {
             next = next.getSibling(direction);
-            numPieces +=1;
-            //System.out.println("NumPieces:" + numPieces);
+            numPlayers++;
+            //System.out.println("numPlayers:" + numPlayers);
         }
+        //If player's pieces exceed 3 return null
+        if(numPlayers > 3)
+            return null;
 
-        //If edge or empty space is reached, return edge or empty space node
+        //If empty space is reached, return empty space node
         //Number of pieces in a row must be less than 4
-        if((next==null || next.getColor()==0) && numPieces<=3)
+        if(next.getColor()==0 && numPlayers<=3)
         {
-            int count = 0;
-            /*
-            while(count<numPieces)
-            {
-                next = next.getSibling(direction);
-                count++;
-            }*/
-            //System.out.println("Next:" + next);
             return next;
         }
         //Counts number of opponents pieces
-        while(next.getColor()==secondColor)
+        while(next.getColor()==opponentColor)
         {
             next = next.getSibling(direction);
-            numOps +=1;
+            numOpponents++;
         }
-        //If number of opponents pieces is less than players pieces return the last opponents node in the row
-        if(numPieces>numOps && numPieces<3)
+        //If number of opponents pieces is less than players pieces return 
+        // the empty space after last opponents node in the row
+        if(numPlayers>numOpponents && numPlayers<=3 && next.getColor()==0)
         {
+            next = first.getSibling(direction);
             int count=0;
-            while(count<(numPieces + numOps)-1)
+            while(count < numPlayers+numOpponents-1)
             {
-                next = first.getSibling(direction);
+                next = next.getSibling(direction);
                 count++;
             }
             return next;
         }
         else 
-            return second;
+            return null;
     }
 }
