@@ -23,8 +23,13 @@ public class AbalonePanel extends JPanel
     Polygon interiorHighlight;
     int[] startHeights = new int[11];
     int[] startXCoords = new int[11];
+    int[] yCapturedCoords = new int[6];
+    int[] xCapturedCoords = new int[2];
+    int pieceSize;
     Node firstClicked;
     Node secondClicked;
+    int capturedBy1 = 6;
+    int capturedBy2 = 6;
 
     //Test Main class
     public static void main(String[] args)
@@ -60,7 +65,7 @@ public class AbalonePanel extends JPanel
         //Create array of ints that represent the starting height for each row
         int heightGap = (int) (height / 9.0);
         int rowGap = (int) (heightGap / 14.0);
-        int pieceSize = heightGap - 2*rowGap;
+        pieceSize = heightGap - 2*rowGap;
         startHeights[1] = upperY + rowGap;
         for (int i = 2; i < startHeights.length; ++i)
         {
@@ -115,28 +120,41 @@ public class AbalonePanel extends JPanel
             else
                 --rowSize;
         }
+
+        //Calculate the positions for captured pieces to be displayed
+        int panelWidth = this.getWidth();
+        int capturedMargin = (int) (pieceSize/10.0);
+        yCapturedCoords[0] = capturedMargin;
+        for (int i = 1; i < yCapturedCoords.length; ++i)
+        {
+            yCapturedCoords[i] = yCapturedCoords[i-1] + pieceSize + capturedMargin;
+        }
+        //Even positions will display on the left side, odds on the right
+        xCapturedCoords[0] = capturedMargin;
+        xCapturedCoords[1] = panelWidth - pieceSize - capturedMargin;
     }
 
     private void createHexagons()
     {
-        //TODO the board size should be the width of the screen minus two piece sizes
-        // if the panel width is less than the height
         int heightGap = (int) (this.getHeight() / 9.0);
         int rowGap = (int) (heightGap / 14.0);
         int pieceSize = heightGap - 2*rowGap;
+
         // Create large hexagon
         Point center = new Point(this.getWidth()/2, this.getHeight()/2);
         Point offCenterLow = new Point(center.x+4, center.y+2);
         Point offCenterHigh = new Point(center.x-4, center.y-2);
         int radius1 = (int) (this.getHeight()/1.9);
-        if (this.getWidth()/2 + pieceSize  < this.getHeight()/2)
-            radius1 = (int) (this.getWidth()/2.1);
+        if (this.getWidth()  < this.getHeight() + pieceSize*2)
+            radius1 = (int) (this.getWidth()/2.3);
         hexExterior = createHexagon(center, radius1);
+
         // Create interior hexagon
         int radius2 = (int) (this.getHeight()/2.4);
-        if (this.getWidth()/2 + pieceSize  < this.getHeight()/2)
-            radius2 = (int) (this.getWidth()/2.5);
+        if (this.getWidth() < this.getHeight() + pieceSize*2)
+            radius2 = (int) (this.getWidth()/2.9);
         hexInterior = createHexagon(center, radius2);
+
         // Create offset hexagon as a shadow
         exteriorShadow = createHexagon(offCenterLow, radius1);
         // Create offset hexagon as a highlight
@@ -147,6 +165,7 @@ public class AbalonePanel extends JPanel
     {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        this.setBackground(new Color(160, 130, 105));
 
         Color boardColor = new Color(140, 100, 75);
         Color boardDark = new Color(75, 45, 30);
@@ -174,6 +193,18 @@ public class AbalonePanel extends JPanel
             else if (graph.getNode(i).getColor() == 2)
                 g2.setColor(Color.black);
             g2.fill(graph.getPiece(i));
+        }
+
+        //Draw any captured pieces
+        g2.setColor(Color.black);
+        for (int i = 0; i < capturedBy1; ++i)
+        {
+            g2.fillOval(xCapturedCoords[0], yCapturedCoords[i], pieceSize, pieceSize);
+        }
+        g2.setColor(Color.white);
+        for (int i = 0; i < capturedBy2; ++i)
+        {
+            g2.fillOval(xCapturedCoords[1], yCapturedCoords[i], pieceSize, pieceSize);
         }
     }
 
