@@ -2,6 +2,8 @@ import java.awt.geom.*;
 public class AbaloneGraph
 {
     private Node[] graph = new Node[91];
+    private int player1Score;
+    private int player2Score;
 
     public static void main(String[] args)
     {
@@ -290,6 +292,15 @@ public class AbaloneGraph
             //if (currNode.getSibling(prevDirection) != null)
                 currNode = currNode.getSibling(prevDirection);
         }
+        //Assign point if scored and reset edge color
+        if (last.isEdge())
+        {
+            if (last.getColor() == 1)
+                ++player2Score;
+            else
+                ++player1Score;
+            last.setColor(0);
+        }
     }
 
     //Takes an array of nodes to be moved in a given direction
@@ -411,5 +422,15 @@ public class AbaloneGraph
         }
         else 
             return null;
+    }
+
+    public int getPlayer1Score()
+    {
+        return player1Score;
+    }
+
+    public int getPlayer2Score()
+    {
+        return player2Score;
     }
 }
