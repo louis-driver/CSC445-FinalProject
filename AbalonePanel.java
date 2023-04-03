@@ -3,7 +3,7 @@ import javax.swing.event.MouseInputAdapter;
 
 //Louis Driver
 // Source for hexagon: https://stackoverflow.com/questions/35853902/drawing-hexagon-using-java-error
-
+// Source for text display: https://docs.oracle.com/javase/tutorial/2d/text/measuringtext.html 
 //This is a JPanel that represents an Abalone board during play
 
 import java.awt.*;
@@ -28,8 +28,8 @@ public class AbalonePanel extends JPanel
     int pieceSize;
     Node firstClicked;
     Node secondClicked;
-    int capturedBy1 = 6;
-    int capturedBy2 = 6;
+    int player1Score;
+    int player2Score;
 
     //Test Main class
     public static void main(String[] args)
@@ -197,14 +197,49 @@ public class AbalonePanel extends JPanel
 
         //Draw any captured pieces
         g2.setColor(Color.black);
-        for (int i = 0; i < capturedBy1; ++i)
+        for (int i = 0; i<player1Score && player1Score<=6; ++i)
         {
             g2.fillOval(xCapturedCoords[0], yCapturedCoords[i], pieceSize, pieceSize);
         }
         g2.setColor(Color.white);
-        for (int i = 0; i < capturedBy2; ++i)
+        for (int i = 0; i<player2Score && player2Score<=6; ++i)
         {
             g2.fillOval(xCapturedCoords[1], yCapturedCoords[i], pieceSize, pieceSize);
+        }
+        
+        //Display winner if applicable
+        //TODO center display in the panel
+        if (player1Score >= 6)
+        {
+            Font font = new Font("Times New Roman", Font.ITALIC, this.getHeight()/10);
+            g2.setFont(font);
+            // get metrics from the graphics
+            FontMetrics metrics = g.getFontMetrics(font);
+            // get the height of a line of text in this font and render context
+            int hgt = metrics.getHeight();
+            // get the advance of my text in this font and render context
+            int adv = metrics.stringWidth("Player1 WINS!");
+
+            g.setColor(Color.black);
+            g.fillRect(this.getWidth()/10 - adv/20, this.getHeight()/2 - (int) (hgt/1.3), adv+adv/10, hgt);
+            g.setColor(Color.white);
+            g.drawString("Player1 WINS!", this.getWidth()/10, this.getHeight()/2);
+        }
+        else if (player2Score >= 6)
+        {
+            Font font = new Font("Times New Roman", Font.ITALIC, this.getHeight()/10);
+            g2.setFont(font);
+            // get metrics from the graphics
+            FontMetrics metrics = g.getFontMetrics(font);
+            // get the height of a line of text in this font and render context
+            int hgt = metrics.getHeight();
+            // get the advance of my text in this font and render context
+            int adv = metrics.stringWidth("Player2 WINS!");
+
+            g.setColor(Color.white);
+            g.fillRect(this.getWidth()/10 - adv/20, this.getHeight()/2 - (int) (hgt/1.3), adv+adv/10, hgt);
+            g.setColor(Color.black);
+            g.drawString("Player2 WINS!", this.getWidth()/10, this.getHeight()/2);
         }
     }
 
@@ -286,6 +321,8 @@ public class AbalonePanel extends JPanel
                 {
                     firstClicked = null;
                     secondClicked = null;
+                    player1Score = graph.getPlayer1Score();
+                    player2Score = graph.getPlayer2Score();
                 }
             }
         }
