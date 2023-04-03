@@ -42,8 +42,6 @@ public class AbalonePanel extends JPanel
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
         frame.setVisible(true);
-        //int direction = graph.getDirection(graph.getNode(7), graph.getNode(14));
-        //graph.makeInlineMove(graph.getNode(7), graph.getNode(22), direction);
     }
 
     public AbalonePanel(AbaloneGraph g)
@@ -62,7 +60,7 @@ public class AbalonePanel extends JPanel
         //Create array of ints that represent the starting height for each row
         int heightGap = (int) (height / 9.0);
         int rowGap = (int) (heightGap / 14.0);
-        int pieceHeight = heightGap - 2*rowGap;
+        int pieceSize = heightGap - 2*rowGap;
         startHeights[1] = upperY + rowGap;
         for (int i = 2; i < startHeights.length; ++i)
         {
@@ -95,19 +93,19 @@ public class AbalonePanel extends JPanel
             int currX = startXCoords[i];
             for (int j = 0; j < rowSize; ++j)
             {
-                currX = startXCoords[i] + (j-1)* (xGap + pieceHeight);
+                currX = startXCoords[i] + (j-1)* (xGap + pieceSize);
                 if (rowSize == 11)
                     incrementing = false;
 
                 if (!graph.getNode(currPosition).isEdge())
                 {
                     //System.out.println("CurrX: " + currX + " CurrPosition:" + currPosition);
-                    Ellipse2D.Double boardSpace = new Ellipse2D.Double(currX, (double) startHeights[i], pieceHeight, pieceHeight);
+                    Ellipse2D.Double boardSpace = new Ellipse2D.Double(currX, (double) startHeights[i], pieceSize, pieceSize);
                     graph.setPiece(currPosition, boardSpace);
                 }
                 else //I.e. an edge of the board
                 {
-                    Ellipse2D.Double boardSpace = new Ellipse2D.Double(0,0, pieceHeight, pieceHeight);
+                    Ellipse2D.Double boardSpace = new Ellipse2D.Double(0,0, pieceSize, pieceSize);
                     graph.setPiece(currPosition, boardSpace);
                 }
                 ++currPosition;
@@ -121,18 +119,23 @@ public class AbalonePanel extends JPanel
 
     private void createHexagons()
     {
+        //TODO the board size should be the width of the screen minus two piece sizes
+        // if the panel width is less than the height
+        int heightGap = (int) (this.getHeight() / 9.0);
+        int rowGap = (int) (heightGap / 14.0);
+        int pieceSize = heightGap - 2*rowGap;
         // Create large hexagon
         Point center = new Point(this.getWidth()/2, this.getHeight()/2);
         Point offCenterLow = new Point(center.x+4, center.y+2);
         Point offCenterHigh = new Point(center.x-4, center.y-2);
         int radius1 = (int) (this.getHeight()/1.9);
-        if (this.getWidth()/2 < radius1)
-            radius1 = this.getWidth()/2;
+        if (this.getWidth()/2 + pieceSize  < this.getHeight()/2)
+            radius1 = (int) (this.getWidth()/2.1);
         hexExterior = createHexagon(center, radius1);
         // Create interior hexagon
         int radius2 = (int) (this.getHeight()/2.4);
-        if (this.getWidth()/2.5 < radius2)
-            radius2 = (int) (this.getWidth()/2.4);
+        if (this.getWidth()/2 + pieceSize  < this.getHeight()/2)
+            radius2 = (int) (this.getWidth()/2.5);
         hexInterior = createHexagon(center, radius2);
         // Create offset hexagon as a shadow
         exteriorShadow = createHexagon(offCenterLow, radius1);
