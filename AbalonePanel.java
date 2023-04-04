@@ -129,7 +129,7 @@ public class AbalonePanel extends JPanel
         {
             yCapturedCoords[i] = yCapturedCoords[i-1] + pieceSize + capturedMargin;
         }
-        //Even positions will display on the left side, odds on the right
+        //Positon 0 will display on the left side, position 1 on the right
         xCapturedCoords[0] = capturedMargin;
         xCapturedCoords[1] = panelWidth - pieceSize - capturedMargin;
     }
@@ -220,9 +220,9 @@ public class AbalonePanel extends JPanel
             // get the advance of my text in this font and render context
             int adv = metrics.stringWidth("Player1 WINS!");
 
-            g.setColor(Color.black);
-            g.fillRect(this.getWidth()/10 - adv/20, this.getHeight()/2 - (int) (hgt/1.3), adv+adv/10, hgt);
             g.setColor(Color.white);
+            g.fillRect(this.getWidth()/10 - adv/20, this.getHeight()/2 - (int) (hgt/1.3), adv+adv/10, hgt);
+            g.setColor(Color.black);
             g.drawString("Player1 WINS!", this.getWidth()/10, this.getHeight()/2);
         }
         else if (player2Score >= 6)
@@ -236,9 +236,9 @@ public class AbalonePanel extends JPanel
             // get the advance of my text in this font and render context
             int adv = metrics.stringWidth("Player2 WINS!");
 
-            g.setColor(Color.white);
-            g.fillRect(this.getWidth()/10 - adv/20, this.getHeight()/2 - (int) (hgt/1.3), adv+adv/10, hgt);
             g.setColor(Color.black);
+            g.fillRect(this.getWidth()/10 - adv/20, this.getHeight()/2 - (int) (hgt/1.3), adv+adv/10, hgt);
+            g.setColor(Color.white);
             g.drawString("Player2 WINS!", this.getWidth()/10, this.getHeight()/2);
         }
     }
