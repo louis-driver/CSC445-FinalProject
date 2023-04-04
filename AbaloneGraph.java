@@ -328,6 +328,7 @@ public class AbaloneGraph
 
     //Determines if a broadside move can be made for a given array of nodes
     // The node array should be three nodes or less
+    //TODO implement hasSibling
     public boolean canMoveBroadside(Node[] nodes, int direction)
     {
         boolean canMove = true;
