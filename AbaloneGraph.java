@@ -1,7 +1,11 @@
 import java.awt.geom.*;
 public class AbaloneGraph
+
+//Bubble sort from https://www.geeksforgeeks.org/bubble-sort/
 {
     private Node[] graph = new Node[91];
+    private int player1Score;
+    private int player2Score;
 
     public static void main(String[] args)
     {
@@ -9,47 +13,66 @@ public class AbaloneGraph
         //for (int i = 0; i < 91; ++i)
             //graph.printSiblings(i);
 
-        //Test pushing nodes 7 and 14 
+        // //Test pushing nodes 7 and 14 
         // int direction = graph.getDirection(graph.getNode(7), graph.getNode(14));
         // graph.makeInlineMove(graph.getNode(7), graph.getNode(22), direction);
         // System.out.println(graph.getNode(7)); //should have color: 0
         // System.out.println(graph.getNode(14)); //color: 2
         // System.out.println(graph.getNode(22)); //color: 2
 
-        /*
-        //Test broadside move
-        Node node1 = graph.getNode(24);
-        Node node2 = graph.getNode(25);
-        //Node node3 = graph.getNode(36);
+        
+        // //Test broadside move
+        // Node node1 = graph.getNode(64);
+        // Node node2 = graph.getNode(65);
+        // Node node3 = graph.getNode(66);
+        // int direction = 11;
+        // Node Sib1 = node1.getSibling(direction);
+        // Node Sib2 = node2.getSibling(direction);
+        // Node Sib3 = node3.getSibling(direction);
+        // System.out.println(node1);
+        // System.out.println(node2);
+        // System.out.println(node3);
+        // System.out.println(Sib1);
+        // System.out.println(Sib2);
+        // System.out.println(Sib3);
+        // Node[] nodes = {node1, node2, node3};
+        // graph.makeBroadsideMove(nodes, 5);
+        // System.out.println(node1);
+        // System.out.println(node2);
+        // System.out.println(node3);
+        // System.out.println(Sib1);
+        // System.out.println(Sib2);
+        // System.out.println(Sib3); 
+
+
+        //Test broadside validity
         int direction = 5;
+        Node node1 = graph.getNode(24);
+        Node node2 = graph.getNode(7);
+        //Node node3 = graph.getNode(26);
         Node Sib1 = node1.getSibling(direction);
         Node Sib2 = node2.getSibling(direction);
-        //Node Sib3 = node3.getSibling(direction);
+       // Node Sib3 = node3.getSibling(direction);
         System.out.println(node1);
         System.out.println(node2);
         //System.out.println(node3);
         System.out.println(Sib1);
         System.out.println(Sib2);
-        //System.out.println(Sib3);
-        Node[] nodes = {node1, node2, null};
-        graph.makeBroadsideMove(nodes, 5);
-        System.out.println(node1);
-        System.out.println(node2);
-        //System.out.println(node3);
-        System.out.println(Sib1);
-        System.out.println(Sib2);
-       // System.out.println(Sib3); */
+       // System.out.println(Sib3);
+        Node[] nodes = {node2, node1};
+        boolean valid = graph.canMoveBroadside(nodes, direction);
+        System.out.println(valid);
        
-       graph.printSiblings(9);
-       graph.printSiblings(26);
-       Node firstClicked = graph.getNode(25);
-       Node secondClicked = graph.getNode(26);
-       int direction = graph.getDirection(firstClicked, secondClicked);
-       System.out.println("Direction:" + direction);
-       Node last = graph.destination(firstClicked, secondClicked, direction);
-       System.out.println("Last:" + last);
-       graph.makeInlineMove(firstClicked, last, direction);
-       System.out.println("Move Made");
+    //    graph.printSiblings(9);
+    //    graph.printSiblings(26);
+    //    Node firstClicked = graph.getNode(25);
+    //    Node secondClicked = graph.getNode(26);
+    //    int direction = graph.getDirection(firstClicked, secondClicked);
+    //    System.out.println("Direction:" + direction);
+    //    Node last = graph.destination(firstClicked, secondClicked, direction);
+    //    System.out.println("Last:" + last);
+    //    graph.makeInlineMove(firstClicked, last, direction);
+    //    System.out.println("Move Made");
 
     }
 
@@ -290,6 +313,15 @@ public class AbaloneGraph
             //if (currNode.getSibling(prevDirection) != null)
                 currNode = currNode.getSibling(prevDirection);
         }
+        //Assign point if scored and reset edge color
+        if (last.isEdge())
+        {
+            if (last.getColor() == 1)
+                ++player2Score;
+            else
+                ++player1Score;
+            last.setColor(0);
+        }
     }
 
     //Takes an array of nodes to be moved in a given direction
@@ -298,20 +330,11 @@ public class AbaloneGraph
     //This method assumes move is valid
     public void makeBroadsideMove(Node[] nodes, int direction)
     {
-        int currPosition = 0;
-        Node currNode = nodes[currPosition];
-        System.out.println("Current node: " + currNode);
-        while(currNode != null && currPosition<3)
+        int color = nodes[0].getColor();
+        for(int i=0; i<nodes.length; i++)
         {
-            currNode.getSibling(direction).setColor(currNode.getColor());
-            currNode.setColor(0);
-
-            if(currPosition<2){
-                currPosition++;
-                currNode = nodes[currPosition];
-            }
-            else 
-                currPosition++;
+            nodes[i].getSibling(direction).setColor(color);
+            nodes[i].setColor(0);
         }
     }
 
@@ -319,9 +342,49 @@ public class AbaloneGraph
     // The node array should be three nodes or less
     public boolean canMoveBroadside(Node[] nodes, int direction)
     {
-        boolean canMove = false;
-        //TODO implement check
+        boolean canMove = true;
+        int color = nodes[0].getColor();
+
+        //Sort nodes from left to right 
+        sortNodes(nodes);
+        //Make sure not more than 3 pieces being moved
+        if(nodes.length>3)
+            canMove=false;
+        //Check if array has consistant colors
+        for(int i=0; i<nodes.length; i++)
+        {
+            if(nodes[i].getColor()==0 || nodes[i].getColor() != color)
+                canMove = false;
+        }
+        //Check if neighbors occupied
+        for(int i=0; i<nodes.length; i++)
+        {
+            if(nodes[i].getSibling(direction).getColor()!=0)
+            {
+                canMove=false;
+            }
+        }
+        //Check to see if nodes are in line 
+        for(int i=0; i<nodes.length-1; i++)
+        {
+            if((nodes[i].getID()-nodes[i+1].getID())!=-1)
+                canMove=false;
+        }
+
         return canMove;
+    }
+
+    private void sortNodes(Node[] nodes)
+    {
+        int n = nodes.length;
+        for (int i = 0; i < n - 1; i++)
+            for (int j = 0; j < n - i - 1; j++)
+                if (nodes[j].getID() > nodes[j + 1].getID()) {
+                    // swap arr[j+1] and arr[j]
+                    Node temp = nodes[j];
+                    nodes[j] = nodes[j + 1];
+                    nodes[j + 1] = temp;
+                }
     }
 
     public void printNodes()
@@ -411,5 +474,15 @@ public class AbaloneGraph
         }
         else 
             return null;
+    }
+
+    public int getPlayer1Score()
+    {
+        return player1Score;
+    }
+
+    public int getPlayer2Score()
+    {
+        return player2Score;
     }
 }

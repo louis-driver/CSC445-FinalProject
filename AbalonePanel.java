@@ -3,7 +3,7 @@ import javax.swing.event.MouseInputAdapter;
 
 //Louis Driver
 // Source for hexagon: https://stackoverflow.com/questions/35853902/drawing-hexagon-using-java-error
-
+// Source for text display: https://docs.oracle.com/javase/tutorial/2d/text/measuringtext.html 
 //This is a JPanel that represents an Abalone board during play
 
 import java.awt.*;
@@ -14,6 +14,7 @@ import java.util.*;
 
 public class AbalonePanel extends JPanel
 {
+    //example commit
     AbaloneGraph graph; 
     int graphSize = 91;
     Polygon hexExterior;
@@ -22,8 +23,13 @@ public class AbalonePanel extends JPanel
     Polygon interiorHighlight;
     int[] startHeights = new int[11];
     int[] startXCoords = new int[11];
+    int[] yCapturedCoords = new int[6];
+    int[] xCapturedCoords = new int[2];
+    int pieceSize;
     Node firstClicked;
     Node secondClicked;
+    int player1Score;
+    int player2Score;
 
     //Test Main class
     public static void main(String[] args)
@@ -41,8 +47,6 @@ public class AbalonePanel extends JPanel
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
         frame.setVisible(true);
-        //int direction = graph.getDirection(graph.getNode(7), graph.getNode(14));
-        //graph.makeInlineMove(graph.getNode(7), graph.getNode(22), direction);
     }
 
     public AbalonePanel(AbaloneGraph g)
@@ -61,7 +65,7 @@ public class AbalonePanel extends JPanel
         //Create array of ints that represent the starting height for each row
         int heightGap = (int) (height / 9.0);
         int rowGap = (int) (heightGap / 14.0);
-        int pieceHeight = heightGap - 2*rowGap;
+        pieceSize = heightGap - 2*rowGap;
         startHeights[1] = upperY + rowGap;
         for (int i = 2; i < startHeights.length; ++i)
         {
@@ -94,19 +98,19 @@ public class AbalonePanel extends JPanel
             int currX = startXCoords[i];
             for (int j = 0; j < rowSize; ++j)
             {
-                currX = startXCoords[i] + (j-1)* (xGap + pieceHeight);
+                currX = startXCoords[i] + (j-1)* (xGap + pieceSize);
                 if (rowSize == 11)
                     incrementing = false;
 
                 if (!graph.getNode(currPosition).isEdge())
                 {
                     //System.out.println("CurrX: " + currX + " CurrPosition:" + currPosition);
-                    Ellipse2D.Double boardSpace = new Ellipse2D.Double(currX, (double) startHeights[i], pieceHeight, pieceHeight);
+                    Ellipse2D.Double boardSpace = new Ellipse2D.Double(currX, (double) startHeights[i], pieceSize, pieceSize);
                     graph.setPiece(currPosition, boardSpace);
                 }
                 else //I.e. an edge of the board
                 {
-                    Ellipse2D.Double boardSpace = new Ellipse2D.Double(0,0, pieceHeight, pieceHeight);
+                    Ellipse2D.Double boardSpace = new Ellipse2D.Double(0,0, pieceSize, pieceSize);
                     graph.setPiece(currPosition, boardSpace);
                 }
                 ++currPosition;
@@ -116,23 +120,41 @@ public class AbalonePanel extends JPanel
             else
                 --rowSize;
         }
+
+        //Calculate the positions for captured pieces to be displayed
+        int panelWidth = this.getWidth();
+        int capturedMargin = (int) (pieceSize/10.0);
+        yCapturedCoords[0] = capturedMargin;
+        for (int i = 1; i < yCapturedCoords.length; ++i)
+        {
+            yCapturedCoords[i] = yCapturedCoords[i-1] + pieceSize + capturedMargin;
+        }
+        //Even positions will display on the left side, odds on the right
+        xCapturedCoords[0] = capturedMargin;
+        xCapturedCoords[1] = panelWidth - pieceSize - capturedMargin;
     }
 
     private void createHexagons()
     {
+        int heightGap = (int) (this.getHeight() / 9.0);
+        int rowGap = (int) (heightGap / 14.0);
+        int pieceSize = heightGap - 2*rowGap;
+
         // Create large hexagon
         Point center = new Point(this.getWidth()/2, this.getHeight()/2);
         Point offCenterLow = new Point(center.x+4, center.y+2);
         Point offCenterHigh = new Point(center.x-4, center.y-2);
         int radius1 = (int) (this.getHeight()/1.9);
-        if (this.getWidth()/2 < radius1)
-            radius1 = this.getWidth()/2;
+        if (this.getWidth()  < this.getHeight() + pieceSize*2)
+            radius1 = (int) (this.getWidth()/2.3);
         hexExterior = createHexagon(center, radius1);
+
         // Create interior hexagon
         int radius2 = (int) (this.getHeight()/2.4);
-        if (this.getWidth()/2.5 < radius2)
-            radius2 = (int) (this.getWidth()/2.4);
+        if (this.getWidth() < this.getHeight() + pieceSize*2)
+            radius2 = (int) (this.getWidth()/2.9);
         hexInterior = createHexagon(center, radius2);
+
         // Create offset hexagon as a shadow
         exteriorShadow = createHexagon(offCenterLow, radius1);
         // Create offset hexagon as a highlight
@@ -143,6 +165,7 @@ public class AbalonePanel extends JPanel
     {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        this.setBackground(new Color(160, 130, 105));
 
         Color boardColor = new Color(140, 100, 75);
         Color boardDark = new Color(75, 45, 30);
@@ -170,6 +193,53 @@ public class AbalonePanel extends JPanel
             else if (graph.getNode(i).getColor() == 2)
                 g2.setColor(Color.black);
             g2.fill(graph.getPiece(i));
+        }
+
+        //Draw any captured pieces
+        g2.setColor(Color.black);
+        for (int i = 0; i<player1Score && player1Score<=6; ++i)
+        {
+            g2.fillOval(xCapturedCoords[0], yCapturedCoords[i], pieceSize, pieceSize);
+        }
+        g2.setColor(Color.white);
+        for (int i = 0; i<player2Score && player2Score<=6; ++i)
+        {
+            g2.fillOval(xCapturedCoords[1], yCapturedCoords[i], pieceSize, pieceSize);
+        }
+        
+        //Display winner if applicable
+        //TODO center display in the panel
+        if (player1Score >= 6)
+        {
+            Font font = new Font("Times New Roman", Font.ITALIC, this.getHeight()/10);
+            g2.setFont(font);
+            // get metrics from the graphics
+            FontMetrics metrics = g.getFontMetrics(font);
+            // get the height of a line of text in this font and render context
+            int hgt = metrics.getHeight();
+            // get the advance of my text in this font and render context
+            int adv = metrics.stringWidth("Player1 WINS!");
+
+            g.setColor(Color.black);
+            g.fillRect(this.getWidth()/10 - adv/20, this.getHeight()/2 - (int) (hgt/1.3), adv+adv/10, hgt);
+            g.setColor(Color.white);
+            g.drawString("Player1 WINS!", this.getWidth()/10, this.getHeight()/2);
+        }
+        else if (player2Score >= 6)
+        {
+            Font font = new Font("Times New Roman", Font.ITALIC, this.getHeight()/10);
+            g2.setFont(font);
+            // get metrics from the graphics
+            FontMetrics metrics = g.getFontMetrics(font);
+            // get the height of a line of text in this font and render context
+            int hgt = metrics.getHeight();
+            // get the advance of my text in this font and render context
+            int adv = metrics.stringWidth("Player2 WINS!");
+
+            g.setColor(Color.white);
+            g.fillRect(this.getWidth()/10 - adv/20, this.getHeight()/2 - (int) (hgt/1.3), adv+adv/10, hgt);
+            g.setColor(Color.black);
+            g.drawString("Player2 WINS!", this.getWidth()/10, this.getHeight()/2);
         }
     }
 
@@ -251,6 +321,8 @@ public class AbalonePanel extends JPanel
                 {
                     firstClicked = null;
                     secondClicked = null;
+                    player1Score = graph.getPlayer1Score();
+                    player2Score = graph.getPlayer2Score();
                 }
             }
         }
