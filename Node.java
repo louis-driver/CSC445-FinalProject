@@ -106,6 +106,26 @@ public class Node
         return isEdge;
     }
 
+    //Returns boolean representing if that neighbor exists
+    public boolean hasNeighbor(Node n)
+    {
+        if(sibling1.equals(n))
+            return true;
+        else if(sibling3.equals(n))
+            return true;
+        else if(sibling5.equals(n))
+            return true;
+        else if(sibling7.equals(n))
+            return true;
+        else if(sibling9.equals(n))
+            return true;
+        else if(sibling11.equals(n))
+            return true;
+        else 
+            return false;
+        
+    }
+
     public String toString()
     {
         String result = "Position: " + getID() + " Color: " + getColor() + " IsEdge: " + isEdge();
