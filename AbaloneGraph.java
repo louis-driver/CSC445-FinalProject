@@ -322,7 +322,7 @@ public class AbaloneGraph
                 currNode = nodes[currPosition];
             }
             else 
-                currPosition++;
+                currNode = null;
         }
     }
 
