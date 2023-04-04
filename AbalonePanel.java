@@ -11,25 +11,27 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import javax.swing.*;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class AbalonePanel extends JPanel
 {
     //example commit
-    AbaloneGraph graph; 
-    int graphSize = 91;
-    Polygon hexExterior;
-    Polygon hexInterior;
-    Polygon exteriorShadow;
-    Polygon interiorHighlight;
-    int[] startHeights = new int[11];
-    int[] startXCoords = new int[11];
-    int[] yCapturedCoords = new int[6];
-    int[] xCapturedCoords = new int[2];
-    int pieceSize;
-    Node firstClicked;
-    Node secondClicked;
-    int player1Score;
-    int player2Score;
+    private AbaloneGraph graph; 
+    private int graphSize = 91;
+    private Polygon hexExterior;
+    private Polygon hexInterior;
+    private Polygon exteriorShadow;
+    private Polygon interiorHighlight;
+    private int[] startHeights = new int[11];
+    private int[] startXCoords = new int[11];
+    private int[] yCapturedCoords = new int[6];
+    private int[] xCapturedCoords = new int[2];
+    private int pieceSize;
+    private Node firstClicked;
+    private Node secondClicked;
+    private ArrayBlockingQueue<Node> selected = new ArrayBlockingQueue<>(3);
+    private int player1Score;
+    private int player2Score;
 
     //Test Main class
     public static void main(String[] args)
@@ -299,14 +301,10 @@ public class AbalonePanel extends JPanel
             {
                 try
                 {
-                    
                     int direction = graph.getDirection(firstClicked, secondClicked);
                     if (direction != -1)
                     {
-                        System.out.println("Direction:" + direction);
                         Node last = graph.destination(firstClicked, secondClicked, direction);
-                        System.out.println("First: " + firstClicked);
-                        System.out.println("Last:" + last);
                         graph.makeInlineMove(firstClicked, last, direction);
                         repaint();
                         System.out.println("Move Made");
@@ -324,6 +322,10 @@ public class AbalonePanel extends JPanel
                     player1Score = graph.getPlayer1Score();
                     player2Score = graph.getPlayer2Score();
                 }
+            }
+            else if (true) //see if broadside move can be made
+            {
+                //do something
             }
         }
     }
