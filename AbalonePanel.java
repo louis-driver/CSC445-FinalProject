@@ -356,22 +356,36 @@ public class AbalonePanel extends JPanel
                     player2Score = graph.getPlayer2Score();
                 }
             }
-            else if (selected.size() == 3) //see if broadside move can be made
+            else if (selected.size() >= 2 && secondClicked != null) //see if broadside move can be made
             {
                 //do something
                 try 
                 {
+                    
+                    System.out.println("Making broadside move");
+                    System.out.println("Size:"+ selected.size());
                     Node[] nodes = new Node[selected.size()];
-                    for (int j = 0; j < selected.size()+1; ++j)
+                    for (int j = 0; j < 3; ++j)
                     {
                         nodes[j] = selected.poll();
+                        System.out.println("Node Popped: " + nodes[j]);
+                        System.out.println("Selected: " + Arrays.toString(selected.toArray()));
                     }
+                    System.out.println("Completed Array: +" + Arrays.toString(nodes));
+                    // TODO need to find direction by comparing secondClicked to the nodes on the edge
+                    // to differentiate between a secondClicked node that could be understood as 
+                    // two different directions
                     int direction = 11;
                     graph.makeBroadsideMove(nodes, direction);
+                    repaint();
                 }
                 catch (RuntimeException ex)
                 {
                     System.out.println("Could not move broadside.");
+                }
+                finally
+                {
+                    secondClicked = null;
                 }
             }
         }
