@@ -186,13 +186,19 @@ public class AbalonePanel extends JPanel
         g.fillPolygon(hexInterior);
 
         //Draw spaces where pieces are/can be
+        Node currNode;
         for (int i = 0; i < graphSize; ++i)
         {
-            if (graph.getNode(i).getColor() == 0)
+            currNode = graph.getNode(i);
+            if (currNode.getColor()==1 && selected.contains(currNode))
+                g2.setColor(new Color(150, 150, 220));
+            else if (currNode.getColor() == 2 && selected.contains(currNode))
+                g2.setColor(new Color(150, 10, 10));
+            else if (currNode.getColor() == 0)
                 g2.setColor(boardDark);
-            else if (graph.getNode(i).getColor() == 1)
+            else if (currNode.getColor() == 1)
                 g2.setColor(Color.white);
-            else if (graph.getNode(i).getColor() == 2)
+            else if (currNode.getColor() == 2)
                 g2.setColor(Color.black);
             g2.fill(graph.getPiece(i));
         }
@@ -272,6 +278,7 @@ public class AbalonePanel extends JPanel
             int i = 0;
             boolean nodeFound = false;
             int nodePosition = -1;
+            Node currNode = null;
             // Finds the point that was clicked if one was clicked
             while (!nodeFound && i < graphSize)
             {
@@ -279,25 +286,51 @@ public class AbalonePanel extends JPanel
                 {
                     nodePosition = i;
                     nodeFound = true;
+                    currNode = graph.getNode(nodePosition);
                 }
                 ++i;
             }
 
             // Prints the node that was clicked if one is found
             if (nodePosition != -1)
-                System.out.println("(" + graph.getNode(nodePosition) +  ")");
+            {
+                System.out.println("(" + currNode +  ")");
+            }
 
+            //Assign most recent three left clicks to the selected queue
+            //If a left click exceeds the three, pop the head, then add
+            if (SwingUtilities.isLeftMouseButton(e) && currNode != null)
+            {
+                //Removes a selected node if pressed again
+                if (selected.contains(currNode))
+                {
+                    selected.remove(currNode);
+                }
+                else if (selected.size() == 3)
+                {
+                    selected.poll();
+                    selected.add(currNode);
+                }
+                else if (currNode.getColor() != 0)
+                {
+                    selected.add(currNode);
+                }
+                System.out.println(Arrays.toString(selected.toArray()));
+                repaint();
+            }
+            
+            /*
             if (SwingUtilities.isLeftMouseButton(e) && nodePosition != -1)
             {
                 // do stuff for left click
                 firstClicked = graph.getNode(nodePosition);
-            }
+            } */
             if (SwingUtilities.isRightMouseButton(e) && nodePosition != -1)
             {
-                // do stuff for rigt click
+                // do stuff for right click
                 secondClicked = graph.getNode(nodePosition);
             }
-            if (firstClicked != null && secondClicked != null)
+            if (firstClicked != null && secondClicked != null) // if canMoveInline
             {
                 try
                 {
@@ -323,9 +356,23 @@ public class AbalonePanel extends JPanel
                     player2Score = graph.getPlayer2Score();
                 }
             }
-            else if (true) //see if broadside move can be made
+            else if (selected.size() == 3) //see if broadside move can be made
             {
                 //do something
+                try 
+                {
+                    Node[] nodes = new Node[selected.size()];
+                    for (int j = 0; j < selected.size()+1; ++j)
+                    {
+                        nodes[j] = selected.poll();
+                    }
+                    int direction = 11;
+                    graph.makeBroadsideMove(nodes, direction);
+                }
+                catch (RuntimeException ex)
+                {
+                    System.out.println("Could not move broadside.");
+                }
             }
         }
     }
