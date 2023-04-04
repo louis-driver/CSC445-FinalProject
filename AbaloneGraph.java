@@ -330,8 +330,55 @@ public class AbaloneGraph
     // The node array should be three nodes or less
     public boolean canMoveBroadside(Node[] nodes, int direction)
     {
-        boolean canMove = false;
-        //TODO implement check
+        boolean canMove = true;
+        int color = nodes[0].getColor();
+
+        //Make sure not more than 3 pieces being moved
+        if(nodes.length>3)
+            canMove=false;
+        //Check if array has consistent colors
+        for(int i=0; i<nodes.length; i++)
+        {
+            if(nodes[i].getColor()==0 || nodes[i].getColor() != color)
+                canMove = false;
+        }
+        //Check if neighbors occupied
+        for(int i=0; i<nodes.length; i++)
+        {
+            if(nodes[i].getSibling(direction).getColor()!=0)
+            {
+                canMove=false;
+            }
+        }
+        //Check to see if nodes are in line 
+        if(nodes.length>2)
+        {
+            int numNeighbors=0;
+            for(int i=0; i<nodes.length-1; i++)
+            {
+                //if(nodes[i].hasNeighbor(nodes[i+1]))
+                    numNeighbors++;
+                //if(nodes[i].hasNeighbor(nodes[nodes.length-1]))
+                    numNeighbors++;
+                System.out.println(numNeighbors);
+            }
+
+            if(numNeighbors<2)
+                canMove=false;
+            System.out.println(canMove);
+        }
+        else
+        {
+            int numNeighbors=0;
+            for(int i=0; i<nodes.length-1; i++)
+            {
+                //if(nodes[i].hasNeighbor(nodes[i+1]))
+                    numNeighbors++;
+            }
+
+            if(numNeighbors<1)
+                canMove=false;
+        }   
         return canMove;
     }
 
