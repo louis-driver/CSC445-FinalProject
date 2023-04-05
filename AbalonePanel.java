@@ -184,17 +184,20 @@ public class AbalonePanel extends JPanel
         for (int i = 0; i < graphSize; ++i)
         {
             currNode = graph.getNode(i);
-            if (currNode.getColor()==1 && selected.contains(currNode))
-                g2.setColor(new Color(150, 150, 220));
-            else if (currNode.getColor() == 2 && selected.contains(currNode))
-                g2.setColor(new Color(150, 10, 10));
-            else if (currNode.getColor() == 0)
-                g2.setColor(boardDark);
-            else if (currNode.getColor() == 1)
-                g2.setColor(Color.white);
-            else if (currNode.getColor() == 2)
-                g2.setColor(Color.black);
-            g2.fill(graph.getPiece(i));
+            if (currNode.getPiece() != null)
+            {
+                if (currNode.getColor()==1 && selected.contains(currNode))
+                    g2.setColor(new Color(150, 150, 220));
+                else if (currNode.getColor() == 2 && selected.contains(currNode))
+                    g2.setColor(new Color(150, 10, 10));
+                else if (currNode.getColor() == 0)
+                    g2.setColor(boardDark);
+                else if (currNode.getColor() == 1)
+                    g2.setColor(Color.white);
+                else if (currNode.getColor() == 2)
+                    g2.setColor(Color.black);
+                g2.fill(graph.getPiece(i));
+            }
         }
 
         //Draw any captured pieces
@@ -276,7 +279,8 @@ public class AbalonePanel extends JPanel
             // Finds the point that was clicked if one was clicked
             while (!nodeFound && i < graphSize)
             {
-                if(graph.getPiece(i).contains(clickedX, clickedY))
+                Ellipse2D currPiece = graph.getPiece(i);
+                if(currPiece != null && currPiece.contains(clickedX, clickedY))
                 {
                     nodePosition = i;
                     nodeFound = true;
@@ -312,15 +316,6 @@ public class AbalonePanel extends JPanel
                 System.out.println(Arrays.toString(selected.toArray()));
                 repaint();
             }
-            
-            /*
-                System.out.println("1(" + graph.getNode(nodePosition) +  ")");
-
-            if (SwingUtilities.isLeftMouseButton(e) && nodePosition != -1)
-            {
-                // do stuff for left click
-                firstClicked = graph.getNode(nodePosition);
-            } */
             if (SwingUtilities.isRightMouseButton(e) && nodePosition != -1)
             {
                 // do stuff for right click
@@ -355,22 +350,18 @@ public class AbalonePanel extends JPanel
             else if (selected.size() >= 2 && secondClicked != null) //see if broadside move can be made
             {
                 try 
-                {
-                    
+                {   
                     System.out.println("Making broadside move");
-                    System.out.println("Size:"+ selected.size());
                     Node[] nodes = new Node[selected.size()];
-                    for (int j = 0; j < selected.size(); ++j)
+                    int size = selected.size();
+                    for (int j = 0; j < size; ++j)
                     {
                         nodes[j] = selected.poll();
-                        System.out.println("Node Popped: " + nodes[j]);
-                        System.out.println("Selected: " + Arrays.toString(selected.toArray()));
                     }
                     System.out.println("Completed Array: +" + Arrays.toString(nodes));
-                    // TODO need to find direction by comparing secondClicked to the nodes on the edge
-                    // to differentiate between a secondClicked node that could be understood as 
-                    // two different directions
-                    int direction = 11;
+                    // TODO need to test canMoveBroadside()
+                    int direction = graph.getBroadsideDirection(nodes, secondClicked);
+                    System.out.println("Direction: "+ direction);
                     graph.makeBroadsideMove(nodes, direction);
                     repaint();
                 }
