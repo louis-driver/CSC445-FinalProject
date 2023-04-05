@@ -127,21 +127,9 @@ public class Node
             return false;  
     }
 
-    //For queues returns next value in data structure
-    public Node getNext()
-    {
-        return next;
-    }
-
-    //For queues returns next value in data structure
-    public void setNext(Node n)
-    {
-        next = n;
-    }
-
     public String toString()
     {
-        String result = "Position: " + getID() + " Color: " + getColor() + " IsEdge: " + isEdge() + " Next: " + next;
+        String result = "Position: " + getID() + " Color: " + getColor() + " IsEdge: " + isEdge();
         return result;
     }
 }
