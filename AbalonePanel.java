@@ -320,6 +320,8 @@ public class AbalonePanel extends JPanel
             }
             
             /*
+                System.out.println("1(" + graph.getNode(nodePosition) +  ")");
+
             if (SwingUtilities.isLeftMouseButton(e) && nodePosition != -1)
             {
                 // do stuff for left click
@@ -335,6 +337,7 @@ public class AbalonePanel extends JPanel
                 try
                 {
                     int direction = graph.getDirection(firstClicked, secondClicked);
+                    System.out.println("entered try");
                     if (direction != -1)
                     {
                         Node last = graph.destination(firstClicked, secondClicked, direction);
