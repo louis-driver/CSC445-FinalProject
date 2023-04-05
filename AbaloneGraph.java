@@ -433,6 +433,21 @@ public class AbaloneGraph
         return sibNum;
     }
 
+    public int getBroadsideDirection(Node[] nodes, Node directionNode)
+    {
+        int direction = -1;
+        for (int i = 0; i < nodes.length; ++i)
+        {
+            if (getDirection(nodes[i], directionNode) != -1)
+            {
+                System.out.println("Direction: "+ getDirection(nodes[i], directionNode));
+                return getDirection(nodes[i], directionNode);
+            }
+        }
+        System.out.println("Direction: "+ direction);
+        return direction;
+    }
+
     //Returns the destination of the last node in an in line move if it is valid 
     // Returns null if the move is not valid 
     public Node destination(Node first, Node second, int direction)
