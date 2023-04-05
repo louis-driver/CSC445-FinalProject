@@ -13,6 +13,7 @@ public class Node
     private Node sibling11;
     private boolean isEdge;
     private Ellipse2D.Double piece;
+    private Node next;
 
     //Creates a node that has a value for:
     // color: a state to determine whose piece is on the node; 0=board, 1=white/player1, 2=black/player2
@@ -23,6 +24,7 @@ public class Node
         this.color = color;
         positionID = ID;
         isEdge = edge; 
+        next = null;
     }
 
     //Sets the sibling node in a given direction based on 
@@ -122,13 +124,24 @@ public class Node
         else if(sibling11.equals(n))
             return true;
         else 
-            return false;
-        
+            return false;  
+    }
+
+    //For queues returns next value in data structure
+    public Node getNext()
+    {
+        return next;
+    }
+
+    //For queues returns next value in data structure
+    public void setNext(Node n)
+    {
+        next = n;
     }
 
     public String toString()
     {
-        String result = "Position: " + getID() + " Color: " + getColor() + " IsEdge: " + isEdge();
+        String result = "Position: " + getID() + " Color: " + getColor() + " IsEdge: " + isEdge() + " Next: " + next;
         return result;
     }
 }
