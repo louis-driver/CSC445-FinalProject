@@ -27,7 +27,6 @@ public class AbalonePanel extends JPanel
     private int[] yCapturedCoords = new int[6];
     private int[] xCapturedCoords = new int[2];
     private int pieceSize;
-    private Node firstClicked;
     private Node secondClicked;
     private ArrayBlockingQueue<Node> selected = new ArrayBlockingQueue<>(3);
     private int player1Score;
@@ -108,11 +107,6 @@ public class AbalonePanel extends JPanel
                 {
                     //System.out.println("CurrX: " + currX + " CurrPosition:" + currPosition);
                     Ellipse2D.Double boardSpace = new Ellipse2D.Double(currX, (double) startHeights[i], pieceSize, pieceSize);
-                    graph.setPiece(currPosition, boardSpace);
-                }
-                else //I.e. an edge of the board
-                {
-                    Ellipse2D.Double boardSpace = new Ellipse2D.Double(0,0, pieceSize, pieceSize);
                     graph.setPiece(currPosition, boardSpace);
                 }
                 ++currPosition;
@@ -332,12 +326,12 @@ public class AbalonePanel extends JPanel
                 // do stuff for right click
                 secondClicked = graph.getNode(nodePosition);
             }
-            if (firstClicked != null && secondClicked != null) // if canMoveInline
+            if (selected.size() == 1 && secondClicked != null) // if canMoveInline
             {
+                Node firstClicked = selected.poll();
                 try
                 {
                     int direction = graph.getDirection(firstClicked, secondClicked);
-                    System.out.println("entered try");
                     if (direction != -1)
                     {
                         Node last = graph.destination(firstClicked, secondClicked, direction);
@@ -348,7 +342,6 @@ public class AbalonePanel extends JPanel
                 }
                 catch (RuntimeException ex)
                 {
-                    //System.out.println(ex);
                     System.out.println("Invalid Move");
                 }
                 finally
@@ -361,14 +354,13 @@ public class AbalonePanel extends JPanel
             }
             else if (selected.size() >= 2 && secondClicked != null) //see if broadside move can be made
             {
-                //do something
                 try 
                 {
                     
                     System.out.println("Making broadside move");
                     System.out.println("Size:"+ selected.size());
                     Node[] nodes = new Node[selected.size()];
-                    for (int j = 0; j < 3; ++j)
+                    for (int j = 0; j < selected.size(); ++j)
                     {
                         nodes[j] = selected.poll();
                         System.out.println("Node Popped: " + nodes[j]);
