@@ -124,8 +124,7 @@ public class Node
         else if(sibling11.equals(n))
             return true;
         else 
-            return false;
-        
+            return false;  
     }
 
     //For queues returns next value in data structure
