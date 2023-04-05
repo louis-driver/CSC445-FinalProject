@@ -12,7 +12,7 @@ public class Queue {
         back = null;
         count = 0;
     }
-
+    //Adds new Node to back of Queue
     public void push(Node n)
     {
         if(count!=0)
@@ -23,7 +23,7 @@ public class Queue {
         count ++;
 
     }
-
+    //Removes front node from the Queue and reduces count
     public void pop()
     {
         if(count == 0)
@@ -39,7 +39,7 @@ public class Queue {
         front = front.getNext();
         count--;
     }
-
+    //Gets the front Node of Queue
     public Node peek()
     {
         if(count==0)
@@ -48,12 +48,12 @@ public class Queue {
         }
         return front;
     }
-
+    //Gets count of the Queue
     public int getCount()
     {
         return count;
     }
-
+    //Returns if the Queue is empty or not
     public boolean isEmpty()
     {
         return count==0;
@@ -65,7 +65,7 @@ public class Queue {
         Node current = front;
         while(current!= null)
         {
-            output += current + ",";
+            output += current.getID() + ",";
             current = current.getNext();
         }
 

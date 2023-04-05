@@ -30,6 +30,7 @@ public class AbalonePanel extends JPanel
     Node secondClicked;
     int player1Score;
     int player2Score;
+    Queue clickedQueue = new Queue();
 
     //Test Main class
     public static void main(String[] args)
@@ -283,33 +284,59 @@ public class AbalonePanel extends JPanel
 
             // Prints the node that was clicked if one is found
             if (nodePosition != -1)
-                System.out.println("(" + graph.getNode(nodePosition) +  ")");
+                System.out.println("1(" + graph.getNode(nodePosition) +  ")");
 
             if (SwingUtilities.isLeftMouseButton(e) && nodePosition != -1)
             {
                 // do stuff for left click
                 firstClicked = graph.getNode(nodePosition);
+                clickedQueue.push(firstClicked);
+                if(clickedQueue.getCount()>3)
+                    clickedQueue.pop();
+                System.out.println("2 " + clickedQueue.toString());
             }
             if (SwingUtilities.isRightMouseButton(e) && nodePosition != -1)
             {
                 // do stuff for rigt click
                 secondClicked = graph.getNode(nodePosition);
             }
-            if (firstClicked != null && secondClicked != null)
+            if (!clickedQueue.isEmpty() && secondClicked != null)
             {
                 try
                 {
                     
                     int direction = graph.getDirection(firstClicked, secondClicked);
+                    System.out.println("entered try");
                     if (direction != -1)
                     {
-                        System.out.println("Direction:" + direction);
-                        Node last = graph.destination(firstClicked, secondClicked, direction);
-                        System.out.println("First: " + firstClicked);
-                        System.out.println("Last:" + last);
-                        graph.makeInlineMove(firstClicked, last, direction);
-                        repaint();
-                        System.out.println("Move Made");
+                        if(clickedQueue.getCount()==1)
+                        {
+                            System.out.println("Direction:" + direction);
+                            Node last = graph.destination(clickedQueue.peek(), secondClicked, direction);
+                            System.out.println("First: " + firstClicked);
+                            System.out.println("Last:" + last);
+                            graph.makeInlineMove(clickedQueue.peek(), last, direction);
+                            repaint();
+                            System.out.println("Move Made");
+                        }
+                        else 
+                        {
+                            System.out.println("direction: " + direction);
+                            Node[] nodes = new Node[clickedQueue.getCount()];
+                            for(int j=0; j<clickedQueue.getCount(); j++)
+                            {
+                                System.out.println("emtered for");
+                                nodes[j] = clickedQueue.peek();
+                                clickedQueue.pop();
+                                System.out.println(nodes[j]);
+                            }
+
+                            if(graph.canMoveBroadside(nodes, direction))
+                                graph.makeBroadsideMove(nodes, direction);
+
+                            repaint();
+                        }
+
                     }
                 }
                 catch (RuntimeException ex)
