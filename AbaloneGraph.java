@@ -376,12 +376,10 @@ public class AbaloneGraph
                     numNeighbors++;
                 if(nodes[i].hasNeighbor(nodes[nodes.length-1]))
                     numNeighbors++;
-                System.out.println(numNeighbors);
             }
 
             if(numNeighbors<2)
                 canMove=false;
-            System.out.println(canMove);
         }
         else
         {
@@ -440,11 +438,9 @@ public class AbaloneGraph
         {
             if (getDirection(nodes[i], directionNode) != -1)
             {
-                System.out.println("Direction: "+ getDirection(nodes[i], directionNode));
                 return getDirection(nodes[i], directionNode);
             }
         }
-        System.out.println("Direction: "+ direction);
         return direction;
     }
 
