@@ -289,12 +289,6 @@ public class AbalonePanel extends JPanel
                 ++i;
             }
 
-            // Prints the node that was clicked if one is found
-            if (nodePosition != -1)
-            {
-                System.out.println("(" + currNode +  ")");
-            }
-
             //Assign most recent three left clicks to the selected queue
             //If a left click exceeds the three, pop the head, then add
             if (SwingUtilities.isLeftMouseButton(e) && currNode != null)
@@ -313,12 +307,10 @@ public class AbalonePanel extends JPanel
                 {
                     selected.add(currNode);
                 }
-                System.out.println(Arrays.toString(selected.toArray()));
                 repaint();
             }
             if (SwingUtilities.isRightMouseButton(e) && nodePosition != -1)
             {
-                // do stuff for right click
                 secondClicked = graph.getNode(nodePosition);
             }
             if (selected.size() == 1 && secondClicked != null) // if canMoveInline
@@ -341,7 +333,6 @@ public class AbalonePanel extends JPanel
                 }
                 finally
                 {
-                    firstClicked = null;
                     secondClicked = null;
                     player1Score = graph.getPlayer1Score();
                     player2Score = graph.getPlayer2Score();
@@ -350,19 +341,19 @@ public class AbalonePanel extends JPanel
             else if (selected.size() >= 2 && secondClicked != null) //see if broadside move can be made
             {
                 try 
-                {   
-                    System.out.println("Making broadside move");
+                {
                     Node[] nodes = new Node[selected.size()];
                     int size = selected.size();
                     for (int j = 0; j < size; ++j)
                     {
                         nodes[j] = selected.poll();
                     }
-                    System.out.println("Completed Array: +" + Arrays.toString(nodes));
                     // TODO need to test canMoveBroadside()
                     int direction = graph.getBroadsideDirection(nodes, secondClicked);
-                    System.out.println("Direction: "+ direction);
-                    graph.makeBroadsideMove(nodes, direction);
+                    if (graph.canMoveBroadside(nodes, direction))
+                    {
+                        graph.makeBroadsideMove(nodes, direction);
+                    }
                     repaint();
                 }
                 catch (RuntimeException ex)
