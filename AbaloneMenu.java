@@ -1,6 +1,12 @@
 //Bryan Floyd
 //Abalone Menu
 
+//TODO Rescale components based on window size change
+//TODO Add example images to rules panel
+//TODO Add detection for rules window exit with x button, reformat longer strings, reduce default window size
+//TODO Add multiplayer button function
+//TODO Window size consistency between JFrames
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -173,7 +179,6 @@ public class AbaloneMenu extends JPanel
 		BackToMenuButton.addActionListener(MainListener);
 		
 		RulesFrame.add(RulesPanel);
-		RulesFrame.setUndecorated(true);
 	}
 	
 	public void GameFrameSetup()
