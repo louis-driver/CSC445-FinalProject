@@ -362,10 +362,22 @@ public class AbaloneGraph
     {
         boolean canMove = true;
         int color = nodes[0].getColor();
-
         //Make sure not more than 3 pieces being moved
         if(nodes.length>3)
             canMove=false;
+
+        //Check for moving pieces onto each other
+        for(int i=0; i<nodes.length; i++)
+        {
+            for(int j=0; j<nodes.length; j++)
+            {
+                if(nodes[i].getSibling(direction)==nodes[j])
+                    canMove=false;
+                System.out.println(canMove);
+            }
+        }
+
+        System.out.println("test");
         //Check if array has consistant colors
         for(int i=0; i<nodes.length; i++)
         {
