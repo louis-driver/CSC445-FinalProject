@@ -31,6 +31,7 @@ public class AbalonePanel extends JPanel
     private ArrayBlockingQueue<Node> selected = new ArrayBlockingQueue<>(3);
     private int player1Score;
     private int player2Score;
+    private boolean player1Turn = true;
 
     //Test Main class
     public static void main(String[] args)
@@ -289,6 +290,11 @@ public class AbalonePanel extends JPanel
                 ++i;
             }
 
+            int currPlayer = 1;
+            //Determines whose turn it is
+            if (!player1Turn)
+                currPlayer = 2;
+
             //Assign most recent three left clicks to the selected queue
             //If a left click exceeds the three, pop the head, then add
             if (SwingUtilities.isLeftMouseButton(e) && currNode != null)
@@ -298,12 +304,12 @@ public class AbalonePanel extends JPanel
                 {
                     selected.remove(currNode);
                 }
-                else if (selected.size() == 3)
+                else if (selected.size() == 3 && currNode.getColor() == currPlayer)
                 {
                     selected.poll();
                     selected.add(currNode);
                 }
-                else if (currNode.getColor() != 0)
+                else if (currNode.getColor() != 0 && currNode.getColor() == currPlayer)
                 {
                     selected.add(currNode);
                 }
@@ -323,6 +329,7 @@ public class AbalonePanel extends JPanel
                     {
                         Node last = graph.destination(firstClicked, secondClicked, direction);
                         graph.makeInlineMove(firstClicked, last, direction);
+                        player1Turn = !player1Turn;
                         repaint();
                         System.out.println("Move Made");
                     }
@@ -348,11 +355,11 @@ public class AbalonePanel extends JPanel
                     {
                         nodes[j] = selected.poll();
                     }
-                    // TODO need to test canMoveBroadside()
                     int direction = graph.getBroadsideDirection(nodes, secondClicked);
                     if (graph.canMoveBroadside(nodes, direction))
                     {
                         graph.makeBroadsideMove(nodes, direction);
+                        player1Turn = !player1Turn;
                     }
                     repaint();
                 }
