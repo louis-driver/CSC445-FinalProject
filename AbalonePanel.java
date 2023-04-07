@@ -372,6 +372,8 @@ public class AbalonePanel extends JPanel
                 finally
                 {
                     secondClicked = null;
+                    player1Score = graph.getPlayer1Score();
+                    player2Score = graph.getPlayer2Score();
                 }
             }
         }

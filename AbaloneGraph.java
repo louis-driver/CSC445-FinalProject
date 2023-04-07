@@ -339,6 +339,20 @@ public class AbaloneGraph
             nodes[i].getSibling(direction).setColor(color);
             nodes[i].setColor(0);
         }
+
+        for(int i=0; i<nodes.length; i++)
+        {
+            if(nodes[i].getSibling(direction).isEdge())
+            {
+                System.out.println("Entered if statement");
+                if(nodes[i].getColor()==1)
+                    player2Score++;
+                else 
+                    player1Score++;
+
+                System.out.println("P1: " + player1Score + "p2: " + player2Score);
+            }
+        }
     }
 
     //Determines if a broadside move can be made for a given array of nodes
