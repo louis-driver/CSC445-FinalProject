@@ -4,7 +4,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.net.URL;
 
 public class AbaloneMenu extends JPanel
 {
@@ -18,47 +17,41 @@ public class AbaloneMenu extends JPanel
 	JButton MPButton;
 	JButton RulesButton;
 	JButton QuitButton;
-	URL url;
 	
+	Color BoardColorLight = new Color(160, 130, 105);
+	Color BoardColorDark = new Color(75, 45, 30);
+
 	boolean gameInProgress = false;
 	boolean rulesFrameOpen = false;
 	
 	public AbaloneMenu()
 	{			
 		setPreferredSize(GUIFrame.getSize());
-		setBackground(Color.BLACK);
+		setBackground(new Color(160, 130, 105));
 		
 		MenuPanel = new JPanel();
 		MenuPanel.setLayout(new BoxLayout(MenuPanel, BoxLayout.PAGE_AXIS));
 		//MenuPanel.setPreferredSize(new Dimension(GUIFrame.getWidth(), GUIFrame.getHeight()+100));
-		MenuPanel.setBackground(Color.BLACK);
+		MenuPanel.setBackground(BoardColorLight);
 		
 		JPanel TitlePanel = new JPanel();
-		TitlePanel.setBackground(Color.BLACK);
+		TitlePanel.setBackground(BoardColorLight);
 		JPanel SPBPanel = new JPanel();
-		SPBPanel.setBackground(Color.BLACK);
+		SPBPanel.setBackground(new Color(75, 45, 30));
 		SPBPanel.setLayout(new BorderLayout());
 		JPanel MPBPanel = new JPanel();
-		MPBPanel.setBackground(Color.BLACK);
+		MPBPanel.setBackground(new Color(75, 45, 30));
 		MPBPanel.setLayout(new BorderLayout());
 		JPanel RulesBPanel = new JPanel();
-		RulesBPanel.setBackground(Color.BLACK);
+		RulesBPanel.setBackground(new Color(75, 45, 30));
 		RulesBPanel.setLayout(new BorderLayout());
 		JPanel QuitBPanel = new JPanel();
-		QuitBPanel.setBackground(Color.BLACK);
+		QuitBPanel.setBackground(new Color(75, 45, 30));
 		QuitBPanel.setLayout(new BorderLayout());
 		
-		try
-		{
-			url = new URL("https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Abalone_standard.svg/220px-Abalone_standard.svg.png");
-		}
-		catch(Exception e)
-		{
-			System.out.println("URL Problem");
-		}
 		PicPanel = new JPanel();
-		PicPanel.setBackground(Color.BLACK);
-		ImageIcon BoardImage = new ImageIcon(url);
+		PicPanel.setBackground(BoardColorLight);
+		ImageIcon BoardImage = new ImageIcon("AbaloneBoard.png");
 		JLabel ImageLabel = new JLabel(BoardImage);
 		PicPanel.add(ImageLabel);
 		
@@ -73,16 +66,16 @@ public class AbaloneMenu extends JPanel
 		RulesButton = new JButton("Rules");
 		QuitButton = new JButton("Quit");
 		
-		Title.setForeground(Color.WHITE);
+		Title.setForeground(new Color(75, 45, 30));
 		SPButton.setForeground(Color.WHITE);
 		MPButton.setForeground(Color.WHITE);
 		RulesButton.setForeground(Color.WHITE);
-		QuitButton.setForeground(Color.WHITE);
+		QuitButton.setForeground(Color.RED);
 		
-		SPButton.setBackground(Color.DARK_GRAY);
-		MPButton.setBackground(Color.DARK_GRAY);
-		RulesButton.setBackground(Color.DARK_GRAY);
-		QuitButton.setBackground(Color.RED);
+		SPButton.setBackground(new Color(75, 45, 30));
+		MPButton.setBackground(new Color(75, 45, 30));
+		RulesButton.setBackground(new Color(75, 45, 30));
+		QuitButton.setBackground(new Color(75, 45, 30));
 		
 		//Add title
 		TitlePanel.add(Title);
@@ -129,34 +122,42 @@ public class AbaloneMenu extends JPanel
 	public void RulesFrameSetup()
 	{
 		RulesFrame = new JFrame();
-		RulesFrame.setSize(675,400);
+		RulesFrame.setSize(675,GUIFrame.getHeight());
 		RulesFrame.setTitle("Abalone: Rules");
 		
 		JPanel RulesPanel = new JPanel();
 		RulesPanel.setLayout(new BoxLayout(RulesPanel, BoxLayout.PAGE_AXIS));
-		RulesPanel.setBackground(Color.DARK_GRAY);
+		RulesPanel.setBackground(BoardColorLight);
 		RulesPanel.setPreferredSize(GUIFrame.getSize());
 		
-		JLabel rulesTitle = new JLabel("  RULES OF ABALONE:");
-		rulesTitle.setForeground(Color.WHITE);
-		JLabel ruleLabel1 = new JLabel("- Objective: Push your opponent's marbles off the board.");
-		ruleLabel1.setForeground(Color.WHITE);
-		JLabel ruleLabel2 = new JLabel("- Black moves first.");
-		ruleLabel2.setForeground(Color.WHITE);
-		JLabel ruleLabel3 = new JLabel("- You may move up to three adjacent pieces, positioned in a straight line, in one direction.");
-		ruleLabel3.setForeground(Color.WHITE);
-		JLabel ruleLabel4 = new JLabel("- This direction can be either 'broadside' (parallel to the line the pieces create) or 'in-line' (perpendicular to the line).");
-		ruleLabel4.setForeground(Color.WHITE);
-		JLabel ruleLabel5 = new JLabel("- TODO");
-		ruleLabel5.setForeground(Color.WHITE);
+		JLabel rulesTitle = new JLabel("   RULES OF ABALONE:");
+		rulesTitle.setForeground(Color.BLACK);
+		JLabel ruleLabel1 = new JLabel(" - Objective: Push your opponent's marbles off the board.");
+		ruleLabel1.setForeground(Color.BLACK);
+		JLabel ruleLabel2 = new JLabel(" - Black moves first.");
+		ruleLabel2.setForeground(Color.BLACK);
+		JLabel ruleLabel3 = new JLabel(" - You may move up to three adjacent pieces, positioned in a straight line, in one direction.");
+		ruleLabel3.setForeground(Color.BLACK);
+		JLabel ruleLabel4 = new JLabel(" - This direction can be either 'broadside' (parallel to the line the pieces create) or 'in-line' (perpendicular to the line).");
+		ruleLabel4.setForeground(Color.BLACK);
+		JLabel ruleLabel5 = new JLabel(" - TODO");
+		ruleLabel5.setForeground(Color.BLACK);
 		
 		JButton BackToMenuButton = new JButton("Back to Menu");
-		BackToMenuButton.setForeground(Color.WHITE);
-		BackToMenuButton.setBackground(Color.RED);
+		BackToMenuButton.setForeground(Color.RED);
+		BackToMenuButton.setBackground(BoardColorDark);
+
+		JPanel RulesPicPanel1 = new JPanel();
+		RulesPicPanel1.setBackground(BoardColorLight);
+		ImageIcon RulesImage1 = new ImageIcon("AbaloneBoardSmall.png");
+		JLabel RulesImg1 = new JLabel(RulesImage1);
+		RulesPicPanel1.add(RulesImg1);
 		
 		RulesPanel.add(Box.createRigidArea(new Dimension(0,20)));
 		RulesPanel.add(rulesTitle);
-		RulesPanel.add(Box.createRigidArea(new Dimension(0,25)));
+		RulesPanel.add(Box.createRigidArea(new Dimension(0,10)));
+		RulesPanel.add(RulesImg1);
+		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
 		RulesPanel.add(ruleLabel1);
 		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
 		RulesPanel.add(ruleLabel2);
@@ -172,6 +173,7 @@ public class AbaloneMenu extends JPanel
 		BackToMenuButton.addActionListener(MainListener);
 		
 		RulesFrame.add(RulesPanel);
+		RulesFrame.setUndecorated(true);
 	}
 	
 	public void GameFrameSetup()
@@ -180,11 +182,18 @@ public class AbaloneMenu extends JPanel
 		AbaloneGraph AbaloneGraph = new AbaloneGraph();
 		AbalonePanel AbalonePanel = new AbalonePanel(AbaloneGraph);
 		LogPanel = new JPanel();
-		GameFrame.setLayout(new FlowLayout());
-		//GameFrame.setSize(AbalonePanel.getWidth() + LogPanel.getWidth(), AbalonePanel.getHeight());
-		GameFrame.setSize(400,500);
+
+		JTextArea TextLog = new JTextArea();
+		TextLog.setEditable(false);
+		LogPanel.add(TextLog);
+		TextLog.append("Test");
+
+		//GameFrame.setLayout(new BorderLayout());
+		GameFrame.setSize(AbalonePanel.getWidth() + LogPanel.getWidth(), AbalonePanel.getHeight());
+		GameFrame.setSize(GUIFrame.getSize());
 		GameFrame.add(AbalonePanel);
-		GameFrame.add(LogPanel);
+		//GameFrame.add(LogPanel, BorderLayout.EAST);
+		GameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GameFrame.setTitle("Abalone");
 	}
 	
@@ -236,7 +245,7 @@ public class AbaloneMenu extends JPanel
 			{
 				RulesFrame.setVisible(false);
 				RulesButton.setForeground(Color.WHITE);
-				RulesButton.setBackground(Color.DARK_GRAY);
+				RulesButton.setBackground(BoardColorDark);
 				rulesFrameOpen = false;
 			}
 	    }
