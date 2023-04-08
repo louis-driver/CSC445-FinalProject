@@ -365,8 +365,6 @@ public class AbaloneGraph
         //Make sure not more than 3 pieces being moved
         if(nodes.length>3)
             canMove=false;
-
-        System.out.println("test");
         //Check if array has consistant colors
         for(int i=0; i<nodes.length; i++)
         {
