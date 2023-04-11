@@ -4,6 +4,7 @@ import javax.swing.event.MouseInputAdapter;
 //Louis Driver
 // Source for hexagon: https://stackoverflow.com/questions/35853902/drawing-hexagon-using-java-error
 // Source for text display: https://docs.oracle.com/javase/tutorial/2d/text/measuringtext.html 
+
 //This is a JPanel that represents an Abalone board during play
 
 import java.awt.*;
@@ -32,6 +33,7 @@ public class AbalonePanel extends JPanel
     private int player1Score;
     private int player2Score;
     private boolean player1Turn = true;
+    private Sound sound = new Sound();
 
     //Test Main class
     public static void main(String[] args)
@@ -332,6 +334,8 @@ public class AbalonePanel extends JPanel
                         player1Turn = !player1Turn;
                         repaint();
                         System.out.println("Move Made");
+                        sound.setFile(0);
+                        sound.play();
                     }
                 }
                 catch (RuntimeException ex)
@@ -359,7 +363,10 @@ public class AbalonePanel extends JPanel
                     if (graph.canMoveBroadside(nodes, direction))
                     {
                         graph.makeBroadsideMove(nodes, direction);
+                        System.out.println("Move Made");
                         player1Turn = !player1Turn;
+                        sound.setFile(0);
+                        sound.play();
                     }
                     repaint();
                 }
