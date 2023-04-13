@@ -91,9 +91,9 @@ public class ComputerPlayer {
         for(int i=0; i<priority.size(); i++)
         {
             boolean remove = true;
-            for(int j=0; j<6; j++)
+            for(int j=1; j<12; j+=2)
             {
-                if((priority.get(i).getSibling(j) != null) && (priority.get(i).getSibling(j).getColor()==0))
+                if((priority.get(i).getSibling(j) != null) && (priority.get(i).getSibling(j).getColor()==0) && !priority.get(i).getSibling(j).isEdge())
                     remove = false;
                 else if((priority.get(i).getSibling(j) != null) && (priority.get(i).getSibling(j).getColor()==1))
                 {
@@ -116,7 +116,7 @@ public class ComputerPlayer {
         {
             for(int i=0; i<priority.size(); i++)
             {
-                for(int j=0; j<priority.size(); j++)
+                for(int j=1; j<12; j+=2)
                 {
                     if((priority.get(i).getSibling(j) != null) && (priority.get(i).getSibling(j).getColor()==1))
                     {
@@ -133,9 +133,9 @@ public class ComputerPlayer {
                     }
                 }
             }
-            for(int i=0; i<6; i++)
+            for(int i=1; i<12; i+=2)
             {
-                if(priority.get(0).getSibling(i)!=null && priority.get(0).getSibling(i).getColor()==0)
+                if(priority.get(0).getSibling(i)!=null && priority.get(0).getSibling(i).getColor()==0 && !priority.get(0).getSibling(i).isEdge())
                 {
                     int direction = graph.getDirection(priority.get(0), priority.get(0).getSibling(i));
                     Node dest = graph.destination(priority.get(0), priority.get(0).getSibling(i), direction);
@@ -152,11 +152,12 @@ public class ComputerPlayer {
             System.out.println("in second statement");
             for(int i=0; i<secondary.size(); i++)
             {
-                for(int j=0; j<6; j++)
+                for(int j=1; j<12; j+=2)
                 {
-                    if(secondary.get(i).getSibling(j)!=null && secondary.get(i).getSibling(j).getColor()==0)
+                    if(secondary.get(i).getSibling(j)!=null && secondary.get(i).getSibling(j).getColor()==0 && !secondary.get(i).getSibling(j).isEdge())
                     {
-                        int direction = graph.getDirection(secondary.get(i), secondary.get(i).getSibling(j));
+                        int direction = j;
+                        System.out.println("direction: " + direction);
                         Node dest = graph.destination(secondary.get(i), secondary.get(i).getSibling(j), direction);
                         int[] move = {secondary.get(i).getID(), dest.getID(), direction};
                         return move;
@@ -165,12 +166,13 @@ public class ComputerPlayer {
             }
 
         }
-        //If there are no priority nodes, the first available single move for a non egd piece 
+        //If there are no priority nodes, the first available single move for a non edge piece 
         else 
         {
+            System.out.println("in else");
             for(int i=0; i<computerNodes.size(); i++)
             {
-                for(int j=0; j<6; j++)
+                for(int j=1; j<12; j+=2)
                 {
                     if(computerNodes.get(i).getSibling(j)!=null && computerNodes.get(i).getSibling(j).getColor()==0)
                     {
