@@ -34,6 +34,8 @@ public class AbalonePanel extends JPanel
     private int player2Score;
     private boolean player1Turn = true;
     private Sound sound = new Sound();
+    private boolean musicOn = true;
+    private boolean musicStarted = false;
 
     //Test Main class
     public static void main(String[] args)
@@ -248,6 +250,17 @@ public class AbalonePanel extends JPanel
             g.fillRect(this.getWidth()/10 - adv/20, this.getHeight()/2 - (int) (hgt/1.3), adv+adv/10, hgt);
             g.setColor(Color.white);
             g.drawString("Player2 WINS!", this.getWidth()/10, this.getHeight()/2);
+        }
+        if (!musicStarted && musicOn)
+        {
+            sound.setFile(4);
+            sound.play();
+            sound.loop();
+            musicStarted = true;
+        }
+        else if (!musicOn)
+        {
+            sound.stop();
         }
     }
 
