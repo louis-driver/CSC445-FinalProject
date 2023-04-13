@@ -72,7 +72,7 @@ public class ComputerPlayer {
         for(int i=0; i<edgePieces.size(); i++)
         {
             boolean priorityNode = false;
-            for(int j=0; j<6; j++)
+            for(int j=2; j<12; j+=2)
             {
                 if(edgePieces.get(i).getSibling(j) != null && edgePieces.get(i).getSibling(j).getColor()==1)
                     priorityNode = true;
