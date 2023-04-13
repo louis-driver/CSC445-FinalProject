@@ -71,16 +71,22 @@ public class ComputerPlayer {
         ArrayList<Node> secondary = new ArrayList<Node>(edgePieces.size());
         for(int i=0; i<edgePieces.size(); i++)
         {
+            boolean priorityNode = false;
             for(int j=0; j<6; j++)
             {
                 if(edgePieces.get(i).getSibling(j) != null && edgePieces.get(i).getSibling(j).getColor()==1)
-                    priority.add(edgePieces.get(i));
-                else 
-                    secondary.add(edgePieces.get(i));
+                    priorityNode = true;
             }
+
+            if(priorityNode)
+                priority.add(edgePieces.get(i));
+            else 
+                secondary.add(edgePieces.get(i));
         }
         priority.trimToSize();
         secondary.trimToSize();
+        System.out.println("prio size 1: " + priority.size());
+        System.out.println("sec size 1: " + secondary.size());
         //Removes nodes from the priority list unless it can push a white piece or can move
         for(int i=0; i<priority.size(); i++)
         {
@@ -101,6 +107,9 @@ public class ComputerPlayer {
             if(remove)
                 priority.remove(i);
         }
+
+        System.out.println("prio size 2: " + priority.size());
+        System.out.println("sec size 2: " + secondary.size());
 
         //Goes through the priority nodes and returns a move based on the ranking system
         if(priority.size()!=0)
@@ -140,15 +149,16 @@ public class ComputerPlayer {
         //If there are no priority nodes, select the first node from the secondary nodes and move it in a direction it can go
         else if(secondary.size()!=0)
         {
+            System.out.println("in second statement");
             for(int i=0; i<secondary.size(); i++)
             {
                 for(int j=0; j<6; j++)
                 {
-                    if(priority.get(i).getSibling(j)!=null && priority.get(i).getSibling(j).getColor()==0)
+                    if(secondary.get(i).getSibling(j)!=null && secondary.get(i).getSibling(j).getColor()==0)
                     {
-                        int direction = graph.getDirection(priority.get(i), priority.get(i).getSibling(j));
-                        Node dest = graph.destination(priority.get(i), priority.get(i).getSibling(j), direction);
-                        int[] move = {priority.get(i).getID(), dest.getID(), direction};
+                        int direction = graph.getDirection(secondary.get(i), secondary.get(i).getSibling(j));
+                        Node dest = graph.destination(secondary.get(i), secondary.get(i).getSibling(j), direction);
+                        int[] move = {secondary.get(i).getID(), dest.getID(), direction};
                         return move;
                     }
                 }
