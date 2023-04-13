@@ -4,7 +4,6 @@ import java.awt.geom.Ellipse2D;
 public class Node
 {
     private int color;
-    private int opponentColor;
     private int positionID;
     private Node sibling1;
     private Node sibling3;
@@ -108,7 +107,7 @@ public class Node
     {
         return isEdge;
     }
-
+    //Checks to see if the piece is next to the edge
     public boolean bordersEdge()
     {
         if(sibling1.isEdge)
