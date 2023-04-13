@@ -19,7 +19,7 @@ public class AbaloneGraph
         this.setSiblings();
         Ai = new ComputerPlayer(this);
         System.out.println(Ai.toString());
-        graph[23].setColor(1);
+        graph[27].setColor(1);
         Ai.updatePlayers(this);
         System.out.println(Ai.toString());
         int[] move = Ai.getMove();

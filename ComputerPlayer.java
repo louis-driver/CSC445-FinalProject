@@ -72,7 +72,7 @@ public class ComputerPlayer {
         for(int i=0; i<edgePieces.size(); i++)
         {
             boolean priorityNode = false;
-            for(int j=2; j<12; j+=2)
+            for(int j=1; j<12; j+=2)
             {
                 if(edgePieces.get(i).getSibling(j) != null && edgePieces.get(i).getSibling(j).getColor()==1)
                     priorityNode = true;
@@ -108,43 +108,52 @@ public class ComputerPlayer {
                 priority.remove(i);
         }
 
+        for(int i=0; i<priority.size(); i++)
+        {
+            System.out.print(priority.get(i) + " ");
+        }
         System.out.println("prio size 2: " + priority.size());
         System.out.println("sec size 2: " + secondary.size());
 
         //Goes through the priority nodes and returns a move based on the ranking system
         if(priority.size()!=0)
         {
+            //Checks to see if any of the priority nodes can push a white node. If it can returns move
             for(int i=0; i<priority.size(); i++)
             {
                 for(int j=1; j<12; j+=2)
                 {
                     if((priority.get(i).getSibling(j) != null) && (priority.get(i).getSibling(j).getColor()==1))
                     {
-                        int direction = graph.getDirection(priority.get(i), priority.get(i).getSibling(j));
+                        int direction = j;
                         Node dest = graph.destination(priority.get(i), priority.get(i).getSibling(j), direction);
                         if(dest!=null)
                         {
+                            System.out.println("return 1");
                             int[] move = {priority.get(i).getID(), dest.getID(), direction};
                             return move;
 
                         }
-                    
-                        
                     }
                 }
-            }
-            for(int i=1; i<12; i+=2)
+            }   
+            //Finds which node can move and moves it 
+            for(int i=0; i<priority.size(); i++)
             {
-                if(priority.get(0).getSibling(i)!=null && priority.get(0).getSibling(i).getColor()==0 && !priority.get(0).getSibling(i).isEdge())
+                for(int j=1; j<12; j+=2)
                 {
-                    int direction = graph.getDirection(priority.get(0), priority.get(0).getSibling(i));
-                    Node dest = graph.destination(priority.get(0), priority.get(0).getSibling(i), direction);
-                    int[] move = {priority.get(i).getID(), dest.getID(), direction};
-                    return move;
+                    if(priority.get(i).getSibling(j)!=null && priority.get(i).getSibling(j).getColor()==0 && !priority.get(i).getSibling(j).isEdge())
+                    {
+                        int direction = graph.getDirection(priority.get(i), priority.get(i).getSibling(j));
+                        Node dest = graph.destination(priority.get(i), priority.get(i).getSibling(j), direction);
+                        int[] move = {priority.get(i).getID(), dest.getID(), direction};
+                        System.out.println("return 2");
+                        return move;
+                    }
                 }
-            }
-
-
+            }  
+            
+            System.out.println("return 3");
         }
         //If there are no priority nodes, select the first node from the secondary nodes and move it in a direction it can go
         else if(secondary.size()!=0)
