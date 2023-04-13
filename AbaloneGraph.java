@@ -6,83 +6,23 @@ public class AbaloneGraph
     private Node[] graph = new Node[91];
     private int player1Score;
     private int player2Score;
+    private ComputerPlayer Ai;
 
     public static void main(String[] args)
     {
         AbaloneGraph graph = new AbaloneGraph();
-        //for (int i = 0; i < 91; ++i)
-            //graph.printSiblings(i);
-
-        // //Test pushing nodes 7 and 14 
-        // int direction = graph.getDirection(graph.getNode(7), graph.getNode(14));
-        // graph.makeInlineMove(graph.getNode(7), graph.getNode(22), direction);
-        // System.out.println(graph.getNode(7)); //should have color: 0
-        // System.out.println(graph.getNode(14)); //color: 2
-        // System.out.println(graph.getNode(22)); //color: 2
-
-        
-        // //Test broadside move
-        // Node node1 = graph.getNode(64);
-        // Node node2 = graph.getNode(65);
-        // Node node3 = graph.getNode(66);
-        // int direction = 11;
-        // Node Sib1 = node1.getSibling(direction);
-        // Node Sib2 = node2.getSibling(direction);
-        // Node Sib3 = node3.getSibling(direction);
-        // System.out.println(node1);
-        // System.out.println(node2);
-        // System.out.println(node3);
-        // System.out.println(Sib1);
-        // System.out.println(Sib2);
-        // System.out.println(Sib3);
-        // Node[] nodes = {node1, node2, node3};
-        // graph.makeBroadsideMove(nodes, 5);
-        // System.out.println(node1);
-        // System.out.println(node2);
-        // System.out.println(node3);
-        // System.out.println(Sib1);
-        // System.out.println(Sib2);
-        // System.out.println(Sib3); 
-
-
-        //Test broadside validity
-        int direction = 1;
-        Node node1 = graph.getNode(45);
-        Node node2 = node1.getSibling(5);
-        Node node3 = node2.getSibling(5);
-        Node Sib1 = node1.getSibling(direction);
-        Node Sib2 = node2.getSibling(direction);
-        Node Sib3 = node3.getSibling(direction);
-        node1.setColor(1);
-        node2.setColor(1);
-        node3.setColor(1);
-        System.out.println(node1);
-        System.out.println(node2);
-        System.out.println(node3);
-        System.out.println(Sib1);
-        System.out.println(Sib2);
-        System.out.println(Sib3);
-        Node[] nodes = {node2, node1, node3};
-        boolean valid = graph.canMoveBroadside(nodes, direction);
-        System.out.println(valid);
-       
-    //    graph.printSiblings(9);
-    //    graph.printSiblings(26);
-    //    Node firstClicked = graph.getNode(25);
-    //    Node secondClicked = graph.getNode(26);
-    //    int direction = graph.getDirection(firstClicked, secondClicked);
-    //    System.out.println("Direction:" + direction);
-    //    Node last = graph.destination(firstClicked, secondClicked, direction);
-    //    System.out.println("Last:" + last);
-    //    graph.makeInlineMove(firstClicked, last, direction);
-    //    System.out.println("Move Made");
-
     }
 
     public AbaloneGraph()
     {
         createGraph();
         this.setSiblings();
+        Ai = new ComputerPlayer(this);
+        System.out.println(Ai.toString());
+        graph[7].setColor(0);
+        System.out.println(Ai.toString());
+        System.out.println(Ai.getMove());
+        
     }
 
     //Creates all nodes in the abalone board graph

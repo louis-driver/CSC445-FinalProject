@@ -4,6 +4,7 @@ import java.awt.geom.Ellipse2D;
 public class Node
 {
     private int color;
+    private int opponentColor;
     private int positionID;
     private Node sibling1;
     private Node sibling3;
@@ -108,6 +109,25 @@ public class Node
         return isEdge;
     }
 
+    public boolean bordersEdge()
+    {
+        if(sibling1.isEdge)
+            return true;
+        else if(sibling3.isEdge)
+            return true;
+        else if(sibling5.isEdge)
+            return true;
+        else if(sibling7.isEdge)
+            return true;
+        else if(sibling9.isEdge)
+            return true;
+        else if(sibling11.isEdge)
+            return true;
+        else 
+            return false; 
+        
+    }
+
     //Returns boolean representing if that neighbor exists
     public boolean hasNeighbor(Node n)
     {
@@ -126,6 +146,7 @@ public class Node
         else 
             return false;  
     }
+
 
     public String toString()
     {
