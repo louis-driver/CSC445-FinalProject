@@ -13,12 +13,17 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.*;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AbalonePanel extends JPanel
 {
-    //example commit
     private AbaloneGraph graph; 
     private int graphSize = 91;
+    private ComputerPlayer ai;
+
+    //Graphics
     private Polygon hexExterior;
     private Polygon hexInterior;
     private Polygon exteriorShadow;
@@ -28,11 +33,16 @@ public class AbalonePanel extends JPanel
     private int[] yCapturedCoords = new int[6];
     private int[] xCapturedCoords = new int[2];
     private int pieceSize;
+
+    //Functionality
     private Node secondClicked;
     private ArrayBlockingQueue<Node> selected = new ArrayBlockingQueue<>(3);
     private int player1Score;
     private int player2Score;
     private boolean player1Turn = true;
+    private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
+    //Audio
     private Sound sound = new Sound();
     private boolean musicOn = true;
     private boolean musicStarted = false;
@@ -59,6 +69,7 @@ public class AbalonePanel extends JPanel
     {
         this.graph = g;
         this.addMouseListener(new MoveAdapter());
+        this.ai = new ComputerPlayer(this.graph);
     }
 
     //Iterates through the graph to assign board spaces proportional to the size
@@ -276,6 +287,28 @@ public class AbalonePanel extends JPanel
         return hexagon;
     }
 
+    private class ComputerMove implements Runnable
+    {
+        public void run()
+        {
+            ai.updatePlayers(graph);
+            int[] moveInfo = ai.getMove();
+            graph.makeInlineMove(graph.getNode(moveInfo[0]), graph.getNode(moveInfo[1]), moveInfo[2]);
+            System.out.println("Computer move made");
+            player1Turn = !player1Turn;
+            player1Score = graph.getPlayer1Score();
+            player2Score = graph.getPlayer2Score();
+            repaint();
+            sound.setFile(0);
+            sound.play();
+        }
+    }
+
+    private void delayComputerMove()
+    {
+        scheduler.schedule(new ComputerMove(), 2l, TimeUnit.SECONDS);
+    }
+
     private class MoveAdapter extends MouseInputAdapter
     {
         public MoveAdapter()
@@ -309,7 +342,7 @@ public class AbalonePanel extends JPanel
             //Determines whose turn it is
             if (!player1Turn)
                 currPlayer = 2;
-
+            
             //Assign most recent three left clicks to the selected queue
             //If a left click exceeds the three, pop the head, then add
             if (SwingUtilities.isLeftMouseButton(e) && currNode != null)
@@ -349,6 +382,9 @@ public class AbalonePanel extends JPanel
                         System.out.println("Move Made");
                         sound.setFile(0);
                         sound.play();
+                        //Make computer move after the user moves
+                        if (graph.getPlayer1Score() < 6)
+                            delayComputerMove();
                     }
                 }
                 catch (RuntimeException ex)
@@ -376,10 +412,14 @@ public class AbalonePanel extends JPanel
                     if (graph.canMoveBroadside(nodes, direction))
                     {
                         graph.makeBroadsideMove(nodes, direction);
+                        repaint();
                         System.out.println("Move Made");
                         player1Turn = !player1Turn;
                         sound.setFile(0);
                         sound.play();
+                        //Make computer move after the user moves
+                        if (graph.getPlayer1Score() < 6)
+                            delayComputerMove();
                     }
                     repaint();
                 }
@@ -390,6 +430,8 @@ public class AbalonePanel extends JPanel
                 finally
                 {
                     secondClicked = null;
+                    player1Score = graph.getPlayer1Score();
+                    player2Score = graph.getPlayer2Score();
                 }
             }
         }
