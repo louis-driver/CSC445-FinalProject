@@ -11,24 +11,22 @@ public class AbaloneGraph
     public static void main(String[] args)
     {
         AbaloneGraph graph = new AbaloneGraph();
-    }
-
-    public AbaloneGraph()
-    {
-        createGraph();
-        this.setSiblings();
-        Ai = new ComputerPlayer(this);
+        ComputerPlayer Ai = new ComputerPlayer(graph);
         System.out.println(Ai.toString());
-        graph[27].setColor(1);
-        Ai.updatePlayers(this);
+        graph.graph[27].setColor(1);
+        Ai.updatePlayers(graph);
         System.out.println(Ai.toString());
         int[] move = Ai.getMove();
         for(int i=0; i<3; i++)
         {
             System.out.println(move[i]);
         }
-       
-        
+    }
+
+    public AbaloneGraph()
+    {
+        createGraph();
+        this.setSiblings();
     }
 
     //Creates all nodes in the abalone board graph
