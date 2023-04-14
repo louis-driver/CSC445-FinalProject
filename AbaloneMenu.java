@@ -150,6 +150,7 @@ public class AbaloneMenu extends JPanel
 		MenuFrame.add(AbaloneMenu);
 		//MenuFrame.add(Box.createVerticalStrut(50));
 		MenuFrame.setTitle("Abalone");
+		MenuFrame.setMinimumSize(new Dimension(460,535));
 		MenuFrame.setVisible(true);
 		MenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
