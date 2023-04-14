@@ -20,11 +20,13 @@ public class AbaloneMenu extends JPanel
 	JPanel PicPanel;
 	JPanel LogPanel;
 	JPanel RulesPanel;
+	JPanel ButtonSectionPanel;
+	JLabel Title;
 	JButton SPButton;
 	JButton MPButton;
 	JButton RulesButton;
 	JButton QuitButton;
-	Font TitleFont = new Font("Times New Roman", Font.ITALIC, this.getHeight()/10);
+	Font TitleFont = new Font("Times New Roman", Font.ITALIC, 50);
 	Font ButtonFont = new Font("Times New Roman", Font.ITALIC, this.getHeight()/20);
 	
 	Color BoardColorLight = new Color(160, 130, 105);
@@ -39,8 +41,8 @@ public class AbaloneMenu extends JPanel
 		setBackground(new Color(160, 130, 105));
 		
 		MenuPanel = new JPanel();
-		MenuPanel.setLayout(new BoxLayout(MenuPanel, BoxLayout.PAGE_AXIS));
-		//MenuPanel.setPreferredSize(new Dimension(MenuFrame.getWidth(), MenuFrame.getHeight()+100));
+		//MenuPanel.setLayout(new BoxLayout(MenuPanel, BoxLayout.PAGE_AXIS));
+		MenuPanel.setLayout(new BorderLayout());
 		MenuPanel.setBackground(BoardColorLight);
 		
 		JPanel TitlePanel = new JPanel();
@@ -64,12 +66,9 @@ public class AbaloneMenu extends JPanel
 		JLabel ImageLabel = new JLabel(BoardImage);
 		PicPanel.add(ImageLabel);
 		
-		JLabel Title = new JLabel("ABALONE", SwingConstants.CENTER);
+		Title = new JLabel("ABALONE", SwingConstants.CENTER);
 		Title.setFont(TitleFont);
 		Title.setAlignmentX(CENTER_ALIGNMENT);
-		Title.setFont(Title.getFont().deriveFont(32f).deriveFont(1));
-		MenuPanel.add(Box.createVerticalGlue());
-		MenuPanel.add(Box.createHorizontalGlue());
 		
 		SPButton = new JButton("Singleplayer");
 		MPButton = new JButton("Multiplayer");
@@ -89,35 +88,52 @@ public class AbaloneMenu extends JPanel
 		
 		//Add title
 		TitlePanel.add(Title);
-		MenuPanel.add(TitlePanel);
+		add(Box.createVerticalGlue());
+		MenuPanel.add(TitlePanel, BorderLayout.NORTH);
+		add(Box.createVerticalStrut(50));
 		
 		//Add picture of board, add spacer
 		MenuPanel.add(PicPanel, BorderLayout.CENTER);
-		MenuPanel.add(Box.createRigidArea(new Dimension(50,10)));
 		
-		//Add panels containing buttons, add spacers
+		//Add panels containing buttons, add spacers, add size bounds
+		Dimension buttDimension = new Dimension(250, 40);
+		
+		ButtonSectionPanel = new JPanel();
+		ButtonSectionPanel.setLayout(new BoxLayout(ButtonSectionPanel, BoxLayout.PAGE_AXIS));
+		ButtonSectionPanel.setOpaque(false);
+
 		SPBPanel.add(SPButton);
-		MenuPanel.add(SPBPanel);
-		MenuPanel.add(Box.createRigidArea(new Dimension(50,10)));
+		ButtonSectionPanel.add(SPBPanel);
+		SPBPanel.setMinimumSize(buttDimension);
+		SPBPanel.setMaximumSize(buttDimension);
+		ButtonSectionPanel.add(Box.createRigidArea(new Dimension(50,10)));
 		MPBPanel.add(MPButton);
-		MenuPanel.add(MPBPanel);
-		MenuPanel.add(Box.createRigidArea(new Dimension(50,10)));
+		ButtonSectionPanel.add(MPBPanel);
+		MPBPanel.setMinimumSize(buttDimension);
+		MPBPanel.setMaximumSize(buttDimension);
+		ButtonSectionPanel.add(Box.createRigidArea(new Dimension(50,10)));
 		RulesBPanel.add(RulesButton);
-		MenuPanel.add(RulesBPanel);
-		MenuPanel.add(Box.createRigidArea(new Dimension(50,10)));
+		ButtonSectionPanel.add(RulesBPanel);
+		RulesBPanel.setMinimumSize(buttDimension);
+		RulesBPanel.setMaximumSize(buttDimension);
+		ButtonSectionPanel.add(Box.createRigidArea(new Dimension(50,10)));
 		QuitBPanel.add(QuitButton);
-		MenuPanel.add(QuitBPanel);
-		MenuPanel.add(Box.createVerticalGlue());
-		MenuPanel.add(Box.createHorizontalGlue());
+		ButtonSectionPanel.add(QuitBPanel);
+		QuitBPanel.setMinimumSize(buttDimension);
+		QuitBPanel.setMaximumSize(buttDimension);
+		ButtonSectionPanel.add(Box.createVerticalGlue());
+		ButtonSectionPanel.add(Box.createHorizontalGlue());
+
+		MenuPanel.add(ButtonSectionPanel, BorderLayout.SOUTH);
 		
 		SPButton.addActionListener(MainListener);
 		MPButton.addActionListener(MainListener);
 		RulesButton.addActionListener(MainListener);
 		QuitButton.addActionListener(MainListener);
 		
-		add(MenuPanel);
 		add(Box.createVerticalGlue());
-		add(Box.createHorizontalGlue());
+		add(MenuPanel);
+		add(Box.createVerticalStrut(50));
 		RulesFrameSetup();
 		GameFrameSetup();
 
@@ -130,7 +146,9 @@ public class AbaloneMenu extends JPanel
 		MenuFrame.setName("MenuFrame");
 		MenuFrame.setSize(400, 500);
 		AbaloneMenu AbaloneMenu = new AbaloneMenu();
+		MenuFrame.add(Box.createVerticalGlue());
 		MenuFrame.add(AbaloneMenu);
+		//MenuFrame.add(Box.createVerticalStrut(50));
 		MenuFrame.setTitle("Abalone");
 		MenuFrame.setVisible(true);
 		MenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -279,8 +297,9 @@ public class AbaloneMenu extends JPanel
 			if (ce.getComponent().getName() == "MenuFrame")
 			{
 				System.out.println("Player resized MenuFrame to:" + MenuFrame.getSize());
+				Title.setFont(new Font("Times New Roman", Font.ITALIC, MenuPanel.getHeight()/10));
 				setPreferredSize(MenuFrame.getSize());
-				MenuPanel.setPreferredSize(new Dimension(MenuFrame.getWidth()-100, MenuFrame.getHeight()-100));
+				MenuPanel.setPreferredSize(new Dimension(MenuFrame.getWidth(), MenuFrame.getHeight()-100));
 			}
 			
 		}
