@@ -7,7 +7,6 @@
 //Calling the get move method provides the nodes for the next computer move
 import java.util.ArrayList;
 
- 
 public class ComputerPlayer {
     private ArrayList<Node> computerNodes;
     private ArrayList<Node> edgePieces;
@@ -30,7 +29,7 @@ public class ComputerPlayer {
             }      
         }
         edgePieces.trimToSize();
-        System.out.println("edge piece size 1: " + edgePieces.size());
+        // System.out.println("edge piece size 1: " + edgePieces.size());
     }
 
     //Takes the current state of graph and iterates throguh adding its players to an ArrayList and its edgePieces to and Array List
@@ -51,8 +50,8 @@ public class ComputerPlayer {
         }
         computerNodes.trimToSize();
         edgePieces.trimToSize();
-        System.out.println("comp piece size 2: " + computerNodes.size());
-        System.out.println("edge piece size 2: " + edgePieces.size());
+        // System.out.println("comp piece size 2: " + computerNodes.size());
+        // System.out.println("edge piece size 2: " + edgePieces.size());
     }
 
     //Returns the nodes and direction for the next move
@@ -65,19 +64,24 @@ public class ComputerPlayer {
     //The int[] returned is ordered as follows: [first node ID from graph, destination piece ID from graph, direction]
     public int[] getMove()
     {
-        System.out.println("comp piece size 3: " + computerNodes.size());
-        System.out.println("edge piece size 3: " + edgePieces.size());
+        // System.out.println("comp piece size 3: " + computerNodes.size());
+        // System.out.println("edge piece size 3: " + edgePieces.size());
         ArrayList<Node> priority = new ArrayList<Node>(edgePieces.size());
         ArrayList<Node> secondary = new ArrayList<Node>(edgePieces.size());
+        //Adds edge pieces that border a white piece or can inline move into priority
         for(int i=0; i<edgePieces.size(); i++)
         {
             boolean priorityNode = false;
             for(int j=1; j<12; j+=2)
             {
-                if(edgePieces.get(i).getSibling(j) != null && edgePieces.get(i).getSibling(j).getColor()==1)
+                Node piece1 = edgePieces.get(i);
+                Node piece2 = edgePieces.get(i).getSibling(j);
+                int direction = graph.getDirection(piece1, piece2);
+                if(piece1 != null && piece2.getColor()==1)
+                    priorityNode = true;
+                else if(graph.destination(piece1, piece2, direction)!=null)
                     priorityNode = true;
             }
-
             if(priorityNode)
                 priority.add(edgePieces.get(i));
             else 
@@ -93,12 +97,21 @@ public class ComputerPlayer {
             boolean remove = true;
             for(int j=1; j<12; j+=2)
             {
-                if((priority.get(i).getSibling(j) != null) && (priority.get(i).getSibling(j).getColor()==0) && !priority.get(i).getSibling(j).isEdge())
+                Node piece1 = priority.get(i);
+                Node piece2 = priority.get(i).getSibling(j);
+                if((piece2 != null) && (piece2.getColor()==0) && !piece2.isEdge())
                     remove = false;
-                else if((priority.get(i).getSibling(j) != null) && (priority.get(i).getSibling(j).getColor()==1))
+                else if((piece2 != null) && (piece2.getColor()==1) && !piece2.isEdge())
                 {
-                    int direction = graph.getDirection(priority.get(i), priority.get(i).getSibling(j));
-                    Node dest = graph.destination(priority.get(i), priority.get(i).getSibling(j), direction);
+                    int direction = graph.getDirection(piece1, piece2);
+                    Node dest = graph.destination(piece1, piece2, direction);
+                    if(dest!=null)
+                        remove=false;
+                }
+                else if(piece2!=null && piece2.getColor()==2 && !piece2.isEdge())
+                {
+                    int direction = graph.getDirection(piece1, piece2);
+                    Node dest = graph.destination(piece1, piece2, direction);
                     if(dest!=null)
                         remove=false;
                 }
@@ -118,12 +131,15 @@ public class ComputerPlayer {
         //Goes through the priority nodes and returns a move based on the ranking system
         if(priority.size()!=0)
         {
-            //Checks to see if any of the priority nodes can push a white node. If it can returns move
+            //Checks to see if any of the priority nodes can push a white node or inline move away from edge and returns possible move
             for(int i=0; i<priority.size(); i++)
             {
                 for(int j=1; j<12; j+=2)
-                {
-                    if((priority.get(i).getSibling(j) != null) && (priority.get(i).getSibling(j).getColor()==1))
+                {   
+                    Node piece1 = priority.get(i);
+                    Node piece2 = piece1.getSibling(j);
+                    int dir = graph.getDirection(piece1, piece2);
+                    if((piece2 != null) && (piece2.getColor()==1))
                     {
                         int direction = j;
                         Node dest = graph.destination(priority.get(i), priority.get(i).getSibling(j), direction);
@@ -134,6 +150,10 @@ public class ComputerPlayer {
                             return move;
 
                         }
+                    }
+                    else if(graph.destination(piece1, piece2, dir)!=null)
+                    {
+                        int[] move = {piece1.getID(), graph.destination(piece1, piece2, dir).getID(), dir};
                     }
                 }
             }   
