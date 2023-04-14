@@ -456,6 +456,91 @@ public class AbaloneGraph
             return null;
     }
 
+    //Returns the node's postion that can push the passed node off the edge by its opponent
+    // and the direction the pushing node would push in via an int array
+    // Ex: int[] values = {pushingNodePosition, direction};
+    //The passed node must be an edge piece
+    // Will return an array with -1s if not possible
+    public int[] inDangerFrom(Node node)
+    {
+        int[] values = {-1, -1};
+        Node pushingNode = null;
+        Node next;
+        int numPlayers = 1;
+        int numOpponents = 0;
+        //Find player
+        int playerColor = node.getColor();
+        int opponentColor = 1;
+        if (playerColor == 1)
+            opponentColor = 2;
+        
+        //Check each of the node's siblings opposite the edge sibling's direction to see if it can be pushed of that edge
+        int[] edgeDirections = new int[3];
+        //find edge directions
+        int currPostion = 0;
+        for (int i = 1; i < 12; i += 2)
+        {
+            if (node.getSibling(i).isEdge())
+            {
+                edgeDirections[currPostion] = i;
+                ++currPostion;
+            }
+        }
+
+        //Check the opposite direction of each edge direction to see if there are a greater number of opponent's pieces
+        for (int i = 0; i<edgeDirections.length && edgeDirections[i]!=0; ++i)
+        {
+            int direction = (edgeDirections[i] + 6) % 12;
+            next = node.getSibling(direction);
+
+            //Iterates through spaces held by players color until a opposite color, empty space, or edge is found
+            //Counts number of pieces in a row of the color whose turn it is
+            while(next!=null && next.getColor()==playerColor)
+            {
+                next = next.getSibling(direction);
+                numPlayers++;
+                //System.out.println("numPlayers:" + numPlayers);
+            }
+            //If player's pieces exceed 3 return empty values because it cannot be pushed from that direction
+            if(numPlayers > 3)
+                return values;
+
+            //If empty space is reached, return empty values
+            if(next.getColor()==0)
+            {
+                return values;
+            }
+            //Counts number of opponents pieces
+            while(next.getColor()==opponentColor)
+            {
+                // Assigns the pushing node that could push the greatest amount
+                if (numOpponents == 2 || numOpponents == 3)
+                    pushingNode = next;
+
+                next = next.getSibling(direction);
+                numOpponents++;
+            }
+            //If number of opponents pieces is greater than players pieces return the opponent's piece that could push in the direction
+            if(numPlayers>numOpponents && pushingNode != null && numPlayers < 3)
+            {
+                values[0] = pushingNode.getID();
+                values[1] = edgeDirections[i];
+                return values;
+            }
+        }
+        //Catch all for unexpected cases? TODO possibly remove
+        return values;
+    }
+
+    //Returns the direction a node can push an opponent in if possible
+    // Returns -1 if not possible
+    public int canPush(Node node)
+    {
+        int pushDirection = -1;
+        //TODO
+        return pushDirection;
+    }
+
     public int getPlayer1Score()
     {
         return player1Score;
