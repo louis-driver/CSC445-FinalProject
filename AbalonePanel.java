@@ -44,7 +44,7 @@ public class AbalonePanel extends JPanel
 
     //Audio
     private Sound sound = new Sound();
-    private boolean musicOn = true;
+    private boolean musicOn = false;
     private boolean musicStarted = false;
 
     //Test Main class
@@ -269,7 +269,7 @@ public class AbalonePanel extends JPanel
             sound.loop();
             musicStarted = true;
         }
-        else if (!musicOn)
+        else if (!musicOn && musicStarted == true)
         {
             sound.stop();
         }
