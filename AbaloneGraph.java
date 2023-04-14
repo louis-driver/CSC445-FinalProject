@@ -415,7 +415,7 @@ public class AbaloneGraph
         //Returns null if the two nodes arent siblings 
         if(direction==-1)
             return null;
-        //Iterates through spaces held by players color until a opposite color, empty soace, or edge is found
+        //Iterates through spaces held by players color until a opposite color, empty space, or edge is found
         //Counts number of pieces in a row of the color whose turn it is
         while(next!=null && next.getColor()==playerColor)
         {
@@ -532,13 +532,46 @@ public class AbaloneGraph
         return values;
     }
 
-    //Returns the direction a node can push an opponent in if possible
-    // Returns -1 if not possible
-    public int canPush(Node node)
-    {
-        int pushDirection = -1;
-        //TODO
-        return pushDirection;
+    //Returns true if a node can push an opponent in the passed direction
+    public boolean canPush(Node node, int direction)
+    { 
+        Node next = node.getSibling(direction);
+        int playerColor = node.getColor();
+        int opponentColor = 1;
+        if (playerColor == 1)
+            opponentColor = 2;
+        int numPlayers = 1;
+        int numOpponents = 0;
+
+        //Iterates through spaces held by players color until a opposite color, empty space, or edge is found
+        //Counts number of pieces in a row of the color whose turn it is
+        while(next!=null && next.getColor()==playerColor)
+        {
+            next = next.getSibling(direction);
+            numPlayers++;
+            //System.out.println("numPlayers:" + numPlayers);
+        }
+        //If player's pieces exceed 3 return false because it cannot push
+        if(numPlayers > 3)
+            return false;
+
+        //If empty space is reached, return false because it is not pushing an opponent
+        if(next.getColor()==0 && numPlayers<=3)
+            return false;
+            
+        //Counts number of opponents pieces
+        while(next.getColor()==opponentColor)
+        {
+            next = next.getSibling(direction);
+            numOpponents++;
+        }
+        //If number of opponents pieces is less than players pieces return true
+        if(numPlayers>numOpponents && numPlayers<=3 && next.getColor()==0)
+        {
+            return true;
+        }
+        else 
+            return false;
     }
 
     public int getPlayer1Score()
