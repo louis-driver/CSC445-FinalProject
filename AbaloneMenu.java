@@ -13,16 +13,19 @@ import javax.swing.*;
 
 public class AbaloneMenu extends JPanel
 {
-	static JFrame GUIFrame;
+	static JFrame MenuFrame;
 	JFrame RulesFrame;
 	JFrame GameFrame;
 	JPanel MenuPanel;
 	JPanel PicPanel;
 	JPanel LogPanel;
+	JPanel RulesPanel;
 	JButton SPButton;
 	JButton MPButton;
 	JButton RulesButton;
 	JButton QuitButton;
+	Font TitleFont = new Font("Times New Roman", Font.ITALIC, this.getHeight()/10);
+	Font ButtonFont = new Font("Times New Roman", Font.ITALIC, this.getHeight()/20);
 	
 	Color BoardColorLight = new Color(160, 130, 105);
 	Color BoardColorDark = new Color(75, 45, 30);
@@ -32,12 +35,12 @@ public class AbaloneMenu extends JPanel
 	
 	public AbaloneMenu()
 	{			
-		setPreferredSize(GUIFrame.getSize());
+		setPreferredSize(MenuFrame.getSize());
 		setBackground(new Color(160, 130, 105));
 		
 		MenuPanel = new JPanel();
 		MenuPanel.setLayout(new BoxLayout(MenuPanel, BoxLayout.PAGE_AXIS));
-		//MenuPanel.setPreferredSize(new Dimension(GUIFrame.getWidth(), GUIFrame.getHeight()+100));
+		//MenuPanel.setPreferredSize(new Dimension(MenuFrame.getWidth(), MenuFrame.getHeight()+100));
 		MenuPanel.setBackground(BoardColorLight);
 		
 		JPanel TitlePanel = new JPanel();
@@ -62,6 +65,7 @@ public class AbaloneMenu extends JPanel
 		PicPanel.add(ImageLabel);
 		
 		JLabel Title = new JLabel("ABALONE", SwingConstants.CENTER);
+		Title.setFont(TitleFont);
 		Title.setAlignmentX(CENTER_ALIGNMENT);
 		Title.setFont(Title.getFont().deriveFont(32f).deriveFont(1));
 		MenuPanel.add(Box.createVerticalGlue());
@@ -103,6 +107,8 @@ public class AbaloneMenu extends JPanel
 		MenuPanel.add(Box.createRigidArea(new Dimension(50,10)));
 		QuitBPanel.add(QuitButton);
 		MenuPanel.add(QuitBPanel);
+		MenuPanel.add(Box.createVerticalGlue());
+		MenuPanel.add(Box.createHorizontalGlue());
 		
 		SPButton.addActionListener(MainListener);
 		MPButton.addActionListener(MainListener);
@@ -110,44 +116,48 @@ public class AbaloneMenu extends JPanel
 		QuitButton.addActionListener(MainListener);
 		
 		add(MenuPanel);
+		add(Box.createVerticalGlue());
+		add(Box.createHorizontalGlue());
 		RulesFrameSetup();
 		GameFrameSetup();
+
+		MenuFrame.addComponentListener(ComponentListener);
 	}
 	
 	public static void main(String[] args)
 	{
-		GUIFrame = new JFrame();
-		GUIFrame.setSize(400, 500);
+		MenuFrame = new JFrame();
+		MenuFrame.setName("MenuFrame");
+		MenuFrame.setSize(400, 500);
 		AbaloneMenu AbaloneMenu = new AbaloneMenu();
-		GUIFrame.add(AbaloneMenu);
-		GUIFrame.setTitle("Abalone");
-		GUIFrame.setVisible(true);
-		GUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MenuFrame.add(AbaloneMenu);
+		MenuFrame.setTitle("Abalone");
+		MenuFrame.setVisible(true);
+		MenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public void RulesFrameSetup()
 	{
 		RulesFrame = new JFrame();
-		RulesFrame.setSize(675,GUIFrame.getHeight());
+		RulesFrame.setName("RulesFrame");
+		RulesFrame.setSize(675,MenuFrame.getHeight());
 		RulesFrame.setTitle("Abalone: Rules");
 		
-		JPanel RulesPanel = new JPanel();
+		RulesPanel = new JPanel();
 		RulesPanel.setLayout(new BoxLayout(RulesPanel, BoxLayout.PAGE_AXIS));
 		RulesPanel.setBackground(BoardColorLight);
-		RulesPanel.setPreferredSize(GUIFrame.getSize());
+		RulesPanel.setPreferredSize(MenuFrame.getSize());
 		
-		JLabel rulesTitle = new JLabel("   RULES OF ABALONE:");
+		JLabel rulesTitle = new JLabel("   RULES OF ABALONE");
 		rulesTitle.setForeground(Color.BLACK);
-		JLabel ruleLabel1 = new JLabel(" - Objective: Push your opponent's marbles off the board.");
+		JLabel ruleLabel1 = new JLabel(" - Objective: Push your opponent's marbles off the board.\n" +
+		" - Black moves first.\n" +
+		" - You may move up to three adjacent pieces, positioned in a straight line, in one direction.");
 		ruleLabel1.setForeground(Color.BLACK);
-		JLabel ruleLabel2 = new JLabel(" - Black moves first.");
+		JLabel ruleLabel2 = new JLabel(" - This direction can be either 'broadside' (parallel to the line the pieces create) or 'in-line' (perpendicular to the line).");
 		ruleLabel2.setForeground(Color.BLACK);
-		JLabel ruleLabel3 = new JLabel(" - You may move up to three adjacent pieces, positioned in a straight line, in one direction.");
+		JLabel ruleLabel3 = new JLabel(" - TODO");
 		ruleLabel3.setForeground(Color.BLACK);
-		JLabel ruleLabel4 = new JLabel(" - This direction can be either 'broadside' (parallel to the line the pieces create) or 'in-line' (perpendicular to the line).");
-		ruleLabel4.setForeground(Color.BLACK);
-		JLabel ruleLabel5 = new JLabel(" - TODO");
-		ruleLabel5.setForeground(Color.BLACK);
 		
 		JButton BackToMenuButton = new JButton("Back to Menu");
 		BackToMenuButton.setForeground(Color.RED);
@@ -170,13 +180,10 @@ public class AbaloneMenu extends JPanel
 		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
 		RulesPanel.add(ruleLabel3);
 		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
-		RulesPanel.add(ruleLabel4);
-		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
-		RulesPanel.add(ruleLabel5);
-		RulesPanel.add(Box.createRigidArea(new Dimension(0,150)));
 		RulesPanel.add(BackToMenuButton);
 		
 		BackToMenuButton.addActionListener(MainListener);
+		RulesFrame.addComponentListener(ComponentListener);
 		
 		RulesFrame.add(RulesPanel);
 	}
@@ -184,18 +191,13 @@ public class AbaloneMenu extends JPanel
 	public void GameFrameSetup()
 	{
 		GameFrame = new JFrame();
+		GameFrame.setName("GameFrame");
 		AbaloneGraph AbaloneGraph = new AbaloneGraph();
 		AbalonePanel AbalonePanel = new AbalonePanel(AbaloneGraph);
-		LogPanel = new JPanel();
-
-		JTextArea TextLog = new JTextArea();
-		TextLog.setEditable(false);
-		LogPanel.add(TextLog);
-		TextLog.append("Test");
 
 		//GameFrame.setLayout(new BorderLayout());
-		GameFrame.setSize(AbalonePanel.getWidth() + LogPanel.getWidth(), AbalonePanel.getHeight());
-		GameFrame.setSize(GUIFrame.getSize());
+		GameFrame.setSize(AbalonePanel.getWidth(), AbalonePanel.getHeight());
+		GameFrame.setSize(MenuFrame.getSize());
 		GameFrame.add(AbalonePanel);
 		//GameFrame.add(LogPanel, BorderLayout.EAST);
 		GameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -218,7 +220,7 @@ public class AbaloneMenu extends JPanel
 					SPButton.setForeground(Color.GRAY);
 					SPButton.setBackground(Color.WHITE);
 					
-					GUIFrame.setVisible(false);
+					MenuFrame.setVisible(false);
 					GameFrame.setVisible(true);
 					gameInProgress = true;
 				}
@@ -238,6 +240,7 @@ public class AbaloneMenu extends JPanel
 					RulesButton.setForeground(Color.GRAY);
 					RulesButton.setBackground(Color.WHITE);
 
+					MenuFrame.setVisible(false);
 					RulesFrame.setVisible(true);
 					rulesFrameOpen = true;
 				}
@@ -249,10 +252,37 @@ public class AbaloneMenu extends JPanel
 			else if (actionEvent.getActionCommand().equals("Back to Menu"))
 			{
 				RulesFrame.setVisible(false);
+				//ComponentListener resets menu
+			}
+	    }
+	};
+
+		ComponentAdapter ComponentListener = new ComponentAdapter(){	
+		public void componentShown(ComponentEvent ce)
+		{
+
+		}
+
+		public void componentHidden(ComponentEvent ce)
+		{
+			if (ce.getComponent().getName() == "RulesFrame")
+			{
+				MenuFrame.setVisible(true);
 				RulesButton.setForeground(Color.WHITE);
 				RulesButton.setBackground(BoardColorDark);
 				rulesFrameOpen = false;
 			}
-	    }
+		}
+
+		public void componentResized(ComponentEvent ce)
+		{
+			if (ce.getComponent().getName() == "MenuFrame")
+			{
+				System.out.println("Player resized MenuFrame to:" + MenuFrame.getSize());
+				setPreferredSize(MenuFrame.getSize());
+				MenuPanel.setPreferredSize(new Dimension(MenuFrame.getWidth()-100, MenuFrame.getHeight()-100));
+			}
+			
+		}
 	};
 }
