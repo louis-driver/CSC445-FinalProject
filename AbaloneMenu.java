@@ -6,6 +6,7 @@
 //TODO Add detection for rules window exit with x button, reformat longer strings, reduce default window size
 //TODO Add multiplayer button function
 //TODO Window size consistency between JFrames
+//TODO fix fullscreen button component resize
 
 import java.awt.*;
 import java.awt.event.*;
