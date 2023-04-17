@@ -107,6 +107,25 @@ public class Node
     {
         return isEdge;
     }
+    //Checks to see if the piece is next to the edge
+    public boolean bordersEdge()
+    {
+        if(sibling1.isEdge)
+            return true;
+        else if(sibling3.isEdge)
+            return true;
+        else if(sibling5.isEdge)
+            return true;
+        else if(sibling7.isEdge)
+            return true;
+        else if(sibling9.isEdge)
+            return true;
+        else if(sibling11.isEdge)
+            return true;
+        else 
+            return false; 
+        
+    }
 
     //Returns boolean representing if that neighbor exists
     public boolean hasNeighbor(Node n)
@@ -126,6 +145,7 @@ public class Node
         else 
             return false;  
     }
+
 
     public String toString()
     {
