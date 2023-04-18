@@ -40,6 +40,7 @@ public class AbalonePanel extends JPanel
     private int player1Score;
     private int player2Score;
     private boolean player1Turn = true;
+    private boolean playingComputer = false;
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     //Audio
@@ -55,7 +56,7 @@ public class AbalonePanel extends JPanel
         int frameHeight = 600;
         JFrame frame = new JFrame();
         AbaloneGraph graph = new AbaloneGraph();
-        AbalonePanel panel = new AbalonePanel(graph);
+        AbalonePanel panel = new AbalonePanel(graph, true);
 
         frame.setSize(frameWidth, frameHeight);
         frame.setTitle("Graph");
@@ -65,11 +66,15 @@ public class AbalonePanel extends JPanel
         frame.setVisible(true);
     }
 
-    public AbalonePanel(AbaloneGraph g)
+    public AbalonePanel(AbaloneGraph g, boolean playComputer)
     {
         this.graph = g;
         this.addMouseListener(new MoveAdapter());
-        this.ai = new ComputerPlayer(this.graph);
+        if (playComputer)
+        {
+            playingComputer = true;
+            this.ai = new ComputerPlayer(this.graph);
+        }
     }
 
     //Iterates through the graph to assign board spaces proportional to the size
@@ -229,39 +234,15 @@ public class AbalonePanel extends JPanel
         }
         
         //Display winner if applicable
-        //TODO center display in the panel
         if (player1Score >= 6)
         {
-            Font font = new Font("Times New Roman", Font.ITALIC, this.getHeight()/10);
-            g2.setFont(font);
-            // get metrics from the graphics
-            FontMetrics metrics = g.getFontMetrics(font);
-            // get the height of a line of text in this font and render context
-            int hgt = metrics.getHeight();
-            // get the advance of my text in this font and render context
-            int adv = metrics.stringWidth("Player1 WINS!");
-
-            g.setColor(Color.white);
-            g.fillRect(this.getWidth()/10 - adv/20, this.getHeight()/2 - (int) (hgt/1.3), adv+adv/10, hgt);
-            g.setColor(Color.black);
-            g.drawString("Player1 WINS!", this.getWidth()/10, this.getHeight()/2);
+            paintWinner(g2, 1);
         }
         else if (player2Score >= 6)
         {
-            Font font = new Font("Times New Roman", Font.ITALIC, this.getHeight()/10);
-            g2.setFont(font);
-            // get metrics from the graphics
-            FontMetrics metrics = g.getFontMetrics(font);
-            // get the height of a line of text in this font and render context
-            int hgt = metrics.getHeight();
-            // get the advance of my text in this font and render context
-            int adv = metrics.stringWidth("Player2 WINS!");
-
-            g.setColor(Color.black);
-            g.fillRect(this.getWidth()/10 - adv/20, this.getHeight()/2 - (int) (hgt/1.3), adv+adv/10, hgt);
-            g.setColor(Color.white);
-            g.drawString("Player2 WINS!", this.getWidth()/10, this.getHeight()/2);
+            paintWinner(g2, 2);
         }
+
         if (!musicStarted && musicOn)
         {
             sound.setFile(4);
@@ -273,6 +254,36 @@ public class AbalonePanel extends JPanel
         {
             sound.stop();
         }
+    }
+
+    private void paintWinner(Graphics g, int winner)
+    {
+        String str = "Player1 WINS!";
+        if (winner == 2)
+            str = "Player2 WINS!";
+        
+        Font font = new Font("Times New Roman", Font.ITALIC, this.getHeight()/10);
+        g.setFont(font);
+        FontMetrics metrics = g.getFontMetrics(font);
+        // get the height of a line of text in this font and render context
+        int strHeight = metrics.getHeight();
+        // get the advance/width of the text in this font and render context
+        int strWidth = metrics.stringWidth(str);
+
+        int xCoord = (this.getWidth()-strWidth)/2;
+        int yCoord = (this.getHeight()-strHeight)/2 + strHeight - (this.getHeight()-strHeight)/25;
+
+        if (winner == 1)
+            g.setColor(Color.white);
+        else 
+            g.setColor(Color.black);
+        g.fillRect(xCoord - strWidth/18, (this.getHeight()-strHeight)/2, strWidth+strWidth/10, strHeight);
+
+        if (winner == 1)
+            g.setColor(Color.black);
+        else 
+            g.setColor(Color.white);
+        g.drawString(str, xCoord, yCoord);
     }
 
     private Polygon createHexagon(Point center, int radius)
@@ -345,7 +356,7 @@ public class AbalonePanel extends JPanel
             
             //Assign most recent three left clicks to the selected queue
             //If a left click exceeds the three, pop the head, then add
-            if (SwingUtilities.isLeftMouseButton(e) && currNode != null)
+            if (SwingUtilities.isLeftMouseButton(e) && currNode != null && (currPlayer == 1 || !playingComputer))
             {
                 //Removes a selected node if pressed again
                 if (selected.contains(currNode))
