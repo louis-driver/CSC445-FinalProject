@@ -67,10 +67,13 @@ public class ComputerPlayer {
     //Returns the nodes and direction for the next move
     //The system to determine moves is to prioritise edge pieces and move them from the edge
     //The moves are ranked as follows:
-    // 1. If its an edge piece, borders a white piece, and can push the white piece
-    // 2. If its an edge piece, borders a white piece, and can move away from the white piece
-    // 3. If its an edge piece and can move 
-    // 4. Any other single piece that can move 
+    // 1. If its on an edge in danger and can escape danger and the edge 
+    // 2. If its on an edge in danger and can escape danger
+    // 3. If it can capture a white piece
+    // 4. If it is an edge and can push a white node 
+    // 5. If it is on an edge and can escape edge 
+    // 6. If it can push a white
+    // 7. Some other possible move 
     //The int[] returned is ordered as follows: [first node ID from graph, destination piece ID from graph, direction]
     public int[] getMove()
     {
@@ -104,6 +107,7 @@ public class ComputerPlayer {
 
     }
 
+    //Returns a move if a node is found in danger that can escape the edge and danger. Otherwise returns {-1, -1, -1}
     private int[] dangerEscapeBoth()
     {
         System.out.println("danger excape both");
@@ -138,6 +142,7 @@ public class ComputerPlayer {
         }
 
     }
+    //Returns a move if a node is found in danger that can escape danger. Otherwise returns {-1, -1, -1}
     private int[] dangerEscapeDanger()
     {
         System.out.println("danger excape danger");
@@ -172,6 +177,7 @@ public class ComputerPlayer {
             return move;
         }  
     }
+    //Returns a move if an opponent piece can be captured. Otherwise returns {-1, -1, -1}
     private int[] captureOpponent()
     {
         System.out.println("dcapture");
@@ -200,6 +206,7 @@ public class ComputerPlayer {
             return move;
         }
     }
+    //Returns a move if a node is found on an edge and can push an opponent. Otherwise returns {-1, -1, -1}
     private int[] edgePush()
     {
         System.out.println(" edge push");
@@ -231,6 +238,7 @@ public class ComputerPlayer {
             return move;
         }
     }
+    //Returns a move if a node is found on an edge and can escape edge. Otherwise returns {-1, -1, -1}
     private int[] edgeEscape()
     {
         System.out.println("edge exscape");
@@ -272,6 +280,7 @@ public class ComputerPlayer {
             return move;
         } 
     }
+    //Returns a move if a node is found that can push an opponent. Otherwise returns {-1, -1, -1}
     private int[] pushWhite()
     {
         System.out.println("push white ");
@@ -308,6 +317,7 @@ public class ComputerPlayer {
             return move;
         }
     }
+    //Returns a move the next possible move. Otherwise returns {-1, -1, -1}
     private int[] otherMove()
     {
         System.out.println("other move");
@@ -332,8 +342,6 @@ public class ComputerPlayer {
         return move;
 
     }
-
-
 
     public String toString()
     {
