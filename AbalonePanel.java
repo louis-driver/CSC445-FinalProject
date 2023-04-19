@@ -40,7 +40,7 @@ public class AbalonePanel extends JPanel
     private int player1Score;
     private int player2Score;
     private boolean player1Turn = true;
-    private boolean playingComputer = false;
+    private boolean playingComputer = true;
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     //Audio
