@@ -74,19 +74,25 @@ public class ComputerPlayer {
     //The int[] returned is ordered as follows: [first node ID from graph, destination piece ID from graph, direction]
     public int[] getMove()
     {
+        System.out.println("computer ieces: " + computerNodes.size());
+        System.out.println("edge ieces: " + edgePieces.size());
         int[] move = dangerEscapeBoth();
         if(move[0]!=-1)
             return move;
         move = dangerEscapeDanger();
         if(move[0]!=-1)
             return move;
-        move = pushWhite();
+        move = captureOpponent();
         if(move[0]!=-1)
             return move;
         move = edgePush();
         if(move[0]!=-1)
             return move;
         move = edgeEscape();
+        System.out.println(move[0] + " " + move[1] + " " + move[2]);
+        if(move[0]!=-1)
+            return move;
+        move = pushWhite();
         if(move[0]!=-1)
             return move;
         move = otherMove();
@@ -100,6 +106,7 @@ public class ComputerPlayer {
 
     private int[] dangerEscapeBoth()
     {
+        System.out.println("danger excape both");
         Node toMove = null;
         int direction = -1;
         Node destination = null;
@@ -133,6 +140,7 @@ public class ComputerPlayer {
     }
     private int[] dangerEscapeDanger()
     {
+        System.out.println("danger excape danger");
         Node toMove = null;
         int direction = -1;
         Node destination = null;
@@ -140,6 +148,7 @@ public class ComputerPlayer {
         {
             Node piece1 = edgePieces.get(i);
             int[] danger = graph.inDangerFrom(piece1);
+            System.out.println("Danger: " + danger[0]);
             for(int j=1; j<12 && danger[0]!=-1; j+=2)
             {
                 Node piece2 = piece1.getSibling(j);
@@ -165,6 +174,7 @@ public class ComputerPlayer {
     }
     private int[] captureOpponent()
     {
+        System.out.println("dcapture");
         int toMove = -1;
         int direction = -1;
         for(int i=0; i<opponentNodes.size(); i++)
@@ -192,6 +202,7 @@ public class ComputerPlayer {
     }
     private int[] edgePush()
     {
+        System.out.println(" edge push");
         Node toMove = null;
         int direction = -1;
         for(int i=0; i<edgePieces.size(); i++)
@@ -222,18 +233,24 @@ public class ComputerPlayer {
     }
     private int[] edgeEscape()
     {
+        System.out.println("edge exscape");
         Node toMove = null;
         int direction = -1;
         Node destination = null;
         for(int i=0; i<edgePieces.size(); i++)
         {
-            for(int j=2; j<12; j+=2)
+            //System.out.println("int main loop");
+            for(int j=1; j<12; j+=2)
             {
+                //System.out.print("second loop ");
                 Node piece1 = edgePieces.get(i);
                 Node piece2 = piece1.getSibling(j);
                 Node dest= graph.destination(piece1, piece2, j);
-                if(destination!= null && !destination.bordersEdge())
+                // System.out.println(dest.isEdge());
+                // System.out.println(dest.bordersEdge());
+                if(dest!= null && !dest.isEdge() && !dest.bordersEdge())
                 {
+                    //System.out.println("in if");
                     toMove = piece1;
                     direction = j;
                     destination = dest;
@@ -241,36 +258,44 @@ public class ComputerPlayer {
             }
 
         }
+        //System.out.println("toMove: " + toMove + " direction: " + direction + " destination: " + destination);
         if(toMove!=null && direction!=-1 && destination!=null)
         {
-            int[] move = {toMove.getID(), destination.getColor(), direction};
+            //System.out.println("first if");
+            int[] move = {toMove.getID(), destination.getID(), direction};
             return move;
         }
         else 
         {
+            //System.out.println("else");
             int[] move = {-1, -1, -1};
             return move;
         } 
     }
     private int[] pushWhite()
     {
+        System.out.println("push white ");
         Node toMove = null;
         int direction = -1;
-        for(int i=0; i<nonEdgePieces.size(); i++)
+        for(int i=0; i<computerNodes.size(); i++)
         {
+            System.out.println("In outer");
             for(int j=1; j<12; j+=2)
             {
-                Node piece = edgePieces.get(i);
+                System.out.println("In inner");
+                Node piece = computerNodes.get(i);
                 boolean canPush = graph.canPush(piece, j);
                 if(canPush)
                 {
-                    toMove = edgePieces.get(i);
+                    System.out.println("In if");
+                    toMove = computerNodes.get(i);
                     direction = j;
                 }
             }
         }
         if(toMove!=null && direction!=-1)
         {
+            System.out.println("In if 2");
             Node piece2 = toMove.getSibling(direction);
             Node destination = graph.destination(toMove, piece2, direction);
             int[] move = {toMove.getID(), destination.getID(), direction};
@@ -278,12 +303,14 @@ public class ComputerPlayer {
         }
         else 
         {
+            System.out.println("In else");
             int[] move = {-1, -1, -1};
             return move;
         }
     }
     private int[] otherMove()
     {
+        System.out.println("other move");
         for(int i=0; i<nonEdgePieces.size(); i++)
         {
             for(int j=1; j<12; j+=2)

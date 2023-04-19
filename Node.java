@@ -109,8 +109,10 @@ public class Node
     }
     //Checks to see if the piece is next to the edge
     public boolean bordersEdge()
-    {
-        if(sibling1.isEdge)
+    {   
+        if(isEdge)
+            return true;
+        else if(sibling1.isEdge)
             return true;
         else if(sibling3.isEdge)
             return true;
