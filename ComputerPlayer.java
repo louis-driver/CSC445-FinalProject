@@ -74,237 +74,27 @@ public class ComputerPlayer {
     //The int[] returned is ordered as follows: [first node ID from graph, destination piece ID from graph, direction]
     public int[] getMove()
     {
-        System.out.println("comp piece size 3: " + computerNodes.size());
-        // System.out.println("edge piece size 3: " + edgePieces.size());
-        ArrayList<Node> priority = new ArrayList<Node>(edgePieces.size());
-        ArrayList<Node> secondary = new ArrayList<Node>(edgePieces.size());
-        //Adds edge pieces that border a white piece or can inline move into priority
-        for(int i=0; i<edgePieces.size(); i++)
-        {
-            boolean priorityNode = false;
-            for(int j=1; j<12; j+=2)
-            {
-                Node piece1 = edgePieces.get(i);
-                Node piece2 = edgePieces.get(i).getSibling(j);
-                int direction = graph.getDirection(piece1, piece2);
-                if(piece1 != null && piece2.getColor()==1)
-                    priorityNode = true;
-                else if(graph.destination(piece1, piece2, direction)!=null)
-                    priorityNode = true;
-            }
-            if(priorityNode)
-                priority.add(edgePieces.get(i));
-            else 
-                secondary.add(edgePieces.get(i));
-        }
-        priority.trimToSize();
-        secondary.trimToSize();
-        System.out.println("prio size 1: " + priority.size());
-        System.out.println("sec size 1: " + secondary.size());
-        
+        int[] move = dangerEscapeBoth();
+        if(move[0]!=-1)
+            return move;
+        move = dangerEscapeDanger();
+        if(move[0]!=-1)
+            return move;
+        move = pushWhite();
+        if(move[0]!=-1)
+            return move;
+        move = edgePush();
+        if(move[0]!=-1)
+            return move;
+        move = edgeEscape();
+        if(move[0]!=-1)
+            return move;
+        move = otherMove();
+        if(move[0]!=-1)
+            return move;
+        int[] error = {-1, -1, -1};
+        return error;
 
-        for(int i=0; i<priority.size(); i++)
-        {
-            System.out.print(priority.get(i) + " ");
-        }
-        System.out.println("prio size 2: " + priority.size());
-        System.out.println("sec size 2: " + secondary.size());
-
-        //Goes through the priority nodes and returns a move based on the ranking system
-        if(priority.size()!=0)
-        {
-            //Checks to see if any of the priority nodes can push a white node or inline move away from edge and returns possible move
-            for(int i=0; i<priority.size(); i++)
-            {
-                for(int j=1; j<12; j+=2)
-                {   
-                    Node piece1 = priority.get(i);
-                    Node piece2 = piece1.getSibling(j);
-                    int direction = j;
-                    Node destination = graph.destination(piece1, piece2, direction);
-                    System.out.println("p1: " + piece1.getID());
-                    System.out.println("p2: " + piece2.getID());
-                    if((piece2 != null) && (piece2.getColor()==1))
-                    {
-                        if(destination!=null)
-                        {
-                            System.out.println("return 1");
-                            int[] move = {piece1.getID(), destination.getID(), direction};
-                            return move;
-
-                        }
-                        else if(piece2.getColor()==0)
-                        {
-                            int[] move = {piece1.getID(), piece2.getID(), direction};
-                            return move;
-                        }
-                    }
-                }    
-                
-            }   
-            for(int i=0; i<priority.size(); i++)
-            {
-                for(int j=1; j<12; j+=2)
-                {
-                    Node piece1 = priority.get(i);
-                    Node piece2 = piece1.getSibling(j);
-                    int direction = j;
-                    Node destination = graph.destination(piece1, piece2, direction);
-                    System.out.println("return 1");
-                    if(!piece2.isEdge() && destination!=null && !destination.isEdge())
-                    {
-                        System.out.println("in else if statement");
-                        System.out.println("j: " + j + "piece1: " + piece1.getID() + "piece2: " + piece2.getID() + "destination: " + graph.destination(piece1, piece2, direction).getID());
-                        int[] move = {piece1.getID(), destination.getID(), direction};
-                        return move;
-                    }
-                }
-            }
-            //Finds which node can move and moves it 
-            for(int i=0; i<priority.size(); i++)
-            {
-                for(int j=1; j<12; j+=2)
-                {
-                    if(priority.get(i).getSibling(j)!=null && priority.get(i).getSibling(j).getColor()==0 && !priority.get(i).getSibling(j).isEdge())
-                    {
-                        int direction = graph.getDirection(priority.get(i), priority.get(i).getSibling(j));
-                        Node dest = graph.destination(priority.get(i), priority.get(i).getSibling(j), direction);
-                        int[] move = {priority.get(i).getID(), dest.getID(), direction};
-                        System.out.println("return 2");
-                        return move;
-                    }
-                }
-            }  
-            
-            System.out.println("return 3");
-        }
-        //If there are no priority nodes, select the first node from the secondary nodes and move it in a direction it can go
-        else if(secondary.size()!=0)
-        {
-            System.out.println("in second statement");
-            for(int i=0; i<secondary.size(); i++)
-            {
-                for(int j=1; j<12; j+=2)
-                {
-                    if(secondary.get(i).getSibling(j)!=null && secondary.get(i).getSibling(j).getColor()==0 && !secondary.get(i).getSibling(j).isEdge())
-                    {
-                        int direction = j;
-                        System.out.println("direction: " + direction);
-                        Node dest = graph.destination(secondary.get(i), secondary.get(i).getSibling(j), direction);
-                        int[] move = {secondary.get(i).getID(), dest.getID(), direction};
-                        return move;
-                    }
-                }
-            }
-
-        }
-        //If there are no priority nodes, the first available single move for a non edge piece 
-        else 
-        {
-            System.out.println("in else");
-            for(int i=0; i<computerNodes.size(); i++)
-            {
-                for(int j=1; j<12; j+=2)
-                {
-                    if(computerNodes.get(i).getSibling(j)!=null && computerNodes.get(i).getSibling(j).getColor()==0)
-                    {
-                        int direction = graph.getDirection(computerNodes.get(i), computerNodes.get(i).getSibling(j));
-                        Node dest = graph.destination(computerNodes.get(i), computerNodes.get(i).getSibling(j), direction);
-                        int[] move = {computerNodes.get(i).getID(), dest.getID(), direction};
-                        return move;
-                    }
-                }
-            }
-        }
-
-        //If no move was found, return all -1
-        int[] move = {-1, -1, -1};
-        return move;
-
-    }
-    //This the real one. Ignore above
-    public int[] getMove2()
-    {
-        Node toMove;
-        int direction = -1;
-        int level = 8;
-        for(int i=0; i<edgePieces.size(); i++)
-        {
-            Node piece1 = edgePieces.get(i);
-            boolean inDanger = false; //call method to check
-            int pushDirection = 0; //call method to return direction it can push
-            //Checks all directions of edge nodes that are in danger and checks if they can escape the edge or move out of danger 
-            for(int j=2; j<12 && inDanger; j+=2)
-            {
-                Node piece2 = piece1.getSibling(j);
-                Node destination= graph.destination(piece1, piece2, j);
-
-                if(destination!= null && !destination.bordersEdge() && !destination.isEdge())
-                {
-                    toMove = piece1;
-                    direction = j; 
-                    level = 1;
-                }
-                else if(destination!=null && !destination.isEdge() && level > 2)
-                {
-                    toMove = piece2;
-                    direction =j;
-                    level = 2;
-                }
-            }
-
-            //If this node can push a white node and a better node hasnt been found, update to move
-            if(pushDirection!=-1 && level>4)
-            {
-                toMove = piece1;
-                level = 3;
-            }
-            
-            //Checks all directions of a node to see if it can move off edge if a better move has not been found
-            for(int j=2; j<12 && level>5; j+=2)
-            {
-                Node piece2 = piece1.getSibling(j);
-                Node destination= graph.destination(piece1, piece2, j);
-                if(destination!= null && !destination.bordersEdge())
-                {
-                    //do something 
-                }
-            }
-              
-        }
-
-        for(int i=0; i<nonEdgePieces.size(); i++)
-        {
-
-        }
-        
-        //Checks all directions of a node to see if it can push a white node if a better move has not been found
-        for(int i=0; i<nonEdgePieces.size() && level>6; i++)
-        {
-            Node piece1 = nonEdgePieces.get(i);
-            int pushDirection = 0; //call can push method 
-            if(pushDirection!= -1)
-            {
-                //do something 
-            }
-        }
-
-        //Checks all directions of a node and finds the first available move if a better move has not been found
-        for(int i=0; i<nonEdgePieces.size() && level>7; i++)
-        {
-            Node piece1 = nonEdgePieces.get(i);
-            for(int j=2; j<12; j+=2)
-            {
-                Node piece2 = piece1.getSibling(j);
-                Node destination = graph.destination(piece1, piece2, i);
-                if(destination!= null && !destination.isEdge())
-                {
-                    // do something 
-                }
-            }
-        }
-        int[] r = {1,2};
-        return r;
 
     }
 
@@ -316,8 +106,8 @@ public class ComputerPlayer {
         for(int i=0; i<edgePieces.size(); i++)
         {
             Node piece1 = edgePieces.get(i);
-            boolean inDanger = false; //call method to check
-            for(int j=2; j<12 && inDanger; j+=2)
+            int[] inDanger = graph.inDangerFrom(piece1); 
+            for(int j=1; j<12 && inDanger[0]!=-1; j+=2)
             {
                 Node piece2 = piece1.getSibling(j);
                 Node dest= graph.destination(piece1, piece2, j);
@@ -349,8 +139,8 @@ public class ComputerPlayer {
         for(int i=0; i<edgePieces.size(); i++)
         {
             Node piece1 = edgePieces.get(i);
-            boolean inDanger = false; //call method to check
-            for(int j=2; j<12 && inDanger; j+=2)
+            int[] danger = graph.inDangerFrom(piece1);
+            for(int j=1; j<12 && danger[0]!=-1; j+=2)
             {
                 Node piece2 = piece1.getSibling(j);
                 Node dest= graph.destination(piece1, piece2, j);
@@ -379,7 +169,7 @@ public class ComputerPlayer {
         int direction = -1;
         for(int i=0; i<opponentNodes.size(); i++)
         {
-            int[] danger = {0,0,0}; //call method for node that pushes and direction
+            int[] danger = graph.inDangerFrom(opponentNodes.get(i));
             if(danger[0]!=-1)
             {
                 toMove = danger[0];
@@ -408,7 +198,8 @@ public class ComputerPlayer {
         {
             for(int j=1; j<12; j+=2)
             {
-                boolean canPush = false; //call method to check if it pushes white
+                Node piece = edgePieces.get(i);
+                boolean canPush = graph.canPush(piece, j); 
                 if(canPush)
                 {
                     toMove = edgePieces.get(i);
@@ -469,7 +260,8 @@ public class ComputerPlayer {
         {
             for(int j=1; j<12; j+=2)
             {
-                boolean canPush = false; //call method to check if it pushes white
+                Node piece = edgePieces.get(i);
+                boolean canPush = graph.canPush(piece, j);
                 if(canPush)
                 {
                     toMove = edgePieces.get(i);
@@ -494,7 +286,7 @@ public class ComputerPlayer {
     {
         for(int i=0; i<nonEdgePieces.size(); i++)
         {
-            for(int j=1; j<12; j++)
+            for(int j=1; j<12; j+=2)
             {
                 Node piece1 = nonEdgePieces.get(i);
                 Node peice2 = piece1.getSibling(j);
