@@ -290,11 +290,11 @@ public class AbaloneGraph
             {
                 System.out.println("Entered if statement");
                 if(nodes[i].getColor()==1)
-                    player2Score++;
+                    ++player1Score;
                 else 
-                    player1Score++;
-
-                System.out.println("P1: " + player1Score + "p2: " + player2Score);
+                    ++player2Score;
+                nodes[i].getSibling(direction).setColor(0);
+                System.out.println("P1: " + player1Score + " p2: " + player2Score);
             }
         }
     }
