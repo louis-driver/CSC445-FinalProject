@@ -31,6 +31,7 @@ public class ComputerPlayer {
             opponentColor = 2;
         
         playablePositions = getBoardSpaces();
+        randomizeArray(playablePositions);
         for(int i=0; i<playablePositions.length; i++)
         {
             Node currNode = graph.getNode(playablePositions[i]);
@@ -60,6 +61,7 @@ public class ComputerPlayer {
         computerNodes.clear();
         edgePieces.clear();
         opponentNodes.clear();
+        randomizeArray(playablePositions);
         for(int i=0; i<playablePositions.length; i++)
         {
             Node currNode = graph.getNode(playablePositions[i]);
@@ -313,15 +315,12 @@ public class ComputerPlayer {
         int direction = -1;
         for(int i=0; i<computerNodes.size(); i++)
         {
-            System.out.println("In outer");
             for(int j=1; j<12; j+=2)
             {
-                System.out.println("In inner");
                 Node piece = computerNodes.get(i);
                 boolean canPush = graph.canPush(piece, j);
                 if(canPush)
                 {
-                    System.out.println("In if");
                     toMove = computerNodes.get(i);
                     direction = j;
                 }
@@ -329,15 +328,14 @@ public class ComputerPlayer {
         }
         if(toMove!=null && direction!=-1)
         {
-            System.out.println("In if 2");
             Node piece2 = toMove.getSibling(direction);
             Node destination = graph.destination(toMove, piece2, direction);
             int[] move = {toMove.getID(), destination.getID(), direction};
+            System.out.println("pushWhite" + Arrays.toString(move));
             return move;
         }
         else 
         {
-            System.out.println("In else");
             int[] move = {-1, -1, -1};
             return move;
         }
@@ -402,6 +400,18 @@ public class ComputerPlayer {
             }
         }
         return playablePositions;
+    }
+
+    private void randomizeArray(int[] ints)
+    {
+        for (int i = 0; i < ints.length; ++i)
+        {
+            int randomPosition = (int) (Math.random() * (ints.length));
+            int temp = ints[i];
+            ints[i] = ints[randomPosition];
+            ints[randomPosition] = temp;
+        }
+        System.out.println(Arrays.toString(ints));
     }
 
     public String toString()
