@@ -15,18 +15,25 @@ public class ComputerPlayer {
     private ArrayList<Node> nonEdgePieces;
     private ArrayList<Node> opponentNodes;
     private int computerColor;
+    private int opponentColor;
+    private int[] playablePositions;
 
-    public ComputerPlayer(AbaloneGraph g)
+    public ComputerPlayer(AbaloneGraph g, int color)
     {
         computerNodes = new ArrayList<Node>(14);
         edgePieces = new ArrayList<Node>(computerNodes.size());
         nonEdgePieces = new ArrayList<>(computerNodes.size());
         opponentNodes = new ArrayList<>(computerNodes.size());
         graph = g;
-        computerColor = 2;
-        for(int i=0; i<91; i++)
+        computerColor = color;
+        opponentColor = 1;
+        if (computerColor == 1)
+            opponentColor = 2;
+        
+        playablePositions = getBoardSpaces();
+        for(int i=0; i<playablePositions.length; i++)
         {
-            if(g.getNode(i).getColor()==2)
+            if(g.getNode(i).getColor()==computerColor)
             {
                 computerNodes.add(g.getNode(i));
                 if(g.getNode(i).bordersEdge() && !g.getNode(i).isEdge())
@@ -35,7 +42,7 @@ public class ComputerPlayer {
                 else if(!g.getNode(i).isEdge())
                     nonEdgePieces.add(g.getNode(i));
             }  
-            else if(g.getNode(i).getColor()==1)
+            else if(g.getNode(i).getColor()==opponentColor)
                 opponentNodes.add(g.getNode(i));    
         }
         edgePieces.trimToSize();
@@ -50,7 +57,7 @@ public class ComputerPlayer {
         computerNodes.clear();
         edgePieces.clear();
         opponentNodes.clear();
-        for(int i=0; i<91; i++)
+        for(int i=0; i<playablePositions.length; i++)
         {
             if(g.getNode(i).getColor()==2)
             {
@@ -161,6 +168,7 @@ public class ComputerPlayer {
         for(int i=0; i<edgePieces.size(); i++)
         {
             Node piece1 = edgePieces.get(i);
+            System.out.println("EscapeDangerPassedNode: " + piece1.getID());
             int[] danger = graph.inDangerFrom(piece1);
             System.out.println("Danger: " + danger[0]);
             for(int j=1; j<12 && danger[0]!=-1; j+=2)
@@ -353,6 +361,21 @@ public class ComputerPlayer {
         int[] move = {-1, -1, -1};
         return move;
 
+    }
+
+    private int[] getBoardSpaces()
+    {
+        int[] playablePositions = new int[61];
+        int currPosition = 0;
+        for (int i = 0; i < 91; ++i)
+        {
+            if (!graph.getNode(i).isEdge())
+            {
+                playablePositions[currPosition] = i;
+                ++currPosition;
+            }
+        }
+        return playablePositions;
     }
 
     public String toString()
