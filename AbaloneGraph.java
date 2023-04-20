@@ -503,11 +503,15 @@ public class AbaloneGraph
             }
             //If player's pieces exceed 3 for all directions return empty values
             if(numPlayers > 3 && i == 3 || edgeDirections[i] == -1)
+            {
+                System.out.println("Returned at exceed 3");
                 return values;
+            }
 
             //If empty space is reached for all directions, return empty values
             if(next.getColor()==0  && i == 3 || edgeDirections[i] == -1)
             {
+                System.out.println("Returned at exceed empty ends");
                 return values;
             }
             //Counts number of opponents pieces
@@ -521,8 +525,9 @@ public class AbaloneGraph
                 numOpponents++;
             }
             //If number of opponents pieces is greater than players pieces return the opponent's piece that could push in the direction
-            if(numPlayers>numOpponents && pushingNode != null && numPlayers < 3)
+            if(numPlayers<numOpponents && pushingNode != null && numPlayers < 3)
             {
+                System.out.println("Returned at push");
                 values[0] = pushingNode.getID();
                 values[1] = edgeDirections[i];
                 return values;
