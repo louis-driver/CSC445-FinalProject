@@ -56,6 +56,7 @@ public class ComputerPlayer {
     //Takes the current state of graph and iterates throguh adding its players to an ArrayList and its edgePieces to and Array List
     public void updatePlayers(AbaloneGraph g)
     {
+        graph = g;
         computerNodes.clear();
         edgePieces.clear();
         opponentNodes.clear();
@@ -345,15 +346,16 @@ public class ComputerPlayer {
     private int[] otherMove()
     {
         System.out.println("other move");
-        for(int i=0; i<nonEdgePieces.size(); i++)
+        //Moves on that won't go to an edge
+        for(int i=0; i<computerNodes.size(); i++)
         {
-            System.out.println("Checking node:" + nonEdgePieces.get(i).getID());
+            System.out.println("Checking node:" + computerNodes.get(i).getID());
             for(int j=1; j<12; j+=2)
             {
-                Node piece1 = nonEdgePieces.get(i);
+                Node piece1 = computerNodes.get(i);
                 Node piece2 = piece1.getSibling(j);
                 Node dest = graph.destination(piece1, piece2, j);
-                if(dest!=null && !dest.isEdge())
+                if(dest!=null && !dest.bordersEdge() && !dest.isEdge())
                 {
                     int[] move = {piece1.getID(), dest.getID(), j};
                     System.out.println("Move:" + Arrays.toString(move));
@@ -362,15 +364,16 @@ public class ComputerPlayer {
 
             }
         }
-        //In case nodes may only go towards an edge
-        for(int i=0; i<nonEdgePieces.size(); i++)
+        //Then choose one that goes to an edge
+        for(int i=0; i<computerNodes.size(); i++)
         {
+            System.out.println("Checking node:" + computerNodes.get(i).getID());
             for(int j=1; j<12; j+=2)
             {
-                Node piece1 = nonEdgePieces.get(i);
+                Node piece1 = computerNodes.get(i);
                 Node piece2 = piece1.getSibling(j);
                 Node dest = graph.destination(piece1, piece2, j);
-                if(dest!=null)
+                if(dest!=null && !dest.isEdge())
                 {
                     int[] move = {piece1.getID(), dest.getID(), j};
                     System.out.println("Move:" + Arrays.toString(move));
