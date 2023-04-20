@@ -33,17 +33,19 @@ public class ComputerPlayer {
         playablePositions = getBoardSpaces();
         for(int i=0; i<playablePositions.length; i++)
         {
-            if(g.getNode(i).getColor()==computerColor)
+            Node currNode = graph.getNode(playablePositions[i]);
+            if(currNode.getColor()==computerColor)
             {
-                computerNodes.add(g.getNode(i));
-                if(g.getNode(i).bordersEdge() && !g.getNode(i).isEdge())
-                    edgePieces.add(g.getNode(i));
-                
-                else if(!g.getNode(i).isEdge())
-                    nonEdgePieces.add(g.getNode(i));
-            }  
-            else if(g.getNode(i).getColor()==opponentColor)
-                opponentNodes.add(g.getNode(i));    
+                computerNodes.add(currNode);
+                if(currNode.bordersEdge() && !currNode.isEdge())
+                    edgePieces.add(currNode);
+                else if(!currNode.isEdge())
+                    nonEdgePieces.add(currNode);
+            }   
+            if(currNode.getColor()==opponentColor)
+            {
+                opponentNodes.add(currNode);
+            }   
         }
         edgePieces.trimToSize();
         nonEdgePieces.trimToSize();
@@ -59,17 +61,18 @@ public class ComputerPlayer {
         opponentNodes.clear();
         for(int i=0; i<playablePositions.length; i++)
         {
-            if(g.getNode(i).getColor()==2)
+            Node currNode = graph.getNode(playablePositions[i]);
+            if(currNode.getColor()==computerColor)
             {
-                computerNodes.add(g.getNode(i));
-                if(g.getNode(i).bordersEdge() && !g.getNode(i).isEdge())
-                    edgePieces.add(g.getNode(i));
-                else if(!g.getNode(i).isEdge())
-                    nonEdgePieces.add(g.getNode(i));
+                computerNodes.add(currNode);
+                if(currNode.bordersEdge() && !currNode.isEdge())
+                    edgePieces.add(currNode);
+                else if(!currNode.isEdge())
+                    nonEdgePieces.add(currNode);
             }   
-            if(g.getNode(i).getColor()==1)
+            if(currNode.getColor()==opponentColor)
             {
-                opponentNodes.add(g.getNode(i));
+                opponentNodes.add(currNode);
             }   
         }
         computerNodes.trimToSize();
@@ -93,8 +96,9 @@ public class ComputerPlayer {
     public int[] getMove()
     {
         updatePlayers(graph);
-        System.out.println("computer ieces: " + computerNodes.size());
-        System.out.println("edge ieces: " + edgePieces.size());
+        System.out.println("computer pieces: " + computerNodes.size());
+        System.out.println("edge pieces: " + edgePieces.size());
+        System.out.println("opponent pieces: " + Arrays.toString(opponentNodes.toArray()));
         int[] move = dangerEscapeBoth();
         if(move[0]!=-1)
             return move;
@@ -343,22 +347,41 @@ public class ComputerPlayer {
         System.out.println("other move");
         for(int i=0; i<nonEdgePieces.size(); i++)
         {
+            System.out.println("Checking node:" + nonEdgePieces.get(i).getID());
             for(int j=1; j<12; j+=2)
             {
                 Node piece1 = nonEdgePieces.get(i);
-                Node peice2 = piece1.getSibling(j);
-                Node dest = graph.destination(piece1, peice2, j);
+                Node piece2 = piece1.getSibling(j);
+                Node dest = graph.destination(piece1, piece2, j);
                 if(dest!=null && !dest.isEdge())
                 {
                     int[] move = {piece1.getID(), dest.getID(), j};
+                    System.out.println("Move:" + Arrays.toString(move));
                     return move;
+                }
 
+            }
+        }
+        //In case nodes may only go towards an edge
+        for(int i=0; i<nonEdgePieces.size(); i++)
+        {
+            for(int j=1; j<12; j+=2)
+            {
+                Node piece1 = nonEdgePieces.get(i);
+                Node piece2 = piece1.getSibling(j);
+                Node dest = graph.destination(piece1, piece2, j);
+                if(dest!=null)
+                {
+                    int[] move = {piece1.getID(), dest.getID(), j};
+                    System.out.println("Move:" + Arrays.toString(move));
+                    return move;
                 }
 
             }
         }
 
         int[] move = {-1, -1, -1};
+        System.out.println("Move:" + Arrays.toString(move));
         return move;
 
     }
