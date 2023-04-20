@@ -218,6 +218,8 @@ public class AbalonePanel extends JPanel
                 else if (currNode.getColor() == 2)
                     g2.setColor(Color.black);
                 g2.fill(graph.getPiece(i));
+                //Uncomment to view node positions
+                g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
             }
         }
 
