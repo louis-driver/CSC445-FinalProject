@@ -6,6 +6,7 @@
 //For each turn, the updated graph should be passed to the Player to keep track of its nodes and positions
 //Calling the get move method provides the nodes for the next computer move
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ComputerPlayer {
     private ArrayList<Node> computerNodes;
@@ -13,6 +14,7 @@ public class ComputerPlayer {
     private AbaloneGraph graph;
     private ArrayList<Node> nonEdgePieces;
     private ArrayList<Node> opponentNodes;
+    private int computerColor;
 
     public ComputerPlayer(AbaloneGraph g)
     {
@@ -21,6 +23,7 @@ public class ComputerPlayer {
         nonEdgePieces = new ArrayList<>(computerNodes.size());
         opponentNodes = new ArrayList<>(computerNodes.size());
         graph = g;
+        computerColor = 2;
         for(int i=0; i<91; i++)
         {
             if(g.getNode(i).getColor()==2)
@@ -46,6 +49,7 @@ public class ComputerPlayer {
     {
         computerNodes.clear();
         edgePieces.clear();
+        opponentNodes.clear();
         for(int i=0; i<91; i++)
         {
             if(g.getNode(i).getColor()==2)
@@ -55,6 +59,10 @@ public class ComputerPlayer {
                     edgePieces.add(g.getNode(i));
                 else if(!g.getNode(i).isEdge())
                     nonEdgePieces.add(g.getNode(i));
+            }   
+            if(g.getNode(i).getColor()==1)
+            {
+                opponentNodes.add(g.getNode(i));
             }   
         }
         computerNodes.trimToSize();
@@ -77,6 +85,7 @@ public class ComputerPlayer {
     //The int[] returned is ordered as follows: [first node ID from graph, destination piece ID from graph, direction]
     public int[] getMove()
     {
+        updatePlayers(graph);
         System.out.println("computer ieces: " + computerNodes.size());
         System.out.println("edge ieces: " + edgePieces.size());
         int[] move = dangerEscapeBoth();
@@ -185,13 +194,16 @@ public class ComputerPlayer {
         int direction = -1;
         for(int i=0; i<opponentNodes.size(); i++)
         {
+            System.out.println("InDanger Passed node: " + opponentNodes.get(i));
             int[] danger = graph.inDangerFrom(opponentNodes.get(i));
-            if(danger[0]!=-1)
+            System.out.println("CaptOpponentDanger: " +Arrays.toString(danger));
+            if(danger[0]!=-1 && graph.getNode(danger[0]).getColor()==computerColor)
             {
                 toMove = danger[0];
                 direction = danger[1];
             }
         }
+        System.out.println("ToMove: " + toMove + " Direction: "+ direction);
         if(toMove!=-1 && direction!=-1)
         {
             Node piece1 = graph.getNode(toMove);
