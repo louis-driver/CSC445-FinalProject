@@ -144,7 +144,7 @@ public class ComputerPlayer {
             {
                 Node piece2 = piece1.getSibling(j);
                 Node dest= graph.destination(piece1, piece2, j);
-                if(destination!= null && !destination.bordersEdge() && !destination.isEdge())
+                if(dest!= null && !dest.bordersEdge() && !dest.isEdge())
                 {
                     toMove = piece1;
                     direction = j; 
@@ -154,7 +154,7 @@ public class ComputerPlayer {
         }
         if(toMove!=null && direction!=-1 && destination!=null)
         {
-            int[] move = {toMove.getID(), destination.getColor(), direction};
+            int[] move = {toMove.getID(), destination.getID(), direction};
             return move;
         }
         else 
@@ -181,9 +181,9 @@ public class ComputerPlayer {
             {
                 Node piece2 = piece1.getSibling(j);
                 Node dest= graph.destination(piece1, piece2, j);
-                if(destination!=null && !destination.isEdge())
+                if(dest!=null && !dest.isEdge())
                 {
-                    toMove = piece2;
+                    toMove = piece1;
                     direction =j;
                     destination = dest;
                 }
@@ -191,7 +191,8 @@ public class ComputerPlayer {
         } 
         if(toMove!=null && direction!=-1 && destination!=null)
         {
-            int[] move = {toMove.getID(), destination.getColor(), direction};
+            int[] move = {toMove.getID(), destination.getID(), direction};
+            System.out.println("Move: " + Arrays.toString(move));
             return move;
         }
         else 

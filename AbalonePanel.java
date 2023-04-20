@@ -23,7 +23,8 @@ public class AbalonePanel extends JPanel
 {
     private AbaloneGraph graph; 
     private int graphSize = 91;
-    private ComputerPlayer ai;
+    private ComputerPlayer ai1;
+    private ComputerPlayer ai2;
 
     //Graphics
     private Polygon hexExterior;
@@ -75,8 +76,9 @@ public class AbalonePanel extends JPanel
         if (playComputer)
         {
             playingComputer = true;
-            this.ai = new ComputerPlayer(this.graph, 2);
+            this.ai1 = new ComputerPlayer(this.graph, 1);
         }
+        this.ai2 = new ComputerPlayer(graph, 2);
         
     }
 
@@ -303,12 +305,12 @@ public class AbalonePanel extends JPanel
         return hexagon;
     }
 
-    private class ComputerMove implements Runnable
+    private class ComputerMove1 implements Runnable
     {
         public void run()
         {
-            ai.updatePlayers(graph);
-            int[] moveInfo = ai.getMove();
+            ai1.updatePlayers(graph);
+            int[] moveInfo = ai1.getMove();
             graph.makeInlineMove(graph.getNode(moveInfo[0]), graph.getNode(moveInfo[1]), moveInfo[2]);
             System.out.println("Computer move made");
             player1Turn = !player1Turn;
@@ -320,9 +322,30 @@ public class AbalonePanel extends JPanel
         }
     }
 
-    private void delayComputerMove()
+    private void delayComputerMove1()
     {
-        scheduler.schedule(new ComputerMove(), 50l, TimeUnit.MILLISECONDS);
+        scheduler.schedule(new ComputerMove1(), 50l, TimeUnit.MILLISECONDS);
+    }
+    private class ComputerMove2 implements Runnable
+    {
+        public void run()
+        {
+            ai2.updatePlayers(graph);
+            int[] moveInfo = ai2.getMove();
+            graph.makeInlineMove(graph.getNode(moveInfo[0]), graph.getNode(moveInfo[1]), moveInfo[2]);
+            System.out.println("Computer move made");
+            player1Turn = !player1Turn;
+            player1Score = graph.getPlayer1Score();
+            player2Score = graph.getPlayer2Score();
+            repaint();
+            sound.setFile(0);
+            sound.play();
+        }
+    }
+
+    private void delayComputerMove2()
+    {
+        scheduler.schedule(new ComputerMove2(), 50l, TimeUnit.MILLISECONDS);
     }
 
     private class MoveAdapter extends MouseInputAdapter
@@ -334,6 +357,18 @@ public class AbalonePanel extends JPanel
 
         public void mouseClicked(MouseEvent e)
         {
+            
+            //Test ai vs ai
+            System.out.println("Player1Turn: " + player1Turn);
+            if (player1Turn)
+            {
+                delayComputerMove1();
+            }
+            else
+            {
+                delayComputerMove2();
+            }
+            /* unncomment for regular play 
             double clickedX = e.getX();
             double clickedY = e.getY();
             
@@ -449,7 +484,7 @@ public class AbalonePanel extends JPanel
                     player1Score = graph.getPlayer1Score();
                     player2Score = graph.getPlayer2Score();
                 }
-            }
+            } */
         }
     }
 }

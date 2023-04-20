@@ -289,6 +289,7 @@ public class AbaloneGraph
             if(nodes[i].getSibling(direction).isEdge())
             {
                 System.out.println("Entered if statement");
+                //Not sure why this seems to be backwards but works?
                 if(nodes[i].getColor()==1)
                     ++player1Score;
                 else 
