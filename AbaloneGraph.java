@@ -11,7 +11,7 @@ public class AbaloneGraph
     public static void main(String[] args)
     {
         AbaloneGraph graph = new AbaloneGraph();
-        ComputerPlayer Ai = new ComputerPlayer(graph);
+        ComputerPlayer Ai = new ComputerPlayer(graph, 2);
         System.out.println(Ai.toString());
         graph.graph[27].setColor(1);
         Ai.updatePlayers(graph);
@@ -490,6 +490,11 @@ public class AbaloneGraph
         //Check the opposite direction of each edge direction to see if there are a greater number of opponent's pieces
         for (int i = 0; i<edgeDirections.length && edgeDirections[i]!=-1; ++i)
         {
+            //Reset for new direction
+            numPlayers = 1;
+            numOpponents = 0;
+            pushingNode = null;
+
             int direction = (edgeDirections[i] + 6) % 12;
             next = node.getSibling(direction);
 

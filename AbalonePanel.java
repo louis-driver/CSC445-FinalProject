@@ -73,7 +73,7 @@ public class AbalonePanel extends JPanel
         if (playComputer)
         {
             playingComputer = true;
-            this.ai = new ComputerPlayer(this.graph);
+            this.ai = new ComputerPlayer(this.graph, 2);
         }
     }
 
