@@ -517,12 +517,12 @@ public class AbaloneGraph
             //Counts number of opponents pieces
             while(next.getColor()==opponentColor)
             {
+                numOpponents++;
                 // Assigns the pushing node that could push the greatest amount
                 if (numOpponents == 2 || numOpponents == 3)
                     pushingNode = next;
 
                 next = next.getSibling(direction);
-                numOpponents++;
             }
             //If number of opponents pieces is greater than players pieces return the opponent's piece that could push in the direction
             if(numPlayers<numOpponents && pushingNode != null && numPlayers < 3)
@@ -557,18 +557,18 @@ public class AbaloneGraph
             //System.out.println("numPlayers:" + numPlayers);
         }
         //If player's pieces exceed 3 return false because it cannot push
-        if(numPlayers > 3)
+        if(numPlayers > 3 || numPlayers < 2)
             return false;
 
         //If empty space is reached, return false because it is not pushing an opponent
-        if(next.getColor()==0 && numPlayers<=3)
+        if(next.getColor()==0)
             return false;
             
         //Counts number of opponents pieces
         while(next.getColor()==opponentColor)
         {
-            next = next.getSibling(direction);
             numOpponents++;
+            next = next.getSibling(direction);
         }
         //If number of opponents pieces is less than players pieces return true
         if(numPlayers>numOpponents && numPlayers<=3 && next.getColor()==0)
