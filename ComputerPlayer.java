@@ -101,7 +101,6 @@ public class ComputerPlayer {
         updatePlayers(graph);
         System.out.println("computer pieces: " + computerNodes.size());
         System.out.println("edge pieces: " + edgePieces.size());
-        System.out.println("opponent pieces: " + Arrays.toString(opponentNodes.toArray()));
         int[] move = dangerEscapeBoth();
         if(move[0]!=-1)
             return move;
@@ -209,9 +208,7 @@ public class ComputerPlayer {
         int direction = -1;
         for(int i=0; i<opponentNodes.size(); i++)
         {
-            System.out.println("InDanger Passed node: " + opponentNodes.get(i));
             int[] danger = graph.inDangerFrom(opponentNodes.get(i));
-            System.out.println("CaptOpponentDanger: " +Arrays.toString(danger));
             if(danger[0]!=-1 && graph.getNode(danger[0]).getColor()==computerColor)
             {
                 toMove = danger[0];
@@ -411,7 +408,6 @@ public class ComputerPlayer {
             ints[i] = ints[randomPosition];
             ints[randomPosition] = temp;
         }
-        System.out.println(Arrays.toString(ints));
     }
 
     public String toString()
