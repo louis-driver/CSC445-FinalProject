@@ -1,5 +1,3 @@
-import javax.swing.JPanel;
-import javax.swing.event.MouseInputAdapter;
 
 //Louis Driver
 // Source for hexagon: https://stackoverflow.com/questions/35853902/drawing-hexagon-using-java-error
@@ -10,7 +8,8 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-
+import javax.swing.JPanel;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.*;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -154,33 +153,6 @@ public class AbalonePanel extends JPanel
         xCapturedCoords[1] = panelWidth - pieceSize - capturedMargin;
     }
 
-    private void createHexagons()
-    {
-        int heightGap = (int) (this.getHeight() / 9.0);
-        int rowGap = (int) (heightGap / 14.0);
-        int pieceSize = heightGap - 2*rowGap;
-
-        // Create large hexagon
-        Point center = new Point(this.getWidth()/2, this.getHeight()/2);
-        Point offCenterLow = new Point(center.x+4, center.y+2);
-        Point offCenterHigh = new Point(center.x-4, center.y-2);
-        int radius1 = (int) (this.getHeight()/1.9);
-        if (this.getWidth()  < this.getHeight() + pieceSize*2)
-            radius1 = (int) (this.getWidth()/2.3);
-        hexExterior = createHexagon(center, radius1);
-
-        // Create interior hexagon
-        int radius2 = (int) (this.getHeight()/2.4);
-        if (this.getWidth() < this.getHeight() + pieceSize*2)
-            radius2 = (int) (this.getWidth()/2.9);
-        hexInterior = createHexagon(center, radius2);
-
-        // Create offset hexagon as a shadow
-        exteriorShadow = createHexagon(offCenterLow, radius1);
-        // Create offset hexagon as a highlight
-        interiorHighlight = createHexagon(offCenterHigh, radius2);
-    }
-
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
@@ -303,47 +275,31 @@ public class AbalonePanel extends JPanel
         return hexagon;
     }
 
-    private class ComputerMove1 implements Runnable
+    private void createHexagons()
     {
-        public void run()
-        {
-            ai1.updatePlayers(graph);
-            int[] moveInfo = ai1.getMove();
-            graph.makeInlineMove(graph.getNode(moveInfo[0]), graph.getNode(moveInfo[1]), moveInfo[2]);
-            System.out.println("Computer move made");
-            player1Turn = !player1Turn;
-            player1Score = graph.getPlayer1Score();
-            player2Score = graph.getPlayer2Score();
-            repaint();
-            sound.setFile(0);
-            sound.play();
-        }
-    }
+        int heightGap = (int) (this.getHeight() / 9.0);
+        int rowGap = (int) (heightGap / 14.0);
+        int pieceSize = heightGap - 2*rowGap;
 
-    private void delayComputerMove1()
-    {
-        scheduler.schedule(new ComputerMove1(), 1000l, TimeUnit.MILLISECONDS);
-    }
-    private class ComputerMove2 implements Runnable
-    {
-        public void run()
-        {
-            ai2.updatePlayers(graph);
-            int[] moveInfo = ai2.getMove();
-            graph.makeInlineMove(graph.getNode(moveInfo[0]), graph.getNode(moveInfo[1]), moveInfo[2]);
-            System.out.println("Computer move made");
-            player1Turn = !player1Turn;
-            player1Score = graph.getPlayer1Score();
-            player2Score = graph.getPlayer2Score();
-            repaint();
-            sound.setFile(0);
-            sound.play();
-        }
-    }
+        // Create large hexagon
+        Point center = new Point(this.getWidth()/2, this.getHeight()/2);
+        Point offCenterLow = new Point(center.x+4, center.y+2);
+        Point offCenterHigh = new Point(center.x-4, center.y-2);
+        int radius1 = (int) (this.getHeight()/1.9);
+        if (this.getWidth()  < this.getHeight() + pieceSize*2)
+            radius1 = (int) (this.getWidth()/2.3);
+        hexExterior = createHexagon(center, radius1);
 
-    private void delayComputerMove2()
-    {
-        scheduler.schedule(new ComputerMove2(), 500l, TimeUnit.MILLISECONDS);
+        // Create interior hexagon
+        int radius2 = (int) (this.getHeight()/2.4);
+        if (this.getWidth() < this.getHeight() + pieceSize*2)
+            radius2 = (int) (this.getWidth()/2.9);
+        hexInterior = createHexagon(center, radius2);
+
+        // Create offset hexagon as a shadow
+        exteriorShadow = createHexagon(offCenterLow, radius1);
+        // Create offset hexagon as a highlight
+        interiorHighlight = createHexagon(offCenterHigh, radius2);
     }
 
     private class MoveAdapter extends MouseInputAdapter
@@ -356,7 +312,7 @@ public class AbalonePanel extends JPanel
         public void mouseClicked(MouseEvent e)
         {
             
-            //Test computer vs computer
+            //Uncomment to view computer vs computer
             /*
             System.out.println("Player1Turn: " + player1Turn);
             if (player1Turn)
@@ -368,6 +324,7 @@ public class AbalonePanel extends JPanel
                 delayComputerMove2();
             }
             */
+            // And comment out from here /*
             
             double clickedX = e.getX();
             double clickedY = e.getY();
@@ -485,6 +442,50 @@ public class AbalonePanel extends JPanel
                     player2Score = graph.getPlayer2Score();
                 }
             }
+        } // to here */
+    }
+
+    private class ComputerMove1 implements Runnable
+    {
+        public void run()
+        {
+            ai1.updatePlayers(graph);
+            int[] moveInfo = ai1.getMove();
+            graph.makeInlineMove(graph.getNode(moveInfo[0]), graph.getNode(moveInfo[1]), moveInfo[2]);
+            System.out.println("Computer move made");
+            player1Turn = !player1Turn;
+            player1Score = graph.getPlayer1Score();
+            player2Score = graph.getPlayer2Score();
+            repaint();
+            sound.setFile(0);
+            sound.play();
         }
+    }
+
+    private void delayComputerMove1()
+    {
+        scheduler.schedule(new ComputerMove1(), 1000l, TimeUnit.MILLISECONDS);
+    }
+    
+    private class ComputerMove2 implements Runnable
+    {
+        public void run()
+        {
+            ai2.updatePlayers(graph);
+            int[] moveInfo = ai2.getMove();
+            graph.makeInlineMove(graph.getNode(moveInfo[0]), graph.getNode(moveInfo[1]), moveInfo[2]);
+            System.out.println("Computer move made");
+            player1Turn = !player1Turn;
+            player1Score = graph.getPlayer1Score();
+            player2Score = graph.getPlayer2Score();
+            repaint();
+            sound.setFile(0);
+            sound.play();
+        }
+    }
+
+    private void delayComputerMove2()
+    {
+        scheduler.schedule(new ComputerMove2(), 500l, TimeUnit.MILLISECONDS);
     }
 }
