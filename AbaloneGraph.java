@@ -6,7 +6,6 @@ public class AbaloneGraph
     private Node[] graph = new Node[91];
     private int player1Score;
     private int player2Score;
-    private ComputerPlayer Ai;
 
     public static void main(String[] args)
     {

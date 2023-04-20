@@ -10,7 +10,6 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-import java.nio.channels.NetworkChannel;
 
 import javax.swing.*;
 import java.util.*;
@@ -43,7 +42,7 @@ public class AbalonePanel extends JPanel
     private int player1Score;
     private int player2Score;
     private boolean player1Turn = true;
-    private boolean playingComputer = true;
+    private boolean playingComputer = false;
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     //Audio
@@ -55,8 +54,8 @@ public class AbalonePanel extends JPanel
     public static void main(String[] args)
     {
         
-        int frameWidth = 600;
-        int frameHeight = 600;
+        int frameWidth = 1000;
+        int frameHeight = 800;
         JFrame frame = new JFrame();
         AbaloneGraph graph = new AbaloneGraph();
         AbalonePanel panel = new AbalonePanel(graph, true);
@@ -76,9 +75,9 @@ public class AbalonePanel extends JPanel
         if (playComputer)
         {
             playingComputer = true;
-            this.ai1 = new ComputerPlayer(this.graph, 1);
+            this.ai1 = new ComputerPlayer(this.graph, 2);
         }
-        this.ai2 = new ComputerPlayer(graph, 2);
+        //this.ai2 = new ComputerPlayer(graph, 1);
         
     }
 
@@ -102,7 +101,6 @@ public class AbalonePanel extends JPanel
         //Find starting x coordinates for each row
         int upperX = hexInterior.xpoints[2];
         int middleX = hexInterior.xpoints[3];
-        //TODO do math to find more accurate hexagon locations
         int xGap = (int) ((upperX - middleX) / 11.0);
         startXCoords[1] = upperX;
         //Set upper half of hexagon
@@ -324,7 +322,7 @@ public class AbalonePanel extends JPanel
 
     private void delayComputerMove1()
     {
-        scheduler.schedule(new ComputerMove1(), 50l, TimeUnit.MILLISECONDS);
+        scheduler.schedule(new ComputerMove1(), 1000l, TimeUnit.MILLISECONDS);
     }
     private class ComputerMove2 implements Runnable
     {
@@ -345,7 +343,7 @@ public class AbalonePanel extends JPanel
 
     private void delayComputerMove2()
     {
-        scheduler.schedule(new ComputerMove2(), 50l, TimeUnit.MILLISECONDS);
+        scheduler.schedule(new ComputerMove2(), 500l, TimeUnit.MILLISECONDS);
     }
 
     private class MoveAdapter extends MouseInputAdapter
@@ -358,7 +356,8 @@ public class AbalonePanel extends JPanel
         public void mouseClicked(MouseEvent e)
         {
             
-            //Test ai vs ai
+            //Test computer vs computer
+            /*
             System.out.println("Player1Turn: " + player1Turn);
             if (player1Turn)
             {
@@ -368,7 +367,8 @@ public class AbalonePanel extends JPanel
             {
                 delayComputerMove2();
             }
-            /* unncomment for regular play 
+            */
+            
             double clickedX = e.getX();
             double clickedY = e.getY();
             
@@ -435,7 +435,7 @@ public class AbalonePanel extends JPanel
                         sound.play();
                         //Make computer move after the user moves
                         if (graph.getPlayer1Score() < 6)
-                            delayComputerMove();
+                            delayComputerMove1();
                     }
                 }
                 catch (RuntimeException ex)
@@ -470,7 +470,7 @@ public class AbalonePanel extends JPanel
                         sound.play();
                         //Make computer move after the user moves
                         if (graph.getPlayer1Score() < 6)
-                            delayComputerMove();
+                            delayComputerMove1();
                     }
                     repaint();
                 }
@@ -484,7 +484,7 @@ public class AbalonePanel extends JPanel
                     player1Score = graph.getPlayer1Score();
                     player2Score = graph.getPlayer2Score();
                 }
-            } */
+            }
         }
     }
 }
