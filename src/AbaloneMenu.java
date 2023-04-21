@@ -158,7 +158,7 @@ public class AbaloneMenu extends JPanel
 		MenuFrame.add(Box.createVerticalGlue());
 		MenuFrame.add(MenuPanel);
 		MenuFrame.setTitle("Abalone");
-		MenuFrame.setMinimumSize(new Dimension(460, 600));
+		MenuFrame.setMinimumSize(new Dimension(screenWidth/3, (int) (screenHeight * 0.85)));
 		MenuFrame.setBackground(BoardColorLight);
 		MenuFrame.setSize(screenSize);
 		MenuFrame.setVisible(true);
