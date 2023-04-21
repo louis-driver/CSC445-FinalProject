@@ -1,12 +1,10 @@
 //Bryan Floyd
 //Abalone Menu
 
-//TODO Rescale components based on window size change
-//TODO Add example images to rules panel
-//TODO Add detection for rules window exit with x button, reformat longer strings, reduce default window size
-//TODO Add multiplayer button function
-//TODO Window size consistency between JFrames
-//TODO fix fullscreen button component resize
+//TODO Add example images to rules panel, finish rules
+//TODO Add RulesFrame scroll bar(s)
+//TODO Possibly add options frame
+//TODO Fix main menu ImageLabel scaling if possible
 
 import java.awt.*;
 import java.awt.event.*;
@@ -18,11 +16,15 @@ public class AbaloneMenu extends JPanel
 	JFrame RulesFrame;
 	JFrame GameFrame;
 	JPanel MenuPanel;
-	JPanel PicPanel;
 	JPanel LogPanel;
 	JPanel RulesPanel;
 	JPanel ButtonSectionPanel;
+	AbalonePanel AbalonePanelS;
+	AbalonePanel AbalonePanelM;
+	AbaloneGraph AbaloneGraphS;
+	AbaloneGraph AbaloneGraphM;
 	JLabel Title;
+	JLabel ImageLabel;
 	JButton SPButton;
 	JButton MPButton;
 	JButton RulesButton;
@@ -32,9 +34,8 @@ public class AbaloneMenu extends JPanel
 	
 	Color BoardColorLight = new Color(160, 130, 105);
 	Color BoardColorDark = new Color(75, 45, 30);
-
-	boolean gameInProgress = false;
-	boolean rulesFrameOpen = false;
+	static int commonWindowHeight;
+	static int commonWindowWidth;
 	
 	public AbaloneMenu()
 	{			
@@ -61,11 +62,8 @@ public class AbaloneMenu extends JPanel
 		QuitBPanel.setBackground(new Color(75, 45, 30));
 		QuitBPanel.setLayout(new BorderLayout());
 		
-		PicPanel = new JPanel();
-		PicPanel.setBackground(BoardColorLight);
 		ImageIcon BoardImage = new ImageIcon("AbaloneBoard.png");
-		JLabel ImageLabel = new JLabel(BoardImage);
-		PicPanel.add(ImageLabel);
+		ImageLabel = new JLabel(BoardImage);
 		
 		Title = new JLabel("ABALONE", SwingConstants.CENTER);
 		Title.setFont(TitleFont);
@@ -94,7 +92,7 @@ public class AbaloneMenu extends JPanel
 		add(Box.createVerticalStrut(50));
 		
 		//Add picture of board, add spacer
-		MenuPanel.add(PicPanel, BorderLayout.CENTER);
+		MenuPanel.add(ImageLabel, BorderLayout.CENTER);
 		
 		//Add panels containing buttons, add spacers, add size bounds
 		Dimension buttDimension = new Dimension(250, 40);
@@ -145,11 +143,11 @@ public class AbaloneMenu extends JPanel
 	{
 		MenuFrame = new JFrame();
 		MenuFrame.setName("MenuFrame");
-		MenuFrame.setSize(400, 500);
+		commonWindowHeight = MenuFrame.getHeight();
+		commonWindowWidth = MenuFrame.getWidth();
 		AbaloneMenu AbaloneMenu = new AbaloneMenu();
 		MenuFrame.add(Box.createVerticalGlue());
 		MenuFrame.add(AbaloneMenu);
-		//MenuFrame.add(Box.createVerticalStrut(50));
 		MenuFrame.setTitle("Abalone");
 		MenuFrame.setMinimumSize(new Dimension(460,535));
 		MenuFrame.setVisible(true);
@@ -160,7 +158,7 @@ public class AbaloneMenu extends JPanel
 	{
 		RulesFrame = new JFrame();
 		RulesFrame.setName("RulesFrame");
-		RulesFrame.setSize(675,MenuFrame.getHeight());
+		RulesFrame.setMinimumSize(new Dimension(535,535));
 		RulesFrame.setTitle("Abalone: Rules");
 		
 		RulesPanel = new JPanel();
@@ -168,16 +166,20 @@ public class AbaloneMenu extends JPanel
 		RulesPanel.setBackground(BoardColorLight);
 		RulesPanel.setPreferredSize(MenuFrame.getSize());
 		
-		JLabel rulesTitle = new JLabel("   RULES OF ABALONE");
+		JLabel rulesTitle = new JLabel(" RULES OF ABALONE");
+		Font rulesTitleFont = new Font("Times New Roman", Font.ITALIC, 30);
+		rulesTitle.setFont(rulesTitleFont);
 		rulesTitle.setForeground(Color.BLACK);
-		JLabel ruleLabel1 = new JLabel(" - Objective: Push your opponent's marbles off the board.\n" +
-		" - Black moves first.\n" +
-		" - You may move up to three adjacent pieces, positioned in a straight line, in one direction.");
+		JLabel ruleLabel1 = new JLabel(" - Objective: Push your opponent's marbles off the board.");
 		ruleLabel1.setForeground(Color.BLACK);
-		JLabel ruleLabel2 = new JLabel(" - This direction can be either 'broadside' (parallel to the line the pieces create) or 'in-line' (perpendicular to the line).");
+		JLabel ruleLabel2 = new JLabel(" - Black moves first.");
 		ruleLabel2.setForeground(Color.BLACK);
-		JLabel ruleLabel3 = new JLabel(" - TODO");
+		JLabel ruleLabel3 = new JLabel(" - You may move up to three adjacent pieces, positioned in a straight line, in one direction.");
 		ruleLabel3.setForeground(Color.BLACK);
+		JLabel ruleLabel4 = new JLabel(" - This direction can be either 'broadside' (parallel to the line the pieces create):");
+		ruleLabel4.setForeground(Color.BLACK);
+		JLabel ruleLabel5 = new JLabel(" - or 'in-line' (perpendicular to the line):");
+		ruleLabel5.setForeground(Color.BLACK);
 		
 		JButton BackToMenuButton = new JButton("Back to Menu");
 		BackToMenuButton.setForeground(Color.RED);
@@ -200,6 +202,10 @@ public class AbaloneMenu extends JPanel
 		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
 		RulesPanel.add(ruleLabel3);
 		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
+		RulesPanel.add(ruleLabel4);
+		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
+		RulesPanel.add(ruleLabel5);
+		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
 		RulesPanel.add(BackToMenuButton);
 		
 		BackToMenuButton.addActionListener(MainListener);
@@ -212,16 +218,14 @@ public class AbaloneMenu extends JPanel
 	{
 		GameFrame = new JFrame();
 		GameFrame.setName("GameFrame");
-		AbaloneGraph AbaloneGraph = new AbaloneGraph();
-		AbalonePanel AbalonePanel = new AbalonePanel(AbaloneGraph);
+		GameFrame.setMinimumSize(new Dimension(550,550));
+		
+		AbaloneGraphS = new AbaloneGraph();
+		AbalonePanelS = new AbalonePanel(AbaloneGraphS, true);
+		AbaloneGraphM = new AbaloneGraph();
+		AbalonePanelM = new AbalonePanel(AbaloneGraphM, false);
 
-		//GameFrame.setLayout(new BorderLayout());
-		GameFrame.setSize(AbalonePanel.getWidth(), AbalonePanel.getHeight());
-		GameFrame.setSize(MenuFrame.getSize());
-		GameFrame.add(AbalonePanel);
-		//GameFrame.add(LogPanel, BorderLayout.EAST);
-		GameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		GameFrame.setTitle("Abalone");
+		GameFrame.addComponentListener(ComponentListener);
 	}
 	
 	ActionListener MainListener = new ActionListener()
@@ -231,39 +235,36 @@ public class AbaloneMenu extends JPanel
 			System.out.println("Player says " + actionEvent.getActionCommand());
 			if (actionEvent.getActionCommand().equals("Singleplayer"))
 			{
-				if(gameInProgress)
+				GameFrame.remove(AbalonePanelM);
+				GameFrame.add(AbalonePanelS);
+				GameFrame.setTitle("Abalone: Singleplayer");
+				MenuFrame.setVisible(false);
+				if (GameFrame.getMinimumSize().getWidth() <= commonWindowWidth && GameFrame.getMinimumSize().getHeight() <= commonWindowHeight)
 				{
-					System.out.println("Game already in progress");
+					GameFrame.setSize(commonWindowWidth, commonWindowHeight);
 				}
-				else
-				{
-					SPButton.setForeground(Color.GRAY);
-					SPButton.setBackground(Color.WHITE);
-					
-					MenuFrame.setVisible(false);
-					GameFrame.setVisible(true);
-					gameInProgress = true;
-				}
+				GameFrame.setVisible(true);
 			}
 			else if (actionEvent.getActionCommand().equals("Multiplayer"))
 			{
-				
+				GameFrame.remove(AbalonePanelS);
+				GameFrame.add(AbalonePanelM);
+				GameFrame.setTitle("Abalone: Multiplayer");
+				MenuFrame.setVisible(false);
+				if (GameFrame.getMinimumSize().getWidth() <= commonWindowWidth && GameFrame.getMinimumSize().getHeight() <= commonWindowHeight)
+				{
+					GameFrame.setSize(commonWindowWidth, commonWindowHeight);
+				}
+				GameFrame.setVisible(true);
 			}
 			else if (actionEvent.getActionCommand().equals("Rules"))
 			{
-				if(rulesFrameOpen)
+				MenuFrame.setVisible(false);
+				if (RulesFrame.getMinimumSize().getWidth() <= commonWindowWidth && RulesFrame.getMinimumSize().getHeight() <= commonWindowHeight)
 				{
-					System.out.println("Rules window is already open");
+					RulesFrame.setSize(new Dimension(commonWindowWidth, commonWindowHeight));
 				}
-				else
-				{
-					RulesButton.setForeground(Color.GRAY);
-					RulesButton.setBackground(Color.WHITE);
-
-					MenuFrame.setVisible(false);
-					RulesFrame.setVisible(true);
-					rulesFrameOpen = true;
-				}
+				RulesFrame.setVisible(true);
 			}
 			else if (actionEvent.getActionCommand().equals("Quit"))
 			{
@@ -287,23 +288,49 @@ public class AbaloneMenu extends JPanel
 		{
 			if (ce.getComponent().getName() == "RulesFrame")
 			{
+				if (MenuFrame.getMinimumSize().getWidth() <= commonWindowWidth && MenuFrame.getMinimumSize().getHeight() <= commonWindowHeight)
+				{
+					MenuFrame.setSize(new Dimension(commonWindowWidth, commonWindowHeight));
+				}
 				MenuFrame.setVisible(true);
-				RulesButton.setForeground(Color.WHITE);
-				RulesButton.setBackground(BoardColorDark);
-				rulesFrameOpen = false;
+
+			}
+			if (ce.getComponent().getName() == "GameFrame")
+			{
+				if (MenuFrame.getMinimumSize().getWidth() <= commonWindowWidth && MenuFrame.getMinimumSize().getHeight() <= commonWindowHeight)
+				{
+					MenuFrame.setSize(new Dimension(commonWindowWidth, commonWindowHeight));
+				}
+				MenuFrame.setVisible(true);
+
 			}
 		}
 
 		public void componentResized(ComponentEvent ce)
 		{
+			System.out.print("Player resized Frame to: ");
 			if (ce.getComponent().getName() == "MenuFrame")
 			{
-				System.out.println("Player resized MenuFrame to:" + MenuFrame.getSize());
+				System.out.println(MenuFrame.getSize());
 				Title.setFont(new Font("Times New Roman", Font.ITALIC, MenuPanel.getHeight()/10));
 				setPreferredSize(MenuFrame.getSize());
+				commonWindowHeight = MenuFrame.getHeight();
+				commonWindowWidth = MenuFrame.getWidth();
 				MenuPanel.setPreferredSize(new Dimension(MenuFrame.getWidth(), MenuFrame.getHeight()-100));
+				ImageLabel.setMinimumSize(new Dimension(MenuFrame.getWidth()-50, MenuFrame.getHeight()-50));
 			}
-			
+			if (ce.getComponent().getName() == "GameFrame")
+			{
+				System.out.println(GameFrame.getSize());
+				commonWindowHeight = GameFrame.getHeight();
+				commonWindowWidth = GameFrame.getWidth();
+			}
+			if (ce.getComponent().getName() == "RulesFrame")
+			{
+				System.out.println(RulesFrame.getSize());
+				commonWindowHeight = RulesFrame.getHeight();
+				commonWindowWidth = RulesFrame.getWidth();
+			}
 		}
 	};
 }
