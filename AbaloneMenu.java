@@ -2,6 +2,7 @@
 //Abalone Menu
 
 //TODO Add example images to rules panel, finish rules
+//TODO Add RulesFrame component scaling
 //TODO Add RulesFrame scroll bar(s)
 //TODO Possibly add options frame
 //TODO Fix main menu ImageLabel scaling if possible
@@ -25,17 +26,17 @@ public class AbaloneMenu extends JPanel
 	AbaloneGraph AbaloneGraphM;
 	JLabel Title;
 	JLabel ImageLabel;
+	JLabel rulesTitle;
+	JLabel[] ruleLabels;
 	JButton SPButton;
 	JButton MPButton;
 	JButton RulesButton;
 	JButton QuitButton;
-	Font TitleFont = new Font("Times New Roman", Font.ITALIC, 50);
-	Font ButtonFont = new Font("Times New Roman", Font.ITALIC, this.getHeight()/20);
+	static int commonWindowHeight;
+	static int commonWindowWidth;
 	
 	Color BoardColorLight = new Color(160, 130, 105);
 	Color BoardColorDark = new Color(75, 45, 30);
-	static int commonWindowHeight;
-	static int commonWindowWidth;
 	
 	public AbaloneMenu()
 	{			
@@ -66,7 +67,7 @@ public class AbaloneMenu extends JPanel
 		ImageLabel = new JLabel(BoardImage);
 		
 		Title = new JLabel("ABALONE", SwingConstants.CENTER);
-		Title.setFont(TitleFont);
+		Title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, commonWindowHeight/10));
 		Title.setAlignmentX(CENTER_ALIGNMENT);
 		
 		SPButton = new JButton("Singleplayer");
@@ -158,7 +159,7 @@ public class AbaloneMenu extends JPanel
 	{
 		RulesFrame = new JFrame();
 		RulesFrame.setName("RulesFrame");
-		RulesFrame.setMinimumSize(new Dimension(535,535));
+		RulesFrame.setMinimumSize(new Dimension(810,535));
 		RulesFrame.setTitle("Abalone: Rules");
 		
 		RulesPanel = new JPanel();
@@ -166,20 +167,22 @@ public class AbaloneMenu extends JPanel
 		RulesPanel.setBackground(BoardColorLight);
 		RulesPanel.setPreferredSize(MenuFrame.getSize());
 		
-		JLabel rulesTitle = new JLabel(" RULES OF ABALONE");
-		Font rulesTitleFont = new Font("Times New Roman", Font.ITALIC, 30);
-		rulesTitle.setFont(rulesTitleFont);
+		rulesTitle = new JLabel(" RULES OF ABALONE");
+		rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, commonWindowHeight/15));
 		rulesTitle.setForeground(Color.BLACK);
-		JLabel ruleLabel1 = new JLabel(" - Objective: Push your opponent's marbles off the board.");
-		ruleLabel1.setForeground(Color.BLACK);
-		JLabel ruleLabel2 = new JLabel(" - Black moves first.");
-		ruleLabel2.setForeground(Color.BLACK);
-		JLabel ruleLabel3 = new JLabel(" - You may move up to three adjacent pieces, positioned in a straight line, in one direction.");
-		ruleLabel3.setForeground(Color.BLACK);
-		JLabel ruleLabel4 = new JLabel(" - This direction can be either 'broadside' (parallel to the line the pieces create):");
-		ruleLabel4.setForeground(Color.BLACK);
-		JLabel ruleLabel5 = new JLabel(" - or 'in-line' (perpendicular to the line):");
-		ruleLabel5.setForeground(Color.BLACK);
+		
+		ruleLabels = new JLabel[5];
+		ruleLabels[0] = new JLabel(" - Objective: Push your opponent's marbles off the board.");
+		ruleLabels[1] = new JLabel(" - Black moves first.");
+		ruleLabels[2] = new JLabel(" - You may move up to three adjacent pieces, positioned in a straight line, in one direction.");
+		ruleLabels[3] = new JLabel(" - This direction can be either 'broadside' (parallel to the line the pieces create):");
+		ruleLabels[4] = new JLabel(" - or 'in-line' (perpendicular to the line):");
+
+		for(int i=0; i<ruleLabels.length; i++)
+		{
+			ruleLabels[i].setForeground(Color.BLACK);
+			ruleLabels[i].setFont(new Font("Times New Roman", Font.ITALIC, MenuPanel.getHeight()/20));
+		}
 		
 		JButton BackToMenuButton = new JButton("Back to Menu");
 		BackToMenuButton.setForeground(Color.RED);
@@ -196,15 +199,15 @@ public class AbaloneMenu extends JPanel
 		RulesPanel.add(Box.createRigidArea(new Dimension(0,10)));
 		RulesPanel.add(RulesImg1);
 		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
-		RulesPanel.add(ruleLabel1);
+		RulesPanel.add(ruleLabels[0]);
 		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
-		RulesPanel.add(ruleLabel2);
+		RulesPanel.add(ruleLabels[1]);
 		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
-		RulesPanel.add(ruleLabel3);
+		RulesPanel.add(ruleLabels[2]);
 		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
-		RulesPanel.add(ruleLabel4);
+		RulesPanel.add(ruleLabels[3]);
 		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
-		RulesPanel.add(ruleLabel5);
+		RulesPanel.add(ruleLabels[4]);
 		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
 		RulesPanel.add(BackToMenuButton);
 		
@@ -312,12 +315,18 @@ public class AbaloneMenu extends JPanel
 			if (ce.getComponent().getName() == "MenuFrame")
 			{
 				System.out.println(MenuFrame.getSize());
-				Title.setFont(new Font("Times New Roman", Font.ITALIC, MenuPanel.getHeight()/10));
+				Title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, MenuPanel.getHeight()/10));
 				setPreferredSize(MenuFrame.getSize());
 				commonWindowHeight = MenuFrame.getHeight();
 				commonWindowWidth = MenuFrame.getWidth();
+<<<<<<< Updated upstream
 				MenuPanel.setPreferredSize(new Dimension(MenuFrame.getWidth(), MenuFrame.getHeight()-100));
 				ImageLabel.setPreferredSize(new Dimension(MenuFrame.getWidth()-50, MenuFrame.getHeight()-50));
+=======
+				MenuPanel.setPreferredSize(new Dimension(commonWindowWidth, commonWindowHeight-60));
+				ImageLabel.setPreferredSize(new Dimension(commonWindowWidth, commonWindowHeight));
+				ImageLabel.repaint();
+>>>>>>> Stashed changes
 			}
 			if (ce.getComponent().getName() == "GameFrame")
 			{
@@ -330,6 +339,12 @@ public class AbaloneMenu extends JPanel
 				System.out.println(RulesFrame.getSize());
 				commonWindowHeight = RulesFrame.getHeight();
 				commonWindowWidth = RulesFrame.getWidth();
+				rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, commonWindowHeight/15));
+
+				for(int i=0; i<ruleLabels.length; i++)
+				{
+					ruleLabels[i].setFont(new Font("Times New Roman", Font.ITALIC, commonWindowHeight/25));
+				}
 			}
 		}
 	};
