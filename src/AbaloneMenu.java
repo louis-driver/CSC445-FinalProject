@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class AbaloneMenu extends JPanel
+public class AbaloneMenu extends JFrame
 {
 	static JFrame MenuFrame;
 	static JPanel MenuPanel;
@@ -44,7 +44,7 @@ public class AbaloneMenu extends JPanel
 
 	public AbaloneMenu()
 	{			
-		setPreferredSize(MenuFrame.getSize());
+		setPreferredSize(getSize());
 		setBackground(new Color(160, 130, 105));
 		
 		MenuPanel = new JPanel();
@@ -70,7 +70,7 @@ public class AbaloneMenu extends JPanel
 		ImageLabel = new JLabel(BoardImage);
 		
 		Title = new JLabel("ABALONE", SwingConstants.CENTER);
-		Title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, MenuFrame.getHeight()/10));
+		Title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/10));
 		Title.setAlignmentX(CENTER_ALIGNMENT);
 		
 		SPButton = new JButton("Singleplayer");
@@ -146,29 +146,35 @@ public class AbaloneMenu extends JPanel
 		GameOptionsMenu.setBackground(BoardColorDark);
 		GameOptionsMenu.add(ShowRulesItem);
 		GameOptionsMenu.add(QuitGameItem);
+		QuitGameItem.setForeground(Color.WHITE);
+		QuitGameItem.setBackground(BoardColorDark);
 		QuitGameItem.setForeground(Color.RED);
 		QuitGameItem.setBackground(BoardColorDark);
+<<<<<<< HEAD
 		ShowRulesItem.setForeground(Color.WHITE);
 		ShowRulesItem.setBackground(BoardColorDark);
+=======
+		ShowRulesItem.addActionListener(MainListener);
+>>>>>>> main
 		QuitGameItem.addActionListener(MainListener);
 		ShowRulesItem.addActionListener(MainListener);
 
-		MenuFrame.addComponentListener(ComponentListener);
+		addComponentListener(ComponentListener);
+
+		setName("MenuFrame");
+		add(Box.createVerticalGlue());
+		add(MenuPanel);
+		setTitle("Abalone");
+		setMinimumSize(new Dimension(screenWidth/3, (int) (screenHeight * 0.85)));
+		setBackground(BoardColorLight);
+		setSize(screenSize);
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public static void main(String[] args)
 	{
-		MenuFrame = new JFrame();
-		MenuFrame.setName("MenuFrame");
 		AbaloneMenu AbaloneMenu = new AbaloneMenu();
-		MenuFrame.add(Box.createVerticalGlue());
-		MenuFrame.add(MenuPanel);
-		MenuFrame.setTitle("Abalone");
-		MenuFrame.setMinimumSize(new Dimension(screenWidth/3, (int) (screenHeight * 0.85)));
-		MenuFrame.setBackground(BoardColorLight);
-		MenuFrame.setSize(screenSize);
-		MenuFrame.setVisible(true);
-		MenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public void RulesPanelSetup()
@@ -176,10 +182,10 @@ public class AbaloneMenu extends JPanel
 		RulesPanel = new JPanel();
 		RulesPanel.setLayout(new BoxLayout(RulesPanel, BoxLayout.PAGE_AXIS));
 		RulesPanel.setBackground(BoardColorLight);
-		RulesPanel.setPreferredSize(MenuFrame.getSize());
+		RulesPanel.setPreferredSize(getSize());
 		
 		rulesTitle = new JLabel(" RULES OF ABALONE");
-		rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, MenuFrame.getHeight()/15));
+		rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/15));
 		rulesTitle.setForeground(Color.BLACK);
 		
 		ruleLabels = new JLabel[5];
@@ -243,6 +249,7 @@ public class AbaloneMenu extends JPanel
 			{
 				AbaloneGraphS = new AbaloneGraph();
 				AbalonePanelS = new AbalonePanel(AbaloneGraphS, true);
+<<<<<<< HEAD
 				MenuFrame.remove(MenuPanel);
 				MenuFrame.remove(RulesPanel);
 				MenuFrame.add(AbalonePanelS);
@@ -253,11 +260,23 @@ public class AbaloneMenu extends JPanel
 				MenuFrame.setSize(MenuFrame.getWidth()+1, MenuFrame.getHeight()+1);
 				SPGameInProgress = true;
 				MPGameInProgress = false;
+=======
+				remove(MenuPanel);
+				remove(RulesPanel);
+				add(AbalonePanelS);
+				setJMenuBar(GameOptionsBar);
+				setTitle("Abalone: Singleplayer");
+				repaint();
+				SPGameInProgress = true;
+				setSize(getWidth()-1, getHeight()-1);
+				setSize(getWidth()+1, getHeight()+1);
+>>>>>>> main
 			}
 			else if (actionEvent.getActionCommand().equals("Multiplayer"))
 			{
 				AbaloneGraphM = new AbaloneGraph();
 				AbalonePanelM = new AbalonePanel(AbaloneGraphM, false);
+<<<<<<< HEAD
 				MenuFrame.remove(MenuPanel);
 				MenuFrame.remove(RulesPanel);
 				MenuFrame.add(AbalonePanelM);
@@ -289,6 +308,35 @@ public class AbaloneMenu extends JPanel
 				MenuFrame.repaint();
 				MenuFrame.setSize(MenuFrame.getWidth()-1, MenuFrame.getHeight()-1);
 				MenuFrame.setSize(MenuFrame.getWidth()+1, MenuFrame.getHeight()+1);
+=======
+				remove(MenuPanel);
+				remove(RulesPanel);
+				add(AbalonePanelM);
+				setJMenuBar(GameOptionsBar);
+				setTitle("Abalone: Multiplayer");
+				repaint();
+				MPGameInProgress = true;
+				setSize(getWidth()-1, getHeight()-1);
+				setSize(getWidth()+1, getHeight()+1);
+			}
+			else if (actionEvent.getActionCommand().equals("Rules"))
+			{
+				if (SPGameInProgress)
+				{
+					remove(AbalonePanelS);
+				}
+				else if (MPGameInProgress)
+				{
+					remove(AbalonePanelM);
+				}
+				remove(MenuPanel);
+				setJMenuBar(null);
+				add(RulesPanel);
+				setTitle("Abalone: Rules");
+				repaint();
+				setSize(getWidth()-1, getHeight()-1);
+				setSize(getWidth()+1, getHeight()+1);
+>>>>>>> main
 			}
 			else if (actionEvent.getActionCommand().equals("Quit"))
 			{
@@ -296,6 +344,7 @@ public class AbaloneMenu extends JPanel
 			}
 			else if (actionEvent.getActionCommand().equals("Back"))
 			{
+<<<<<<< HEAD
 				MenuFrame.remove(RulesPanel);
 				if(SPGameInProgress)
 				{
@@ -342,6 +391,50 @@ public class AbaloneMenu extends JPanel
 				MenuFrame.repaint();
 				MenuFrame.setSize(MenuFrame.getWidth()-1, MenuFrame.getHeight()-1);
 				MenuFrame.setSize(MenuFrame.getWidth()+1, MenuFrame.getHeight()+1);
+=======
+				remove(RulesPanel);
+				if (SPGameInProgress)
+				{
+					setJMenuBar(GameOptionsBar);
+					add(AbalonePanelS);
+					setTitle("Abalone: Singleplayer");
+				}
+				else if (MPGameInProgress)
+				{
+					setJMenuBar(GameOptionsBar);
+					add(AbalonePanelM);
+					setTitle("Abalone: Multiplayer");
+				}
+				else
+				{
+					setJMenuBar(null);
+					add(MenuPanel);
+					setTitle("Abalone");
+				}
+				repaint();
+				setSize(getWidth()-1, getHeight()-1);
+				setSize(getWidth()+1, getHeight()+1);
+			}
+			else if (actionEvent.getActionCommand().equals("Quit Game"))
+			{
+				if (SPGameInProgress)
+				{
+					remove(AbalonePanelS);
+					SPGameInProgress = false;
+				}
+				if (MPGameInProgress)
+				{
+					remove(AbalonePanelM);
+					MPGameInProgress = false;
+				}
+				remove(RulesPanel);
+				setJMenuBar(null);
+				add(MenuPanel);
+				setTitle("Abalone");
+				repaint();
+				setSize(getWidth()-1, getHeight()-1);
+				setSize(getWidth()+1, getHeight()+1);
+>>>>>>> main
 			}
 	    }
 	};
@@ -360,15 +453,15 @@ public class AbaloneMenu extends JPanel
 
 		public void componentResized(ComponentEvent ce)
 		{
-			System.out.println("Player resized Frame to:" + MenuFrame.getSize());
+			System.out.println("Player resized Frame to:" + getSize());
 			Title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, MenuPanel.getHeight()/10));
-			MenuPanel.setPreferredSize(new Dimension(MenuFrame.getWidth(), MenuFrame.getHeight()-90));
-			ImageLabel.setPreferredSize(new Dimension(MenuFrame.getWidth()-50, MenuFrame.getHeight()-50));
-			rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, MenuFrame.getHeight()/15));
+			MenuPanel.setPreferredSize(new Dimension(getWidth(), getHeight()-90));
+			//ImageLabel.setPreferredSize(new Dimension(getWidth()-50, getHeight()-50));
+			rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/15));
 
 			for(int i=0; i<ruleLabels.length; i++)
 			{
-				ruleLabels[i].setFont(new Font("Times New Roman", Font.ITALIC, MenuFrame.getHeight()/25));
+				ruleLabels[i].setFont(new Font("Times New Roman", Font.ITALIC, getHeight()/25));
 			}
 		}
 	};
