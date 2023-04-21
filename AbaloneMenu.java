@@ -15,7 +15,7 @@ public class AbaloneMenu extends JPanel
 	static JFrame MenuFrame;
 	JFrame RulesFrame;
 	JFrame GameFrame;
-	JPanel MenuPanel;
+	static JPanel MenuPanel;
 	JPanel LogPanel;
 	JPanel RulesPanel;
 	JPanel ButtonSectionPanel;
@@ -147,7 +147,7 @@ public class AbaloneMenu extends JPanel
 		commonWindowWidth = MenuFrame.getWidth();
 		AbaloneMenu AbaloneMenu = new AbaloneMenu();
 		MenuFrame.add(Box.createVerticalGlue());
-		MenuFrame.add(AbaloneMenu);
+		MenuFrame.add(MenuPanel);
 		MenuFrame.setTitle("Abalone");
 		MenuFrame.setMinimumSize(new Dimension(460,535));
 		MenuFrame.setVisible(true);
@@ -317,7 +317,7 @@ public class AbaloneMenu extends JPanel
 				commonWindowHeight = MenuFrame.getHeight();
 				commonWindowWidth = MenuFrame.getWidth();
 				MenuPanel.setPreferredSize(new Dimension(MenuFrame.getWidth(), MenuFrame.getHeight()-100));
-				ImageLabel.setMinimumSize(new Dimension(MenuFrame.getWidth()-50, MenuFrame.getHeight()-50));
+				ImageLabel.setPreferredSize(new Dimension(MenuFrame.getWidth()-50, MenuFrame.getHeight()-50));
 			}
 			if (ce.getComponent().getName() == "GameFrame")
 			{
