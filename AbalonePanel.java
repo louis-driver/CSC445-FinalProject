@@ -58,7 +58,7 @@ public class AbalonePanel extends JPanel
         int frameHeight = 600;
         JFrame frame = new JFrame();
         AbaloneGraph graph = new AbaloneGraph();
-        AbalonePanel panel = new AbalonePanel(graph, true);
+        AbalonePanel panel = new AbalonePanel(graph, false);
 
         frame.setSize(frameWidth, frameHeight);
         frame.setTitle("Graph");
@@ -222,7 +222,7 @@ public class AbalonePanel extends JPanel
                     g2.setColor(Color.black);
                 g2.fill(graph.getPiece(i));
                 //Uncomment to view node positions
-                g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
+                //g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
             }
         }
 
