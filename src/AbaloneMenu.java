@@ -63,7 +63,7 @@ public class AbaloneMenu extends JPanel
 		QuitBPanel.setBackground(new Color(75, 45, 30));
 		QuitBPanel.setLayout(new BorderLayout());
 		
-		ImageIcon BoardImage = new ImageIcon("AbaloneBoard.png");
+		ImageIcon BoardImage = new ImageIcon("Resources/AbaloneBoard.png");
 		ImageLabel = new JLabel(BoardImage);
 		
 		Title = new JLabel("ABALONE", SwingConstants.CENTER);
@@ -188,7 +188,7 @@ public class AbaloneMenu extends JPanel
 
 		JPanel RulesPicPanel1 = new JPanel();
 		RulesPicPanel1.setBackground(BoardColorLight);
-		ImageIcon RulesImage1 = new ImageIcon("AbaloneBoardSmall.png");
+		ImageIcon RulesImage1 = new ImageIcon("Resources/AbaloneBoardSmall.png");
 		JLabel RulesImg1 = new JLabel(RulesImage1);
 		RulesPicPanel1.add(RulesImg1);
 		
