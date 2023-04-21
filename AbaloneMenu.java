@@ -37,7 +37,10 @@ public class AbaloneMenu extends JPanel
 	
 	Color BoardColorLight = new Color(160, 130, 105);
 	Color BoardColorDark = new Color(75, 45, 30);
-	
+	static Dimension screenSize = new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(), (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()-40);
+	static int screenWidth = (int) screenSize.getWidth();
+	static int screenHeight = (int) screenSize.getHeight();
+
 	public AbaloneMenu()
 	{			
 		setPreferredSize(MenuFrame.getSize());
@@ -151,6 +154,7 @@ public class AbaloneMenu extends JPanel
 		MenuFrame.add(MenuPanel);
 		MenuFrame.setTitle("Abalone");
 		MenuFrame.setMinimumSize(new Dimension(460,535));
+		MenuFrame.setSize(screenSize);
 		MenuFrame.setVisible(true);
 		MenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -319,14 +323,8 @@ public class AbaloneMenu extends JPanel
 				setPreferredSize(MenuFrame.getSize());
 				commonWindowHeight = MenuFrame.getHeight();
 				commonWindowWidth = MenuFrame.getWidth();
-<<<<<<< Updated upstream
 				MenuPanel.setPreferredSize(new Dimension(MenuFrame.getWidth(), MenuFrame.getHeight()-100));
 				ImageLabel.setPreferredSize(new Dimension(MenuFrame.getWidth()-50, MenuFrame.getHeight()-50));
-=======
-				MenuPanel.setPreferredSize(new Dimension(commonWindowWidth, commonWindowHeight-60));
-				ImageLabel.setPreferredSize(new Dimension(commonWindowWidth, commonWindowHeight));
-				ImageLabel.repaint();
->>>>>>> Stashed changes
 			}
 			if (ce.getComponent().getName() == "GameFrame")
 			{
