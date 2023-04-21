@@ -1,3 +1,4 @@
+package src;
 //A class to play against a human 
 //It will probably play like the biggest idiot known to man kind, so be nice. 
 
