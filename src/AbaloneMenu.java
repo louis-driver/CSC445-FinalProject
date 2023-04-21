@@ -146,8 +146,8 @@ public class AbaloneMenu extends JFrame
 		GameOptionsMenu.setBackground(BoardColorDark);
 		GameOptionsMenu.add(ShowRulesItem);
 		GameOptionsMenu.add(QuitGameItem);
-		QuitGameItem.setForeground(Color.WHITE);
-		QuitGameItem.setBackground(BoardColorDark);
+		ShowRulesItem.setForeground(Color.WHITE);
+		ShowRulesItem.setBackground(BoardColorDark);
 		QuitGameItem.setForeground(Color.RED);
 		QuitGameItem.setBackground(BoardColorDark);
 		ShowRulesItem.addActionListener(MainListener);
@@ -355,9 +355,8 @@ public class AbaloneMenu extends JFrame
 			System.out.println("Player resized Frame to:" + getSize());
 			Title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, MenuPanel.getHeight()/10));
 			MenuPanel.setPreferredSize(new Dimension(getWidth(), getHeight()-90));
-			//ImageLabel.setPreferredSize(new Dimension(getWidth()-50, getHeight()-50));
+			
 			rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/15));
-
 			for(int i=0; i<ruleLabels.length; i++)
 			{
 				ruleLabels[i].setFont(new Font("Times New Roman", Font.ITALIC, getHeight()/25));
