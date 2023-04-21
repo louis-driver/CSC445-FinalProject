@@ -150,12 +150,7 @@ public class AbaloneMenu extends JFrame
 		QuitGameItem.setBackground(BoardColorDark);
 		QuitGameItem.setForeground(Color.RED);
 		QuitGameItem.setBackground(BoardColorDark);
-<<<<<<< HEAD
-		ShowRulesItem.setForeground(Color.WHITE);
-		ShowRulesItem.setBackground(BoardColorDark);
-=======
 		ShowRulesItem.addActionListener(MainListener);
->>>>>>> main
 		QuitGameItem.addActionListener(MainListener);
 		ShowRulesItem.addActionListener(MainListener);
 
@@ -249,18 +244,6 @@ public class AbaloneMenu extends JFrame
 			{
 				AbaloneGraphS = new AbaloneGraph();
 				AbalonePanelS = new AbalonePanel(AbaloneGraphS, true);
-<<<<<<< HEAD
-				MenuFrame.remove(MenuPanel);
-				MenuFrame.remove(RulesPanel);
-				MenuFrame.add(AbalonePanelS);
-				MenuFrame.setJMenuBar(GameOptionsBar);
-				MenuFrame.setTitle("Abalone: Singleplayer");
-				MenuFrame.repaint();
-				MenuFrame.setSize(MenuFrame.getWidth()-1, MenuFrame.getHeight()-1);
-				MenuFrame.setSize(MenuFrame.getWidth()+1, MenuFrame.getHeight()+1);
-				SPGameInProgress = true;
-				MPGameInProgress = false;
-=======
 				remove(MenuPanel);
 				remove(RulesPanel);
 				add(AbalonePanelS);
@@ -270,45 +253,11 @@ public class AbaloneMenu extends JFrame
 				SPGameInProgress = true;
 				setSize(getWidth()-1, getHeight()-1);
 				setSize(getWidth()+1, getHeight()+1);
->>>>>>> main
 			}
 			else if (actionEvent.getActionCommand().equals("Multiplayer"))
 			{
 				AbaloneGraphM = new AbaloneGraph();
 				AbalonePanelM = new AbalonePanel(AbaloneGraphM, false);
-<<<<<<< HEAD
-				MenuFrame.remove(MenuPanel);
-				MenuFrame.remove(RulesPanel);
-				MenuFrame.add(AbalonePanelM);
-				MenuFrame.setJMenuBar(GameOptionsBar);
-				MenuFrame.setTitle("Abalone: Multiplayer");
-				MenuFrame.repaint();
-				MenuFrame.setSize(MenuFrame.getWidth()-1, MenuFrame.getHeight()-1);
-				MenuFrame.setSize(MenuFrame.getWidth()+1, MenuFrame.getHeight()+1);
-				SPGameInProgress = false;
-				MPGameInProgress = true;
-			}
-			else if (actionEvent.getActionCommand().equals("Rules"))
-			{
-				for (int i=0; i<MenuFrame.getContentPane().getComponents().length; i++)
-				{
-					if(MenuFrame.getContentPane().getComponents()[i] == AbalonePanelS)
-					{
-						MenuFrame.remove(AbalonePanelS);
-					}
-					else if(MenuFrame.getContentPane().getComponents()[i] == AbalonePanelM)
-					{
-						MenuFrame.remove(AbalonePanelM);
-					}
-				}
-				MenuFrame.remove(MenuPanel);
-				MenuFrame.setJMenuBar(null);
-				MenuFrame.add(RulesPanel);
-				MenuFrame.setTitle("Abalone: Rules");
-				MenuFrame.repaint();
-				MenuFrame.setSize(MenuFrame.getWidth()-1, MenuFrame.getHeight()-1);
-				MenuFrame.setSize(MenuFrame.getWidth()+1, MenuFrame.getHeight()+1);
-=======
 				remove(MenuPanel);
 				remove(RulesPanel);
 				add(AbalonePanelM);
@@ -336,7 +285,6 @@ public class AbaloneMenu extends JFrame
 				repaint();
 				setSize(getWidth()-1, getHeight()-1);
 				setSize(getWidth()+1, getHeight()+1);
->>>>>>> main
 			}
 			else if (actionEvent.getActionCommand().equals("Quit"))
 			{
@@ -344,54 +292,6 @@ public class AbaloneMenu extends JFrame
 			}
 			else if (actionEvent.getActionCommand().equals("Back"))
 			{
-<<<<<<< HEAD
-				MenuFrame.remove(RulesPanel);
-				if(SPGameInProgress)
-				{
-					MenuFrame.setJMenuBar(GameOptionsBar);
-					MenuFrame.add(AbalonePanelS);
-					MenuFrame.setTitle("Abalone: Singleplayer");
-				}
-				else if(MPGameInProgress)
-				{
-					MenuFrame.setJMenuBar(GameOptionsBar);
-					MenuFrame.add(AbalonePanelM);
-					MenuFrame.setTitle("Abalone: Multiplayer");
-				}
-				else
-				{
-					MenuFrame.setJMenuBar(null);
-					MenuFrame.add(MenuPanel);
-					MenuFrame.setTitle("Abalone");
-				}
-				
-				MenuFrame.repaint();
-				MenuFrame.setSize(MenuFrame.getWidth()-1, MenuFrame.getHeight()-1);
-				MenuFrame.setSize(MenuFrame.getWidth()+1, MenuFrame.getHeight()+1);
-			}
-			else if (actionEvent.getActionCommand().equals("Quit Game"))
-			{
-				for (int i=0; i<MenuFrame.getContentPane().getComponents().length; i++)
-				{
-					if(MenuFrame.getContentPane().getComponents()[i] == AbalonePanelS)
-					{
-						MenuFrame.remove(AbalonePanelS);
-					}
-					else if(MenuFrame.getContentPane().getComponents()[i] == AbalonePanelM)
-					{
-						MenuFrame.remove(AbalonePanelM);
-					}
-				}
-				SPGameInProgress = false;
-				MPGameInProgress = false;
-				MenuFrame.remove(RulesPanel);
-				MenuFrame.setJMenuBar(null);
-				MenuFrame.add(MenuPanel);
-				MenuFrame.setTitle("Abalone");
-				MenuFrame.repaint();
-				MenuFrame.setSize(MenuFrame.getWidth()-1, MenuFrame.getHeight()-1);
-				MenuFrame.setSize(MenuFrame.getWidth()+1, MenuFrame.getHeight()+1);
-=======
 				remove(RulesPanel);
 				if (SPGameInProgress)
 				{
@@ -434,7 +334,6 @@ public class AbaloneMenu extends JFrame
 				repaint();
 				setSize(getWidth()-1, getHeight()-1);
 				setSize(getWidth()+1, getHeight()+1);
->>>>>>> main
 			}
 	    }
 	};
