@@ -16,6 +16,7 @@ public class AbaloneMenu extends JFrame
 	AbaloneGraph AbaloneGraphS;
 	AbaloneGraph AbaloneGraphM;
 	RulesPanel RulesPanel;
+	JScrollPane RulesScrollPane;
 	JLabel Title;
 	JLabel ImageLabel;
 	JButton SPButton;
@@ -192,6 +193,8 @@ public class AbaloneMenu extends JFrame
 		BackToMenuButton.setForeground(Color.RED);
 		BackToMenuButton.setBackground(BoardColorDark);
 		BackToMenuButton.addActionListener(MainListener);
+		RulesScrollPane = new JScrollPane(RulesPanel);
+		RulesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		RulesPanel.add(BackToMenuButton);
 	}
 	
@@ -213,7 +216,7 @@ public class AbaloneMenu extends JFrame
 			if (actionEvent.getActionCommand().equals("Singleplayer"))
 			{
 				remove(MenuPanel);
-				remove(RulesPanel.RulesScrollPane);
+				remove(RulesScrollPane);
 				add(AbalonePanelS);
 				setJMenuBar(GameOptionsBar);
 				setTitle("Abalone: Singleplayer");
@@ -225,7 +228,7 @@ public class AbaloneMenu extends JFrame
 			else if (actionEvent.getActionCommand().equals("Multiplayer"))
 			{
 				remove(MenuPanel);
-				remove(RulesPanel.RulesScrollPane);
+				remove(RulesScrollPane);
 				add(AbalonePanelM);
 				setJMenuBar(GameOptionsBar);
 				setTitle("Abalone: Multiplayer");
@@ -246,7 +249,7 @@ public class AbaloneMenu extends JFrame
 				}
 				remove(MenuPanel);
 				setJMenuBar(null);
-				add(RulesPanel.RulesScrollPane);
+				add(RulesScrollPane);
 				setTitle("Abalone: Rules");
 				repaint();
 				setSize(getWidth()-1, getHeight()-1);
@@ -266,7 +269,7 @@ public class AbaloneMenu extends JFrame
 					setJMenuBar(null);
 					MPGameInProgress = false;
 				}
-				remove(RulesPanel.RulesScrollPane);
+				remove(RulesScrollPane);
 				add(MenuPanel);
 				MenuPanel.remove(ButtonSectionPanel);
 				Title.setText("Thanks for playing!");
@@ -306,7 +309,7 @@ public class AbaloneMenu extends JFrame
 					add(MenuPanel);
 					setTitle("Abalone");
 				}
-				remove(RulesPanel.RulesScrollPane);
+				remove(RulesScrollPane);
 				repaint();
 				setSize(getWidth()-1, getHeight()-1);
 				setSize(getWidth()+1, getHeight()+1);
@@ -324,7 +327,7 @@ public class AbaloneMenu extends JFrame
 					MPGameInProgress = false;
 				}
 				
-				remove(RulesPanel.RulesScrollPane);
+				remove(RulesScrollPane);
 				setJMenuBar(null);
 				add(MenuPanel);
 				setTitle("Abalone");
