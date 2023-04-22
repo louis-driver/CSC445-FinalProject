@@ -1,9 +1,6 @@
 //Bryan Floyd
 //Abalone Menu
 
-//TODO Add example images to rules panel, finish rules
-//TODO Possibly add options panel
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -13,20 +10,19 @@ public class AbaloneMenu extends JFrame
 	static JFrame MenuFrame;
 	static JPanel MenuPanel;
 	JPanel LogPanel;
-	JPanel RulesPanel;
 	JPanel ButtonSectionPanel;
 	AbalonePanel AbalonePanelS;
 	AbalonePanel AbalonePanelM;
 	AbaloneGraph AbaloneGraphS;
 	AbaloneGraph AbaloneGraphM;
+	RulesPanel RulesPanel;
 	JLabel Title;
 	JLabel ImageLabel;
-	JLabel rulesTitle;
-	JLabel[] ruleLabels;
 	JButton SPButton;
 	JButton MPButton;
 	JButton RulesButton;
 	JButton QuitButton;
+	JButton BackToMenuButton;
 	JMenuBar GameOptionsBar = new JMenuBar();
 	JMenu GameOptionsMenu = new JMenu("Options");
 	JMenu GameQuitMenu = new JMenu("Quit to...");
@@ -98,7 +94,7 @@ public class AbaloneMenu extends JFrame
 		MenuPanel.add(TitlePanel, BorderLayout.NORTH);
 		add(Box.createVerticalStrut(50));
 		
-		//Add picture of board, add spacer
+		//Add picture of board
 		MenuPanel.add(ImageLabel, BorderLayout.CENTER);
 		
 		//Add panels containing buttons, add spacers, add size bounds
@@ -138,11 +134,9 @@ public class AbaloneMenu extends JFrame
 		RulesButton.addActionListener(MainListener);
 		QuitButton.addActionListener(MainListener);
 		
-		add(Box.createVerticalGlue());
+		//add(Box.createVerticalGlue());
 		add(MenuPanel);
-		add(Box.createVerticalStrut(50));
-		RulesPanelSetup();
-		GamePanelSetup();
+		//add(Box.createVerticalStrut(50));
 
 		GameOptionsBar.setBackground(BoardColorDark);
 		GameOptionsMenu.setForeground(Color.WHITE);
@@ -172,6 +166,9 @@ public class AbaloneMenu extends JFrame
 		GameResetItem.addActionListener(MainListener);
 		addComponentListener(ComponentListener);
 
+		RulesPanelSetup();
+		GamePanelSetup();
+
 		setName("MenuFrame");
 		add(MenuPanel);
 		setTitle("Abalone");
@@ -189,56 +186,13 @@ public class AbaloneMenu extends JFrame
 	
 	public void RulesPanelSetup()
 	{
-		RulesPanel = new JPanel();
-		RulesPanel.setLayout(new BoxLayout(RulesPanel, BoxLayout.PAGE_AXIS));
-		RulesPanel.setBackground(BoardColorLight);
-		RulesPanel.setPreferredSize(getSize());
+		RulesPanel = new RulesPanel();
 		
-		rulesTitle = new JLabel(" RULES OF ABALONE");
-		rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/15));
-		rulesTitle.setForeground(Color.BLACK);
-		
-		ruleLabels = new JLabel[5];
-		ruleLabels[0] = new JLabel(" - Objective: Push your opponent's marbles off the board.");
-		ruleLabels[1] = new JLabel(" - Black moves first.");
-		ruleLabels[2] = new JLabel(" - You may move up to three adjacent pieces, positioned in a straight line, in one direction.");
-		ruleLabels[3] = new JLabel(" - This direction can be either 'broadside' (parallel to the line the pieces create):");
-		ruleLabels[4] = new JLabel(" - or 'in-line' (perpendicular to the line):");
-
-		for(int i=0; i<ruleLabels.length; i++)
-		{
-			ruleLabels[i].setForeground(Color.BLACK);
-			ruleLabels[i].setFont(new Font("Times New Roman", Font.ITALIC, MenuPanel.getHeight()/20));
-		}
-		
-		JButton BackToMenuButton = new JButton("Back");
+		BackToMenuButton = new JButton("Back");
 		BackToMenuButton.setForeground(Color.RED);
 		BackToMenuButton.setBackground(BoardColorDark);
-
-		JPanel RulesPicPanel1 = new JPanel();
-		RulesPicPanel1.setBackground(BoardColorLight);
-		ImageIcon RulesImage1 = new ImageIcon("Resources/AbaloneBoardSmall.png");
-		JLabel RulesImg1 = new JLabel(RulesImage1);
-		RulesPicPanel1.add(RulesImg1);
-		
-		RulesPanel.add(Box.createRigidArea(new Dimension(0,20)));
-		RulesPanel.add(rulesTitle);
-		RulesPanel.add(Box.createRigidArea(new Dimension(0,10)));
-		RulesPanel.add(RulesImg1);
-		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
-		RulesPanel.add(ruleLabels[0]);
-		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
-		RulesPanel.add(ruleLabels[1]);
-		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
-		RulesPanel.add(ruleLabels[2]);
-		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
-		RulesPanel.add(ruleLabels[3]);
-		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
-		RulesPanel.add(ruleLabels[4]);
-		RulesPanel.add(Box.createRigidArea(new Dimension(0,7)));
-		RulesPanel.add(BackToMenuButton);
-		
 		BackToMenuButton.addActionListener(MainListener);
+		RulesPanel.add(BackToMenuButton);
 	}
 	
 	public void GamePanelSetup()
@@ -259,7 +213,7 @@ public class AbaloneMenu extends JFrame
 			if (actionEvent.getActionCommand().equals("Singleplayer"))
 			{
 				remove(MenuPanel);
-				remove(RulesPanel);
+				remove(RulesPanel.RulesScrollPane);
 				add(AbalonePanelS);
 				setJMenuBar(GameOptionsBar);
 				setTitle("Abalone: Singleplayer");
@@ -271,7 +225,7 @@ public class AbaloneMenu extends JFrame
 			else if (actionEvent.getActionCommand().equals("Multiplayer"))
 			{
 				remove(MenuPanel);
-				remove(RulesPanel);
+				remove(RulesPanel.RulesScrollPane);
 				add(AbalonePanelM);
 				setJMenuBar(GameOptionsBar);
 				setTitle("Abalone: Multiplayer");
@@ -292,7 +246,7 @@ public class AbaloneMenu extends JFrame
 				}
 				remove(MenuPanel);
 				setJMenuBar(null);
-				add(RulesPanel);
+				add(RulesPanel.RulesScrollPane);
 				setTitle("Abalone: Rules");
 				repaint();
 				setSize(getWidth()-1, getHeight()-1);
@@ -300,11 +254,40 @@ public class AbaloneMenu extends JFrame
 			}
 			else if (actionEvent.getActionCommand().equals("Quit") || actionEvent.getActionCommand().equals("Desktop"))
 			{
-				System.exit(0);
+				if (SPGameInProgress)
+				{
+					remove(AbalonePanelS);
+					setJMenuBar(null);
+					SPGameInProgress = false;
+				}
+				if (MPGameInProgress)
+				{
+					remove(AbalonePanelM);
+					setJMenuBar(null);
+					MPGameInProgress = false;
+				}
+				remove(RulesPanel.RulesScrollPane);
+				add(MenuPanel);
+				MenuPanel.remove(ButtonSectionPanel);
+				Title.setText("Thanks for playing!");
+
+				
+				repaint();
+				setSize(getWidth()-1, getHeight()-1);
+				setSize(getWidth()+1, getHeight()+1);
+
+				Timer timer = new Timer(3000, new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						System.exit(0);
+					}
+				});
+				timer.setRepeats(false);
+				timer.start();
 			}
 			else if (actionEvent.getActionCommand().equals("Back"))
 			{
-				remove(RulesPanel);
 				if (SPGameInProgress)
 				{
 					setJMenuBar(GameOptionsBar);
@@ -323,6 +306,7 @@ public class AbaloneMenu extends JFrame
 					add(MenuPanel);
 					setTitle("Abalone");
 				}
+				remove(RulesPanel.RulesScrollPane);
 				repaint();
 				setSize(getWidth()-1, getHeight()-1);
 				setSize(getWidth()+1, getHeight()+1);
@@ -340,7 +324,7 @@ public class AbaloneMenu extends JFrame
 					MPGameInProgress = false;
 				}
 				
-				remove(RulesPanel);
+				remove(RulesPanel.RulesScrollPane);
 				setJMenuBar(null);
 				add(MenuPanel);
 				setTitle("Abalone");
@@ -385,14 +369,24 @@ public class AbaloneMenu extends JFrame
 
 		public void componentResized(ComponentEvent ce)
 		{
-			System.out.println("Player resized Frame to:" + getSize());
+			System.out.println("Resized Frame to:" + getSize());
 			Title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, MenuPanel.getHeight()/10));
 			MenuPanel.setPreferredSize(new Dimension(getWidth(), getHeight()-90));
 			
-			rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/15));
-			for(int i=0; i<ruleLabels.length; i++)
+			RulesPanel.rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/15));
+			for(int i=0; i<RulesPanel.ruleLabels.length; i++)
 			{
-				ruleLabels[i].setFont(new Font("Times New Roman", Font.ITALIC, getHeight()/25));
+				if (RulesPanel.ruleLabels[i].getText() != null)
+				{
+					if (RulesPanel.ruleLabels[i].getText().charAt(3) != ' ')
+					{
+						RulesPanel.ruleLabels[i].setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/20));
+					}
+					else
+					{
+						RulesPanel.ruleLabels[i].setFont(new Font("Times New Roman", Font.ITALIC, getHeight()/30));
+					}
+				}
 			}
 		}
 	};
