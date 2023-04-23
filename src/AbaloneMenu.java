@@ -374,25 +374,8 @@ public class AbaloneMenu extends JFrame
 
 		public void componentResized(ComponentEvent ce)
 		{
-			System.out.println("Resized Frame to:" + getSize());
 			Title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, MenuPanel.getHeight()/10));
 			MenuPanel.setPreferredSize(new Dimension(getWidth(), getHeight()-90));
-			
-			RulesPanel.rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/15));
-			for(int i=0; i<RulesPanel.ruleLabels.length; i++)
-			{
-				if (RulesPanel.ruleLabels[i].getText() != null)
-				{
-					if (RulesPanel.ruleLabels[i].getText().charAt(3) != ' ')
-					{
-						RulesPanel.ruleLabels[i].setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/20));
-					}
-					else
-					{
-						RulesPanel.ruleLabels[i].setFont(new Font("Times New Roman", Font.ITALIC, getHeight()/30));
-					}
-				}
-			}
 		}
 	};
 }

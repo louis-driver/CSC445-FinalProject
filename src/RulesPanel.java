@@ -67,7 +67,7 @@ public class RulesPanel extends JPanel
                 add(Box.createRigidArea(new Dimension(0,25)));
                 ruleLabels[i] = new JLabel(ruleLabels[i].getText());
                 ruleLabels[i].setForeground(Color.BLACK);
-				ruleLabels[i].setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 20));
+				ruleLabels[i].setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 30));
             }
             //Normal text
             else
