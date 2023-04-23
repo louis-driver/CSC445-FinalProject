@@ -121,6 +121,9 @@ public class ComputerPlayer {
         move = pushWhite();
         if(move[0]!=-1)
             return move;
+        move = uniteFriends();
+        if(move[0]!=-1)
+            return move;
         move = otherMove();
         if(move[0]!=-1)
             return move;
@@ -338,6 +341,52 @@ public class ComputerPlayer {
             int[] move = {-1, -1, -1};
             return move;
         }
+    }
+
+    private int[] uniteFriends()
+    {
+        System.out.println(" Louis is getting on my nerves ");
+        Node toMove = null;
+        int direction = -1;
+        Node destination = null;
+        for(int i=0; i<computerNodes.size(); i++)
+        {
+            System.out.println("int main loop");
+            for(int j=1; j<12; j+=2)
+            {
+                System.out.print("second loop ");
+                Node piece1 = computerNodes.get(i);
+                Node piece2 = piece1.getSibling(j);
+                Node dest= graph.destination(piece1, piece2, j);
+                // System.out.println(dest.isEdge());
+                // System.out.println(dest.bordersEdge());
+                for(int k=1; k<12; k+=2)
+                {
+                    if(dest!=null && !dest.isEdge() && k!=(j+2)%12 && k!=(j-2)%12 && dest.getSibling(k).getColor()==piece1.getColor())
+                    {
+                        System.out.println("k: " + k);
+                        toMove = piece1;
+                        direction = j;
+                        destination = dest;
+                    }
+                }
+            }
+        }
+        //System.out.println("toMove: " + toMove + " direction: " + direction + " destination: " + destination);
+        if(toMove!=null && direction!=-1 && destination!=null)
+        {
+            //System.out.println("first if");
+            int[] move = {toMove.getID(), destination.getID(), direction};
+            System.out.println(Arrays.toString(move));
+            return move;
+        }
+        else 
+        {
+            //System.out.println("else");
+            int[] move = {-1, -1, -1};
+            System.out.println(Arrays.toString(move));
+            return move;
+        } 
     }
     //Returns a move the next possible move. Otherwise returns {-1, -1, -1}
     private int[] otherMove()

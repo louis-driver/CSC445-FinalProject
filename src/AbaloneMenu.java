@@ -373,7 +373,6 @@ public class AbaloneMenu extends JFrame
 
 		public void componentResized(ComponentEvent ce)
 		{
-			System.out.println("Resized Frame to:" + getSize());
 			Title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, MenuPanel.getHeight()/10));
 			MenuPanel.setPreferredSize(new Dimension(getWidth(), getHeight()-90));
 			
