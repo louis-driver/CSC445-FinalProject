@@ -1,10 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ComponentEvent;
-
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 
 // A class to display the abalone rules in a JPanel
