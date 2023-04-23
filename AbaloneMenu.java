@@ -40,6 +40,7 @@ public class AbaloneMenu extends JFrame
 	static int screenHeight = (int) screenSize.getHeight();
 	boolean SPGameInProgress = false;
 	boolean MPGameInProgress = false;
+	Sound sound = new Sound();
 
 	public AbaloneMenu()
 	{			
@@ -210,6 +211,8 @@ public class AbaloneMenu extends JFrame
 		public void actionPerformed(ActionEvent actionEvent) 
 	    {
 			System.out.println("Player says " + actionEvent.getActionCommand());
+			sound.setFile(0);
+        	sound.play();
 			if (actionEvent.getActionCommand().equals("Singleplayer"))
 			{
 				remove(MenuPanel);
