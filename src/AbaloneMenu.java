@@ -12,6 +12,7 @@ public class AbaloneMenu extends JFrame
 	static JPanel MenuPanel;
 	JPanel LogPanel;
 	JPanel ButtonSectionPanel;
+	private AbalonePanel displayPanel = new AbalonePanel(new AbaloneGraph(), false, true);
 	AbalonePanel AbalonePanelS;
 	AbalonePanel AbalonePanelM;
 	AbaloneGraph AbaloneGraphS;
@@ -97,7 +98,7 @@ public class AbaloneMenu extends JFrame
 		add(Box.createVerticalStrut(50));
 		
 		//Add picture of board
-		MenuPanel.add(ImageLabel, BorderLayout.CENTER);
+		MenuPanel.add(displayPanel, BorderLayout.CENTER);
 		
 		//Add panels containing buttons, add spacers, add size bounds
 		Dimension buttDimension = new Dimension(250, 40);
@@ -202,9 +203,9 @@ public class AbaloneMenu extends JFrame
 	public void GamePanelSetup()
 	{
 		AbaloneGraphS = new AbaloneGraph();
-		AbalonePanelS = new AbalonePanel(AbaloneGraphS, true);
+		AbalonePanelS = new AbalonePanel(AbaloneGraphS, true, false);
 		AbaloneGraphM = new AbaloneGraph();
-		AbalonePanelM = new AbalonePanel(AbaloneGraphM, false);
+		AbalonePanelM = new AbalonePanel(AbaloneGraphM, false, false);
 	}
 	
 	ActionListener MainListener = new ActionListener()
@@ -342,14 +343,14 @@ public class AbaloneMenu extends JFrame
 				{
 					remove(AbalonePanelS);
 					AbaloneGraphS = new AbaloneGraph();
-					AbalonePanelS = new AbalonePanel(AbaloneGraphS, true);
+					AbalonePanelS = new AbalonePanel(AbaloneGraphS, true, false);
 					add(AbalonePanelS);
 				}
 				if (MPGameInProgress)
 				{
 					remove(AbalonePanelM);
 					AbaloneGraphM = new AbaloneGraph();
-					AbalonePanelM = new AbalonePanel(AbaloneGraphM, false);
+					AbalonePanelM = new AbalonePanel(AbaloneGraphM, false, false);
 					add(AbalonePanelM);
 				}
 				repaint();
