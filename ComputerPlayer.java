@@ -1,7 +1,6 @@
 //A class to play against a human 
 //It will probably play like the biggest idiot known to man kind, so be nice. 
 
-
 //Player takes a AbaloneGraph Object for construction.
 //For each turn, the updated graph should be passed to the Player to keep track of its nodes and positions
 //Calling the get move method provides the nodes for the next computer move
@@ -31,6 +30,7 @@ public class ComputerPlayer {
             opponentColor = 2;
         
         playablePositions = getBoardSpaces();
+        randomizeArray(playablePositions);
         for(int i=0; i<playablePositions.length; i++)
         {
             Node currNode = graph.getNode(playablePositions[i]);
@@ -60,6 +60,7 @@ public class ComputerPlayer {
         computerNodes.clear();
         edgePieces.clear();
         opponentNodes.clear();
+        randomizeArray(playablePositions);
         for(int i=0; i<playablePositions.length; i++)
         {
             Node currNode = graph.getNode(playablePositions[i]);
@@ -99,7 +100,6 @@ public class ComputerPlayer {
         updatePlayers(graph);
         System.out.println("computer pieces: " + computerNodes.size());
         System.out.println("edge pieces: " + edgePieces.size());
-        System.out.println("opponent pieces: " + Arrays.toString(opponentNodes.toArray()));
         int[] move = dangerEscapeBoth();
         if(move[0]!=-1)
             return move;
@@ -143,7 +143,7 @@ public class ComputerPlayer {
             {
                 Node piece2 = piece1.getSibling(j);
                 Node dest= graph.destination(piece1, piece2, j);
-                if(destination!= null && !destination.bordersEdge() && !destination.isEdge())
+                if(dest!= null && !dest.bordersEdge() && !dest.isEdge())
                 {
                     toMove = piece1;
                     direction = j; 
@@ -153,7 +153,7 @@ public class ComputerPlayer {
         }
         if(toMove!=null && direction!=-1 && destination!=null)
         {
-            int[] move = {toMove.getID(), destination.getColor(), direction};
+            int[] move = {toMove.getID(), destination.getID(), direction};
             return move;
         }
         else 
@@ -180,9 +180,9 @@ public class ComputerPlayer {
             {
                 Node piece2 = piece1.getSibling(j);
                 Node dest= graph.destination(piece1, piece2, j);
-                if(destination!=null && !destination.isEdge())
+                if(dest!=null && !dest.isEdge())
                 {
-                    toMove = piece2;
+                    toMove = piece1;
                     direction =j;
                     destination = dest;
                 }
@@ -190,7 +190,8 @@ public class ComputerPlayer {
         } 
         if(toMove!=null && direction!=-1 && destination!=null)
         {
-            int[] move = {toMove.getID(), destination.getColor(), direction};
+            int[] move = {toMove.getID(), destination.getID(), direction};
+            System.out.println("Move:" + Arrays.toString(move));
             return move;
         }
         else 
@@ -207,9 +208,7 @@ public class ComputerPlayer {
         int direction = -1;
         for(int i=0; i<opponentNodes.size(); i++)
         {
-            System.out.println("InDanger Passed node: " + opponentNodes.get(i));
             int[] danger = graph.inDangerFrom(opponentNodes.get(i));
-            System.out.println("CaptOpponentDanger: " +Arrays.toString(danger));
             if(danger[0]!=-1 && graph.getNode(danger[0]).getColor()==computerColor)
             {
                 toMove = danger[0];
@@ -313,15 +312,12 @@ public class ComputerPlayer {
         int direction = -1;
         for(int i=0; i<computerNodes.size(); i++)
         {
-            System.out.println("In outer");
             for(int j=1; j<12; j+=2)
             {
-                System.out.println("In inner");
                 Node piece = computerNodes.get(i);
                 boolean canPush = graph.canPush(piece, j);
                 if(canPush)
                 {
-                    System.out.println("In if");
                     toMove = computerNodes.get(i);
                     direction = j;
                 }
@@ -329,15 +325,14 @@ public class ComputerPlayer {
         }
         if(toMove!=null && direction!=-1)
         {
-            System.out.println("In if 2");
             Node piece2 = toMove.getSibling(direction);
             Node destination = graph.destination(toMove, piece2, direction);
             int[] move = {toMove.getID(), destination.getID(), direction};
+            System.out.println("pushWhite" + Arrays.toString(move));
             return move;
         }
         else 
         {
-            System.out.println("In else");
             int[] move = {-1, -1, -1};
             return move;
         }
@@ -402,6 +397,17 @@ public class ComputerPlayer {
             }
         }
         return playablePositions;
+    }
+
+    private void randomizeArray(int[] ints)
+    {
+        for (int i = 0; i < ints.length; ++i)
+        {
+            int randomPosition = (int) (Math.random() * (ints.length));
+            int temp = ints[i];
+            ints[i] = ints[randomPosition];
+            ints[randomPosition] = temp;
+        }
     }
 
     public String toString()

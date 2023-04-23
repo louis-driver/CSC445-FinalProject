@@ -57,7 +57,7 @@ public class AbalonePanel extends JPanel
         int frameHeight = 600;
         JFrame frame = new JFrame();
         AbaloneGraph graph = new AbaloneGraph();
-        AbalonePanel panel = new AbalonePanel(graph, false);
+        AbalonePanel panel = new AbalonePanel(graph, true);
         frame.setSize(frameWidth, frameHeight);
         frame.setTitle("Graph");
         frame.add(panel);

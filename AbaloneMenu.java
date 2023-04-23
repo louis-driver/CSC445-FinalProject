@@ -62,7 +62,7 @@ public class AbaloneMenu extends JPanel
 		QuitBPanel.setBackground(boardColorDark);
 		QuitBPanel.setLayout(new BorderLayout());
 		
-		ImageIcon BoardImage = new ImageIcon("AbaloneBoard.png");
+		ImageIcon BoardImage = new ImageIcon("Images/AbaloneBoardSmall.jpg");
 		ImageLabel = new JLabel(BoardImage);
 		
 		Title = new JLabel("ABALONE", SwingConstants.CENTER);
@@ -309,10 +309,8 @@ public class AbaloneMenu extends JPanel
 
 		public void componentResized(ComponentEvent ce)
 		{
-			System.out.print("Player resized Frame to: ");
 			if (ce.getComponent().getName() == "MenuFrame")
 			{
-				System.out.println(MenuFrame.getSize());
 				Title.setFont(new Font("Times New Roman", Font.ITALIC, MenuPanel.getHeight()/10));
 				setPreferredSize(MenuFrame.getSize());
 				commonWindowHeight = MenuFrame.getHeight();
@@ -322,13 +320,11 @@ public class AbaloneMenu extends JPanel
 			}
 			if (ce.getComponent().getName() == "GameFrame")
 			{
-				System.out.println(GameFrame.getSize());
 				commonWindowHeight = GameFrame.getHeight();
 				commonWindowWidth = GameFrame.getWidth();
 			}
 			if (ce.getComponent().getName() == "RulesFrame")
 			{
-				System.out.println(RulesFrame.getSize());
 				commonWindowHeight = RulesFrame.getHeight();
 				commonWindowWidth = RulesFrame.getWidth();
 			}
