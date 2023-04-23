@@ -32,7 +32,7 @@ public class RulesPanel extends JPanel
 
         frame.setSize(frameWidth, frameHeight);
         frame.setTitle("Rules");
-        //frame.add(panel);
+        frame.add(panel);
         
 		panel.setSize(frame.getSize());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,14 +64,12 @@ public class RulesPanel extends JPanel
 
 		rules.add(Box.createRigidArea(new Dimension(0,7)));
 		rules.add(toMenuBtn);
-        scrollPane = new JScrollPane(this);
-        scrollPane.setEnabled(true);
-        scrollPane.createHorizontalScrollBar();
+        //scrollPane = new JScrollPane(this);
+        //scrollPane.setEnabled(true);
+        //scrollPane.createHorizontalScrollBar();
         this.add(rules);
-        //this.add(scrollPane);
-        scrollPane.setBackground(BoardColorLight);
-        frame.add(scrollPane);
     }
+
 
     private void createLabels(String[] strings)
     {
