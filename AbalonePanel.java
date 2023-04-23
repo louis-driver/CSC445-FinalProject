@@ -10,7 +10,6 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-import java.nio.channels.NetworkChannel;
 
 import javax.swing.*;
 import java.util.*;
@@ -42,7 +41,7 @@ public class AbalonePanel extends JPanel
     private int player1Score;
     private int player2Score;
     private boolean player1Turn = true;
-    private boolean playingComputer = true;
+    private boolean playingComputer;
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     //Audio
@@ -59,7 +58,6 @@ public class AbalonePanel extends JPanel
         JFrame frame = new JFrame();
         AbaloneGraph graph = new AbaloneGraph();
         AbalonePanel panel = new AbalonePanel(graph, false);
-
         frame.setSize(frameWidth, frameHeight);
         frame.setTitle("Graph");
         frame.add(panel);
@@ -358,10 +356,10 @@ public class AbalonePanel extends JPanel
             //Determines whose turn it is
             if (!player1Turn)
                 currPlayer = 2;
-            
+
             //Assign most recent three left clicks to the selected queue
             //If a left click exceeds the three, pop the head, then add
-            if (SwingUtilities.isLeftMouseButton(e) && currNode != null && (currPlayer == 1 || !playingComputer))
+            if (SwingUtilities.isLeftMouseButton(e) && currNode != null && (!playingComputer || currPlayer == 1))
             {
                 //Removes a selected node if pressed again
                 if (selected.contains(currNode))
@@ -377,6 +375,8 @@ public class AbalonePanel extends JPanel
                 {
                     selected.add(currNode);
                 }
+                //Prevents undesired movement if the user right-clicked before left clicking
+                secondClicked = null;
                 repaint();
             }
             if (SwingUtilities.isRightMouseButton(e) && nodePosition != -1)
@@ -399,7 +399,7 @@ public class AbalonePanel extends JPanel
                         sound.setFile(0);
                         sound.play();
                         //Make computer move after the user moves
-                        if (graph.getPlayer1Score() < 6)
+                        if (graph.getPlayer1Score() < 6 && playingComputer)
                             delayComputerMove();
                     }
                 }
@@ -434,7 +434,7 @@ public class AbalonePanel extends JPanel
                         sound.setFile(0);
                         sound.play();
                         //Make computer move after the user moves
-                        if (graph.getPlayer1Score() < 6)
+                        if (graph.getPlayer1Score() < 6 && playingComputer)
                             delayComputerMove();
                     }
                     repaint();
