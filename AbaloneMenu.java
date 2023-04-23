@@ -220,10 +220,10 @@ public class AbaloneMenu extends JPanel
 		GameFrame.setName("GameFrame");
 		GameFrame.setMinimumSize(new Dimension(550,550));
 		
-		AbaloneGraphS = new AbaloneGraph();
-		AbalonePanelS = new AbalonePanel(AbaloneGraphS, true);
-		AbaloneGraphM = new AbaloneGraph();
-		AbalonePanelM = new AbalonePanel(AbaloneGraphM, false);
+		AbaloneGraph graphS = new AbaloneGraph();
+		AbalonePanelS = new AbalonePanel(graphS, true);
+		AbaloneGraph graphM = new AbaloneGraph();
+		AbalonePanelM = new AbalonePanel(graphM, false);
 
 		GameFrame.addComponentListener(ComponentListener);
 	}
@@ -278,7 +278,8 @@ public class AbaloneMenu extends JPanel
 	    }
 	};
 
-	ComponentAdapter ComponentListener = new ComponentAdapter(){	
+	ComponentAdapter ComponentListener = new ComponentAdapter()
+	{	
 		public void componentShown(ComponentEvent ce)
 		{
 
