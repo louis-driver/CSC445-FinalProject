@@ -67,7 +67,7 @@ public class AbaloneMenu extends JFrame
 		QuitBPanel.setBackground(new Color(75, 45, 30));
 		QuitBPanel.setLayout(new BorderLayout());
 		
-		ImageIcon BoardImage = new ImageIcon("Images/MainMenuImage.png");
+		ImageIcon BoardImage = new ImageIcon("./Resources/Images/MainMenuImage.png");
 		ImageLabel = new JLabel(BoardImage);
 		
 		Title = new JLabel("ABALONE", SwingConstants.CENTER);
