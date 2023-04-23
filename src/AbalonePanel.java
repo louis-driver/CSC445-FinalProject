@@ -35,6 +35,7 @@ public class AbalonePanel extends JPanel
     private int[] yCapturedCoords = new int[6];
     private int[] xCapturedCoords = new int[2];
     private int pieceSize;
+    private boolean forDisplay = false;
 
     //Functionality
     private Node secondClicked;
@@ -58,7 +59,7 @@ public class AbalonePanel extends JPanel
         int frameHeight = 800;
         JFrame frame = new JFrame();
         AbaloneGraph graph = new AbaloneGraph();
-        AbalonePanel panel = new AbalonePanel(graph, false);
+        AbalonePanel panel = new AbalonePanel(graph, false, false);
 
         frame.setSize(frameWidth, frameHeight);
         frame.setTitle("Graph");
@@ -68,7 +69,7 @@ public class AbalonePanel extends JPanel
         frame.setVisible(true);
     }
 
-    public AbalonePanel(AbaloneGraph g, boolean playComputer)
+    public AbalonePanel(AbaloneGraph g, boolean playComputer, boolean displayOnly)
     {
         this.graph = g;
         this.addMouseListener(new MoveAdapter());
@@ -78,6 +79,8 @@ public class AbalonePanel extends JPanel
             this.ai1 = new ComputerPlayer(this.graph, 2);
         }
         //this.ai2 = new ComputerPlayer(graph, 1);
+        if (displayOnly)
+            forDisplay = true;
         
     }
 
@@ -354,7 +357,7 @@ public class AbalonePanel extends JPanel
             
             //Assign most recent three left clicks to the selected queue
             //If a left click exceeds the three, pop the head, then add
-            if (SwingUtilities.isLeftMouseButton(e) && currNode != null && (currPlayer == 1 || !playingComputer))
+            if (SwingUtilities.isLeftMouseButton(e) && currNode != null && (currPlayer == 1 || !playingComputer) && !forDisplay)
             {
                 //Removes a selected node if pressed again
                 if (selected.contains(currNode))
