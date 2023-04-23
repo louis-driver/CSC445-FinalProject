@@ -57,7 +57,7 @@ public class AbalonePanel extends JPanel
         int frameHeight = 600;
         JFrame frame = new JFrame();
         AbaloneGraph graph = new AbaloneGraph();
-        AbalonePanel panel = new AbalonePanel(graph, false);
+        AbalonePanel panel = new AbalonePanel(graph, true);
 
         frame.setSize(frameWidth, frameHeight);
         frame.setTitle("Graph");
@@ -321,7 +321,7 @@ public class AbalonePanel extends JPanel
 
     private void delayComputerMove()
     {
-        scheduler.schedule(new ComputerMove(), 50l, TimeUnit.MILLISECONDS);
+        scheduler.schedule(new ComputerMove(), 1000l, TimeUnit.MILLISECONDS);
     }
 
     private class MoveAdapter extends MouseInputAdapter
@@ -400,7 +400,7 @@ public class AbalonePanel extends JPanel
                         sound.setFile(0);
                         sound.play();
                         //Make computer move after the user moves
-                        if (graph.getPlayer1Score() < 6 && !playingComputer)
+                        if (graph.getPlayer1Score() < 6 && playingComputer)
                             delayComputerMove();
                     }
                 }
@@ -435,7 +435,7 @@ public class AbalonePanel extends JPanel
                         sound.setFile(0);
                         sound.play();
                         //Make computer move after the user moves
-                        if (graph.getPlayer1Score() < 6 && !playingComputer)
+                        if (graph.getPlayer1Score() < 6 && playingComputer)
                             delayComputerMove();
                     }
                     repaint();
