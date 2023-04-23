@@ -380,8 +380,9 @@ public class AbalonePanel extends JPanel
             if (SwingUtilities.isRightMouseButton(e) && nodePosition != -1)
             {
                 secondClicked = graph.getNode(nodePosition);
+                repaint();
             }
-            if (selected.size() == 1 && secondClicked != null) // if canMoveInline
+            if (selected.size() == 1 && secondClicked != null && secondClicked.hasNeighbor(selected.peek())) // if canMoveInline
             {
                 Node firstClicked = selected.poll();
                 try
