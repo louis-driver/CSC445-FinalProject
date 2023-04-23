@@ -373,6 +373,8 @@ public class AbalonePanel extends JPanel
                 {
                     selected.add(currNode);
                 }
+                //Prevents user from accidentally right-clicking a direction before selecting all pieces
+                secondClicked = null;
                 repaint();
             }
             if (SwingUtilities.isRightMouseButton(e) && nodePosition != -1)
