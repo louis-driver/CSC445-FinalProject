@@ -4,17 +4,17 @@ import java.awt.Font;
 import javax.swing.*;
 
 //A class to display the abalone rules in a JPanel
+//Don't make any components here private, the ComponentListener for this is still on AbaloneMenu
 
 public class RulesPanel extends JPanel
 {
-    JScrollPane RulesScrollPane;
     JLabel rulesTitle;
     JLabel[] ruleLabels;
-    static Color BoardColorLight = new Color(160, 130, 105);
-	static Color BoardColorDark = new Color(75, 45, 30);
 
     public RulesPanel()
     {
+        Color BoardColorLight = new Color(160, 130, 105);
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(BoardColorLight);
 		setMinimumSize(new Dimension(getWidth(), getHeight()+500));
@@ -79,8 +79,5 @@ public class RulesPanel extends JPanel
             add(ruleLabels[i]);
 		}
         add(Box.createRigidArea(new Dimension(0,25)));
-		
-        RulesScrollPane = new JScrollPane(this);
-		RulesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     }
 }
