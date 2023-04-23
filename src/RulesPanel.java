@@ -14,10 +14,10 @@ public class RulesPanel extends JPanel
 
     public RulesPanel()
     {
-        Color BoardColorLight = new Color(160, 130, 105);
+        Color boardColorLight = new Color(160, 130, 105);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setBackground(BoardColorLight);
+		setBackground(boardColorLight);
 		setMinimumSize(new Dimension(getWidth(), getHeight()+500));
 		
 		rulesTitle = new JLabel(" RULES OF ABALONE");
@@ -67,7 +67,7 @@ public class RulesPanel extends JPanel
                 add(Box.createRigidArea(new Dimension(0,25)));
                 ruleLabels[i] = new JLabel(ruleLabels[i].getText());
                 ruleLabels[i].setForeground(Color.BLACK);
-				ruleLabels[i].setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 20));
+				ruleLabels[i].setFont(new Font("Times New Roman", Font.BOLD, 30));
             }
             //Normal text
             else
@@ -75,7 +75,7 @@ public class RulesPanel extends JPanel
                 add(Box.createRigidArea(new Dimension(0,10)));
                 ruleLabels[i] = new JLabel(ruleLabels[i].getText());
                 ruleLabels[i].setForeground(Color.BLACK);
-				ruleLabels[i].setFont(new Font("Times New Roman", Font.ITALIC, 30));
+				ruleLabels[i].setFont(new Font("Times New Roman", Font.PLAIN, 25));
             }
             add(ruleLabels[i]);
 		}
