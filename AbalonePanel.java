@@ -10,7 +10,6 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-import java.nio.channels.NetworkChannel;
 
 import javax.swing.*;
 import java.util.*;
@@ -42,7 +41,7 @@ public class AbalonePanel extends JPanel
     private int player1Score;
     private int player2Score;
     private boolean player1Turn = true;
-    private boolean playingComputer = true;
+    private boolean playingComputer;
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     //Audio
@@ -377,6 +376,8 @@ public class AbalonePanel extends JPanel
                 {
                     selected.add(currNode);
                 }
+                //Prevents user from making undesired move if they right-click before selecting all their pieces
+                secondClicked = null;
                 repaint();
             }
             if (SwingUtilities.isRightMouseButton(e) && nodePosition != -1)
@@ -399,7 +400,7 @@ public class AbalonePanel extends JPanel
                         sound.setFile(0);
                         sound.play();
                         //Make computer move after the user moves
-                        if (graph.getPlayer1Score() < 6)
+                        if (graph.getPlayer1Score() < 6 && !playingComputer)
                             delayComputerMove();
                     }
                 }
@@ -434,7 +435,7 @@ public class AbalonePanel extends JPanel
                         sound.setFile(0);
                         sound.play();
                         //Make computer move after the user moves
-                        if (graph.getPlayer1Score() < 6)
+                        if (graph.getPlayer1Score() < 6 && !playingComputer)
                             delayComputerMove();
                     }
                     repaint();
