@@ -9,12 +9,10 @@ import javax.swing.*;
 public class AbaloneMenu extends JFrame
 {
 	private static JPanel menuPanel;
-	private JPanel LogPanel;
 	private JPanel buttonSectionPanel;
-	//private AbalonePanel abalonePanelD = new AbalonePanel(AbaloneGraphD, true);
+	private AbalonePanel displayPanel = new AbalonePanel(new AbaloneGraph(), false, true);
 	private AbalonePanel abalonePanelS;
 	private AbalonePanel abalonePanelM;
-	//private AbaloneGraph abaloneGraphD = new AbaloneGraoh();
 	private AbaloneGraph abaloneGraphS;
 	private AbaloneGraph abaloneGraphM;
 	private RulesPanel rulesPanel;
@@ -246,7 +244,6 @@ public class AbaloneMenu extends JFrame
 				setJMenuBar(null);
 				menuPanel.remove(buttonSectionPanel);
 				title.setText("Thanks for playing!");
-
 				
 				repaint();
 				setSize(getWidth()-1, getHeight()-1);

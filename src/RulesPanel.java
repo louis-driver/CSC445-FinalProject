@@ -18,7 +18,7 @@ public class RulesPanel extends JPanel
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(boardColorLight);
-		setMinimumSize(new Dimension(getWidth(), getHeight()+500));
+		setMinimumSize(new Dimension(getWidth(), getHeight()));
 		
 		rulesTitle = new JLabel(" RULES OF ABALONE");
 		rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 50));
