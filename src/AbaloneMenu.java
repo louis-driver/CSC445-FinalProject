@@ -11,6 +11,10 @@ public class AbaloneMenu extends JFrame
 	private static JPanel menuPanel;
 	private JPanel buttonSectionPanel;
 	private AbalonePanel displayPanel = new AbalonePanel(new AbaloneGraph(), false, true);
+<<<<<<< HEAD
+=======
+	//private AbalonePanel abalonePanelD = new AbalonePanel(AbaloneGraphD, true);
+>>>>>>> main
 	private AbalonePanel abalonePanelS;
 	private AbalonePanel abalonePanelM;
 	private AbaloneGraph abaloneGraphS;
@@ -94,7 +98,7 @@ public class AbaloneMenu extends JFrame
 		menuPanel.add(titlePanel, BorderLayout.NORTH);
 		
 		//Add picture of board
-		menuPanel.add(imageLabel, BorderLayout.CENTER);
+		menuPanel.add(displayPanel, BorderLayout.CENTER);
 		
 		//Add panels containing buttons, add spacers, add size bounds
 		Dimension buttDimension = new Dimension(250, 40);
@@ -197,9 +201,9 @@ public class AbaloneMenu extends JFrame
 	public void GamePanelSetup()
 	{
 		abaloneGraphS = new AbaloneGraph();
-		abalonePanelS = new AbalonePanel(abaloneGraphS, true);
+		abalonePanelS = new AbalonePanel(abaloneGraphS, true, false);
 		abaloneGraphM = new AbaloneGraph();
-		abalonePanelM = new AbalonePanel(abaloneGraphM, false);
+		abalonePanelM = new AbalonePanel(abaloneGraphM, false, false);
 	}
 	
 	ActionListener MainListener = new ActionListener()
@@ -306,13 +310,13 @@ public class AbaloneMenu extends JFrame
 				if (spGameInProgress)
 				{
 					abaloneGraphS = new AbaloneGraph();
-					abalonePanelS = new AbalonePanel(abaloneGraphS, true);
+					abalonePanelS = new AbalonePanel(abaloneGraphS, true, false);
 					setContentPane(abalonePanelS);
 				}
 				if (mpGameInProgress)
 				{
 					abaloneGraphM = new AbaloneGraph();
-					abalonePanelM = new AbalonePanel(abaloneGraphM, false);
+					abalonePanelM = new AbalonePanel(abaloneGraphM, false, false);
 					setContentPane(abalonePanelM);
 				}
 				repaint();
@@ -336,7 +340,6 @@ public class AbaloneMenu extends JFrame
 
 		public void componentResized(ComponentEvent ce)
 		{
-			//System.out.println("Resized Frame to:" + getSize());
 			title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, menuPanel.getHeight()/10));
 			menuPanel.setPreferredSize(new Dimension(getWidth(), getHeight()-90));
 		}

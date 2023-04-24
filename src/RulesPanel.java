@@ -9,8 +9,8 @@ import javax.swing.*;
 
 public class RulesPanel extends JPanel
 {
-    JLabel rulesTitle;
-    JLabel[] ruleLabels;
+    private JLabel rulesTitle;
+    private JLabel[] ruleLabels;
 
     public RulesPanel()
     {
