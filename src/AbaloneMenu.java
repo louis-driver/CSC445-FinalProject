@@ -21,7 +21,6 @@ public class AbaloneMenu extends JFrame
 	private RulesPanel rulesPanel;
 	private JScrollPane rulesScrollPane;
 	private JLabel title;
-	private JLabel imageLabel;
 	private JButton spButton;
 	private JButton mpButton;
 	private JButton rulesButton;
@@ -68,9 +67,6 @@ public class AbaloneMenu extends JFrame
 		JPanel quitBPanel = new JPanel();
 		quitBPanel.setBackground(new Color(75, 45, 30));
 		quitBPanel.setLayout(new BorderLayout());
-		
-		ImageIcon boardImage = new ImageIcon("./Resources/Images/MainMenuImage.png");
-		imageLabel = new JLabel(boardImage);
 		
 		title = new JLabel("ABALONE", SwingConstants.CENTER);
 		title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/10));
@@ -172,7 +168,8 @@ public class AbaloneMenu extends JFrame
 		setName("MenuFrame");
 		setContentPane(menuPanel);
 		setTitle("Abalone");
-		setSize(screenSize);
+		//setSize(screenSize);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setMinimumSize(new Dimension((int)(screenWidth/3), (int)(screenHeight*0.85)));
 		setBackground(boardColorLight);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -194,6 +191,7 @@ public class AbaloneMenu extends JFrame
 		backToMenuButton.addActionListener(MainListener);
 		rulesScrollPane = new JScrollPane(rulesPanel);
 		rulesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		rulesScrollPane.getVerticalScrollBar().setUnitIncrement(15);
 		rulesPanel.add(backToMenuButton);
 	}
 	

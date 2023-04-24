@@ -12,14 +12,14 @@ public class AbaloneGraph
     {
         AbaloneGraph graph = new AbaloneGraph();
         ComputerPlayer Ai = new ComputerPlayer(graph, 2);
-        System.out.println(Ai.toString());
+        //System.out.println(Ai.toString());
         graph.graph[27].setColor(1);
         Ai.updatePlayers(graph);
-        System.out.println(Ai.toString());
+        //System.out.println(Ai.toString());
         int[] move = Ai.getMove();
         for(int i=0; i<3; i++)
         {
-            System.out.println(move[i]);
+            //System.out.println(move[i]);
         }
     }
 
@@ -288,14 +288,13 @@ public class AbaloneGraph
         {
             if(nodes[i].getSibling(direction).isEdge())
             {
-                System.out.println("Entered if statement");
                 //Not sure why this seems to be backwards but works?
                 if(nodes[i].getColor()==1)
                     ++player1Score;
                 else 
                     ++player2Score;
                 nodes[i].getSibling(direction).setColor(0);
-                System.out.println("P1: " + player1Score + " p2: " + player2Score);
+                //System.out.println("P1: " + player1Score + " p2: " + player2Score);
             }
         }
     }
@@ -510,14 +509,14 @@ public class AbaloneGraph
             //If player's pieces exceed 3 for all directions return empty values
             if(numPlayers > 3 && i == 3 || edgeDirections[i] == -1)
             {
-                System.out.println("Returned at exceed 3");
+                //System.out.println("Returned at exceed 3");
                 return values;
             }
 
             //If empty space is reached for all directions, return empty values
             if(next.getColor()==0  && i == 3 || edgeDirections[i] == -1)
             {
-                System.out.println("Returned at exceed empty ends");
+                //System.out.println("Returned at exceed empty ends");
                 return values;
             }
             //Counts number of opponents pieces
@@ -533,7 +532,7 @@ public class AbaloneGraph
             //If number of opponents pieces is greater than players pieces return the opponent's piece that could push in the direction
             if(numPlayers<numOpponents && pushingNode != null && numPlayers < 3)
             {
-                System.out.println("Returned at push");
+                //System.out.println("Returned at push");
                 values[0] = pushingNode.getID();
                 values[1] = edgeDirections[i];
                 return values;
