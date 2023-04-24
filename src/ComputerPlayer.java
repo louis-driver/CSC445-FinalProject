@@ -122,8 +122,8 @@ public class ComputerPlayer {
         if(move[0]!=-1)
             return move;
         move = uniteFriends();
-        if(move[0]!=-1)
-            return move;
+        //if(move[0]!=-1)
+          //  return move;
         move = otherMove();
         if(move[0]!=-1)
             return move;
