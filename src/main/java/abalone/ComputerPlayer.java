@@ -100,8 +100,8 @@ public class ComputerPlayer {
     public int[] getMove()
     {
         updatePlayers(graph);
-        System.out.println("computer pieces: " + computerNodes.size());
-        System.out.println("edge pieces: " + edgePieces.size());
+        //System.out.println("computer pieces: " + computerNodes.size());
+        //System.out.println("edge pieces: " + edgePieces.size());
         int[] move = dangerEscapeBoth();
         if(move[0]!=-1)
             return move;
@@ -115,15 +115,15 @@ public class ComputerPlayer {
         if(move[0]!=-1)
             return move;
         move = edgeEscape();
-        System.out.println(move[0] + " " + move[1] + " " + move[2]);
+        //System.out.println(move[0] + " " + move[1] + " " + move[2]);
         if(move[0]!=-1)
             return move;
         move = pushWhite();
         if(move[0]!=-1)
             return move;
         move = uniteFriends();
-        if(move[0]!=-1)
-            return move;
+        //if(move[0]!=-1)
+          //  return move;
         move = otherMove();
         if(move[0]!=-1)
             return move;
@@ -136,7 +136,7 @@ public class ComputerPlayer {
     //Returns a move if a node is found in danger that can escape the edge and danger. Otherwise returns {-1, -1, -1}
     private int[] dangerEscapeBoth()
     {
-        System.out.println("danger excape both");
+        //System.out.println("danger excape both");
         Node toMove = null;
         int direction = -1;
         Node destination = null;
@@ -171,16 +171,16 @@ public class ComputerPlayer {
     //Returns a move if a node is found in danger that can escape danger. Otherwise returns {-1, -1, -1}
     private int[] dangerEscapeDanger()
     {
-        System.out.println("danger excape danger");
+        //System.out.println("danger excape danger");
         Node toMove = null;
         int direction = -1;
         Node destination = null;
         for(int i=0; i<edgePieces.size(); i++)
         {
             Node piece1 = edgePieces.get(i);
-            System.out.println("EscapeDangerPassedNode: " + piece1.getID());
+            //System.out.println("EscapeDangerPassedNode: " + piece1.getID());
             int[] danger = graph.inDangerFrom(piece1);
-            System.out.println("Danger: " + danger[0]);
+            //System.out.println("Danger: " + danger[0]);
             for(int j=1; j<12 && danger[0]!=-1; j+=2)
             {
                 Node piece2 = piece1.getSibling(j);
@@ -196,7 +196,7 @@ public class ComputerPlayer {
         if(toMove!=null && direction!=-1 && destination!=null)
         {
             int[] move = {toMove.getID(), destination.getID(), direction};
-            System.out.println("Move: " + Arrays.toString(move));
+            //System.out.println("Move: " + Arrays.toString(move));
             return move;
         }
         else 
@@ -208,7 +208,7 @@ public class ComputerPlayer {
     //Returns a move if an opponent piece can be captured. Otherwise returns {-1, -1, -1}
     private int[] captureOpponent()
     {
-        System.out.println("dcapture");
+        //System.out.println("dcapture");
         int toMove = -1;
         int direction = -1;
         for(int i=0; i<opponentNodes.size(); i++)
@@ -220,7 +220,7 @@ public class ComputerPlayer {
                 direction = danger[1];
             }
         }
-        System.out.println("ToMove: " + toMove + " Direction: "+ direction);
+        //System.out.println("ToMove: " + toMove + " Direction: "+ direction);
         if(toMove!=-1 && direction!=-1)
         {
             Node piece1 = graph.getNode(toMove);
@@ -238,7 +238,7 @@ public class ComputerPlayer {
     //Returns a move if a node is found on an edge and can push an opponent. Otherwise returns {-1, -1, -1}
     private int[] edgePush()
     {
-        System.out.println(" edge push");
+        //System.out.println(" edge push");
         Node toMove = null;
         int direction = -1;
         for(int i=0; i<edgePieces.size(); i++)
@@ -270,16 +270,14 @@ public class ComputerPlayer {
     //Returns a move if a node is found on an edge and can escape edge. Otherwise returns {-1, -1, -1}
     private int[] edgeEscape()
     {
-        System.out.println("edge exscape");
+        //System.out.println("edge exscape");
         Node toMove = null;
         int direction = -1;
         Node destination = null;
         for(int i=0; i<edgePieces.size(); i++)
         {
-            //System.out.println("int main loop");
             for(int j=1; j<12; j+=2)
             {
-                //System.out.print("second loop ");
                 Node piece1 = edgePieces.get(i);
                 Node piece2 = piece1.getSibling(j);
                 Node dest= graph.destination(piece1, piece2, j);
@@ -287,7 +285,6 @@ public class ComputerPlayer {
                 // System.out.println(dest.bordersEdge());
                 if(dest!= null && !dest.isEdge() && !dest.bordersEdge())
                 {
-                    //System.out.println("in if");
                     toMove = piece1;
                     direction = j;
                     destination = dest;
@@ -298,13 +295,11 @@ public class ComputerPlayer {
         //System.out.println("toMove: " + toMove + " direction: " + direction + " destination: " + destination);
         if(toMove!=null && direction!=-1 && destination!=null)
         {
-            //System.out.println("first if");
             int[] move = {toMove.getID(), destination.getID(), direction};
             return move;
         }
         else 
         {
-            //System.out.println("else");
             int[] move = {-1, -1, -1};
             return move;
         } 
@@ -312,7 +307,7 @@ public class ComputerPlayer {
     //Returns a move if a node is found that can push an opponent. Otherwise returns {-1, -1, -1}
     private int[] pushWhite()
     {
-        System.out.println("push white ");
+        //System.out.println("push white ");
         Node toMove = null;
         int direction = -1;
         for(int i=0; i<computerNodes.size(); i++)
@@ -333,7 +328,7 @@ public class ComputerPlayer {
             Node piece2 = toMove.getSibling(direction);
             Node destination = graph.destination(toMove, piece2, direction);
             int[] move = {toMove.getID(), destination.getID(), direction};
-            System.out.println("pushWhite" + Arrays.toString(move));
+            //System.out.println("pushWhite" + Arrays.toString(move));
             return move;
         }
         else 
@@ -345,16 +340,14 @@ public class ComputerPlayer {
 
     private int[] uniteFriends()
     {
-        System.out.println(" Louis is getting on my nerves ");
+        //System.out.println(" Louis is getting on my nerves ");
         Node toMove = null;
         int direction = -1;
         Node destination = null;
         for(int i=0; i<computerNodes.size(); i++)
         {
-            System.out.println("int main loop");
             for(int j=1; j<12; j+=2)
             {
-                System.out.print("second loop ");
                 Node piece1 = computerNodes.get(i);
                 Node piece2 = piece1.getSibling(j);
                 Node dest= graph.destination(piece1, piece2, j);
@@ -364,7 +357,7 @@ public class ComputerPlayer {
                 {
                     if(dest!=null && !dest.isEdge() && k!=(j+2)%12 && k!=(j-2)%12 && dest.getSibling(k).getColor()==piece1.getColor())
                     {
-                        System.out.println("k: " + k);
+                        //System.out.println("k: " + k);
                         toMove = piece1;
                         direction = j;
                         destination = dest;
@@ -375,27 +368,25 @@ public class ComputerPlayer {
         //System.out.println("toMove: " + toMove + " direction: " + direction + " destination: " + destination);
         if(toMove!=null && direction!=-1 && destination!=null)
         {
-            //System.out.println("first if");
             int[] move = {toMove.getID(), destination.getID(), direction};
-            System.out.println(Arrays.toString(move));
+            //System.out.println(Arrays.toString(move));
             return move;
         }
         else 
         {
-            //System.out.println("else");
             int[] move = {-1, -1, -1};
-            System.out.println(Arrays.toString(move));
+            //System.out.println(Arrays.toString(move));
             return move;
         } 
     }
     //Returns a move the next possible move. Otherwise returns {-1, -1, -1}
     private int[] otherMove()
     {
-        System.out.println("other move");
+        //System.out.println("other move");
         //Moves on that won't go to an edge
         for(int i=0; i<computerNodes.size(); i++)
         {
-            System.out.println("Checking node:" + computerNodes.get(i).getID());
+            //System.out.println("Checking node:" + computerNodes.get(i).getID());
             for(int j=1; j<12; j+=2)
             {
                 Node piece1 = computerNodes.get(i);
@@ -404,7 +395,7 @@ public class ComputerPlayer {
                 if(dest!=null && !dest.bordersEdge() && !dest.isEdge())
                 {
                     int[] move = {piece1.getID(), dest.getID(), j};
-                    System.out.println("Move:" + Arrays.toString(move));
+                    //System.out.println("Move:" + Arrays.toString(move));
                     return move;
                 }
 
@@ -413,7 +404,7 @@ public class ComputerPlayer {
         //Then choose one that goes to an edge
         for(int i=0; i<computerNodes.size(); i++)
         {
-            System.out.println("Checking node:" + computerNodes.get(i).getID());
+            //System.out.println("Checking node:" + computerNodes.get(i).getID());
             for(int j=1; j<12; j+=2)
             {
                 Node piece1 = computerNodes.get(i);
@@ -422,7 +413,7 @@ public class ComputerPlayer {
                 if(dest!=null && !dest.isEdge())
                 {
                     int[] move = {piece1.getID(), dest.getID(), j};
-                    System.out.println("Move:" + Arrays.toString(move));
+                    //System.out.println("Move:" + Arrays.toString(move));
                     return move;
                 }
 
@@ -430,7 +421,7 @@ public class ComputerPlayer {
         }
 
         int[] move = {-1, -1, -1};
-        System.out.println("Move:" + Arrays.toString(move));
+        //System.out.println("Move:" + Arrays.toString(move));
         return move;
 
     }
