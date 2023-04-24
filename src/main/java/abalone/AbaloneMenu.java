@@ -207,7 +207,6 @@ public class AbaloneMenu extends JFrame
 	{ 
 		public void actionPerformed(ActionEvent actionEvent) 
 	    {
-			//System.out.println("Player says " + actionEvent.getActionCommand());
 			sound.setFile(0);
         	sound.play();
 			if (actionEvent.getActionCommand().equals("Singleplayer"))

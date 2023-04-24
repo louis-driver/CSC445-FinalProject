@@ -132,7 +132,6 @@ public class AbalonePanel extends JPanel
 
                 if (!graph.getNode(currPosition).isEdge())
                 {
-                    //System.out.println("CurrX: " + currX + " CurrPosition:" + currPosition);
                     Ellipse2D.Double boardSpace = new Ellipse2D.Double(currX, (double) startHeights[i], pieceSize, pieceSize);
                     graph.setPiece(currPosition, boardSpace);
                 }
@@ -174,8 +173,6 @@ public class AbalonePanel extends JPanel
         g.fillPolygon(exteriorShadow);
         g.setColor(boardDark);
         g.fillPolygon(hexExterior);
-        g.setColor(Color.white);
-        g.fillPolygon(interiorHighlight);
         g.setColor(boardColor);
         g.fillPolygon(hexInterior);
 
