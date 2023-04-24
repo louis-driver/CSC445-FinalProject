@@ -394,7 +394,7 @@ public class AbalonePanel extends JPanel
                         graph.makeInlineMove(firstClicked, last, direction);
                         player1Turn = !player1Turn;
                         repaint();
-                        System.out.println("Move Made");
+                        //System.out.println("Move Made");
                         sound.setFile(0);
                         sound.play();
                         //Make computer move after the user moves
@@ -404,7 +404,7 @@ public class AbalonePanel extends JPanel
                 }
                 catch (RuntimeException ex)
                 {
-                    System.out.println("Invalid Move");
+                    //System.out.println("Invalid Move");
                 }
                 finally
                 {
@@ -428,7 +428,7 @@ public class AbalonePanel extends JPanel
                     {
                         graph.makeBroadsideMove(nodes, direction);
                         repaint();
-                        System.out.println("Move Made");
+                        //System.out.println("Move Made");
                         player1Turn = !player1Turn;
                         sound.setFile(0);
                         sound.play();
@@ -440,7 +440,7 @@ public class AbalonePanel extends JPanel
                 }
                 catch (RuntimeException ex)
                 {
-                    System.out.println("Could not move broadside.");
+                    //System.out.println("Could not move broadside.");
                 }
                 finally
                 {
@@ -459,7 +459,7 @@ public class AbalonePanel extends JPanel
             ai1.updatePlayers(graph);
             int[] moveInfo = ai1.getMove();
             graph.makeInlineMove(graph.getNode(moveInfo[0]), graph.getNode(moveInfo[1]), moveInfo[2]);
-            System.out.println("Computer move made");
+            //System.out.println("Computer move made");
             player1Turn = !player1Turn;
             player1Score = graph.getPlayer1Score();
             player2Score = graph.getPlayer2Score();
@@ -481,7 +481,7 @@ public class AbalonePanel extends JPanel
             ai2.updatePlayers(graph);
             int[] moveInfo = ai2.getMove();
             graph.makeInlineMove(graph.getNode(moveInfo[0]), graph.getNode(moveInfo[1]), moveInfo[2]);
-            System.out.println("Computer move made");
+            //System.out.println("Computer move made");
             player1Turn = !player1Turn;
             player1Score = graph.getPlayer1Score();
             player2Score = graph.getPlayer2Score();

@@ -168,7 +168,8 @@ public class AbaloneMenu extends JFrame
 		setName("MenuFrame");
 		setContentPane(menuPanel);
 		setTitle("Abalone");
-		setSize(screenSize);
+		//setSize(screenSize);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setMinimumSize(new Dimension((int)(screenWidth/3), (int)(screenHeight*0.85)));
 		setBackground(boardColorLight);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
