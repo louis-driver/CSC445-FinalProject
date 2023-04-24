@@ -3,25 +3,13 @@ import java.awt.geom.*;
 public class AbaloneGraph
 
 //Bubble sort from https://www.geeksforgeeks.org/bubble-sort/
+
+//This class creates a graph data structure from linked nodes and represents a game of Abalone
 {
     private Node[] graph = new Node[91];
     private int player1Score;
     private int player2Score;
 
-    public static void main(String[] args)
-    {
-        AbaloneGraph graph = new AbaloneGraph();
-        ComputerPlayer Ai = new ComputerPlayer(graph, 2);
-        //System.out.println(Ai.toString());
-        graph.graph[27].setColor(1);
-        Ai.updatePlayers(graph);
-        //System.out.println(Ai.toString());
-        int[] move = Ai.getMove();
-        for(int i=0; i<3; i++)
-        {
-            //System.out.println(move[i]);
-        }
-    }
 
     public AbaloneGraph()
     {
@@ -74,9 +62,6 @@ public class AbaloneGraph
                     else
                         graph[currPosition] = new Node(0, currPosition, false);
                 }
-
-                //Uncomment to view nodes being created
-                //System.out.println(graph[currPosition]);
                 ++currPosition;
             }
             if (incrementing)
@@ -244,10 +229,8 @@ public class AbaloneGraph
         boolean updated = false;
         Node currNode = last;
         int prevDirection = (direction+6) % 12; //used to reference previous nodes
-        //System.out.println("PrevDirection:" + prevDirection);
         while (!updated)
         {
-            //System.out.println("PrevDirection:" + prevDirection + " CurrNode: " + currNode);
             //Set currNode to the previous node's color if it is not the first node
             if (currNode != first) 
                 currNode.setColor(currNode.getSibling(prevDirection).getColor());
@@ -294,7 +277,6 @@ public class AbaloneGraph
                 else 
                     ++player2Score;
                 nodes[i].getSibling(direction).setColor(0);
-                //System.out.println("P1: " + player1Score + " p2: " + player2Score);
             }
         }
     }
@@ -459,7 +441,7 @@ public class AbaloneGraph
     //Returns the node's postion that can push the passed node off the edge by its opponent
     // and the direction the pushing node would push in via an int array
     // Ex: int[] values = {pushingNodePosition, direction};
-    //The passed node must be an edge piece
+    // The passed node must be an edge piece
     // Will return an array with -1s if not possible
     public int[] inDangerFrom(Node node)
     {
