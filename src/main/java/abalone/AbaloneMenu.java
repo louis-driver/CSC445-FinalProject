@@ -168,7 +168,6 @@ public class AbaloneMenu extends JFrame
 		setName("MenuFrame");
 		setContentPane(menuPanel);
 		setTitle("Abalone");
-		//setSize(screenSize);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setMinimumSize(new Dimension((int)(screenWidth/3), (int)(screenHeight*0.85)));
 		setBackground(boardColorLight);
@@ -250,7 +249,7 @@ public class AbaloneMenu extends JFrame
 				setSize(getWidth()-1, getHeight()-1);
 				setSize(getWidth()+1, getHeight()+1);
 
-				Timer timer = new Timer(3000, new ActionListener()
+				Timer timer = new Timer(1000, new ActionListener()
 				{
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -338,7 +337,7 @@ public class AbaloneMenu extends JFrame
 		public void componentResized(ComponentEvent ce)
 		{
 			title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, menuPanel.getHeight()/10));
-			menuPanel.setPreferredSize(new Dimension(getWidth(), getHeight()-90));
+			menuPanel.setPreferredSize(new Dimension(getWidth(), getHeight()));
 		}
 	};
 }
