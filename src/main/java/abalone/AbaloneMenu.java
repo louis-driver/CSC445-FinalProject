@@ -42,8 +42,9 @@ public class AbaloneMenu extends JFrame
 		//Setting up JFrame
 		setContentPane(menuPanel);
 		setTitle("Abalone");
-		setSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(), (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()-30));
 		setMinimumSize(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/3), (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*0.85)));
+		setSize(getMinimumSize());
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setBackground(boardColorLight);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		addComponentListener(componentListener);
@@ -63,7 +64,7 @@ public class AbaloneMenu extends JFrame
 		menuPanel.setBackground(boardColorLight);
 		
 		//Set titleLabel Appearance
-		titleLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/10));
+		titleLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getWidth()/10));
 		titleLabel.setForeground(boardColorDark);
 
 		//Instance of the game panel for display on the main menu
@@ -169,7 +170,7 @@ public class AbaloneMenu extends JFrame
 		goodByePanel.setBackground(boardColorLight);
 		
 		//Set goodByeLabel Appearance
-		goodByeLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/10));
+		goodByeLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getWidth()/10));
 		goodByeLabel.setForeground(boardColorDark);
 
 		//Instance of the game panel for display on goodByePanel
@@ -232,13 +233,14 @@ public class AbaloneMenu extends JFrame
 				setJMenuBar(null);
 				updateImage();
 
-				Timer timer = new Timer(2000, new ActionListener()
-				{
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						System.exit(0);
+				Timer timer = new Timer(1000, new ActionListener()
+					{
+						public void actionPerformed(ActionEvent e)
+						{
+							System.exit(0);
+						}
 					}
-				});
+				);
 				timer.setRepeats(false);
 				timer.start();
 			}
@@ -300,8 +302,8 @@ public class AbaloneMenu extends JFrame
 		//Resizes titleLabel and goodByeLabel as JFrame is resized
 		public void componentResized(ComponentEvent ce)
 		{
-			titleLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, menuPanel.getHeight()/10));
-			goodByeLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/10));
+			titleLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, menuPanel.getWidth()/10));
+			goodByeLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getWidth()/10));
 		}
 	};
 }

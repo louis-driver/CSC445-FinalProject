@@ -1,7 +1,5 @@
 package abalone;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.*;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,10 +18,9 @@ public class RulesPanel extends JPanel
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(boardColorLight);
-		setMinimumSize(new Dimension(getWidth(), getHeight()+500));
 		
 		rulesTitle = new JLabel(" RULES OF ABALONE");
-		rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 50));
+		rulesTitle.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, (int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20)));
 		rulesTitle.setForeground(Color.BLACK);
 		add(Box.createRigidArea(new Dimension(0,20)));
 		add(rulesTitle);
@@ -106,7 +103,7 @@ public class RulesPanel extends JPanel
                 add(Box.createRigidArea(new Dimension(0,25)));
                 ruleLabels[i] = new JLabel(ruleLabels[i].getText());
                 ruleLabels[i].setForeground(Color.BLACK);
-				ruleLabels[i].setFont(new Font("Times New Roman", Font.BOLD, 30));
+				ruleLabels[i].setFont(new Font("Times New Roman", Font.BOLD, (int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/60)));
             }
             //Normal text
             else
@@ -114,7 +111,7 @@ public class RulesPanel extends JPanel
                 add(Box.createRigidArea(new Dimension(0,10)));
                 ruleLabels[i] = new JLabel(ruleLabels[i].getText());
                 ruleLabels[i].setForeground(Color.BLACK);
-				ruleLabels[i].setFont(new Font("Times New Roman", Font.PLAIN, 25));
+				ruleLabels[i].setFont(new Font("Times New Roman", Font.PLAIN, (int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/60)));
             }
             add(ruleLabels[i]);
 		}
