@@ -1,7 +1,7 @@
 //Bryan Floyd
 //Abalone Menu
 
-package src;
+package abalone;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
