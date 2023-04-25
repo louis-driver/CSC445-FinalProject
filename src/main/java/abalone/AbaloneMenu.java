@@ -220,6 +220,7 @@ public class AbaloneMenu extends JFrame
 			//"Rules" button found in main menu or in game panel JMenuBar
 			else if (actionEvent.getActionCommand().equals("Rules"))
 			{
+				rulesScrollPane.getVerticalScrollBar().setUnitIncrement(15);
 				setContentPane(rulesScrollPane);
 				setJMenuBar(null);
 				setTitle("Abalone: Rules");
