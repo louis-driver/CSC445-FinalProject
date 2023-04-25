@@ -15,7 +15,7 @@ public class AbaloneMenu extends JFrame
 	//private AbalonePanel abalonePanelD = new AbalonePanel(AbaloneGraphD, true);
 	private AbalonePanel abalonePanelS;
 	private AbalonePanel abalonePanelM;
-	//private AbaloneGraph abaloneGraphD = new AbaloneGraoh();
+	//private AbaloneGraph abaloneGraphD = new AbaloneGraph();
 	private AbaloneGraph abaloneGraphS;
 	private AbaloneGraph abaloneGraphM;
 	private RulesPanel rulesPanel;
