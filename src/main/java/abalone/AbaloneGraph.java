@@ -1,4 +1,5 @@
 package abalone;
+import javax.print.attribute.standard.Destination;
 import java.awt.geom.*;
 public class AbaloneGraph
 
@@ -290,16 +291,16 @@ public class AbaloneGraph
         //Make sure not more than 3 pieces being moved
         if(nodes.length>3)
             canMove=false;
-        //Check if array has consistant colors
+        //Check if array has consistent colors
         for(int i=0; i<nodes.length; i++)
         {
             if(nodes[i].getColor()==0 || nodes[i].getColor() != color)
                 canMove = false;
         }
-        //Check if neighbors occupied
+        //Check if neighbors occupied or is edge
         for(int i=0; i<nodes.length; i++)
         {
-            if(nodes[i].getSibling(direction).getColor()!=0)
+            if(nodes[i].getSibling(direction).getColor()!=0 || nodes[i].getSibling(direction).isEdge())
             {
                 canMove=false;
             }
@@ -405,8 +406,8 @@ public class AbaloneGraph
             numPlayers++;
             //System.out.println("numPlayers:" + numPlayers);
         }
-        //If player's pieces exceed 3 return null
-        if(numPlayers > 3)
+        //If player's pieces exceed 3 return null or pushing self off edge
+        if(numPlayers > 3 || next.isEdge())
             return null;
 
         //If empty space is reached, return empty space node
