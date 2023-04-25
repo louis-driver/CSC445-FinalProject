@@ -1,7 +1,3 @@
-<<<<<<< HEAD:src/AbaloneMenu.java
-=======
-package abalone;
->>>>>>> main:src/main/java/abalone/AbaloneMenu.java
 //Bryan Floyd
 //Abalone Menu
 
@@ -12,7 +8,6 @@ import javax.swing.*;
 
 public class AbaloneMenu extends JFrame
 {
-<<<<<<< HEAD:src/AbaloneMenu.java
 	private JPanel menuPanel = new JPanel();
 
 	private JLabel titleLabel = new JLabel("ABALONE", SwingConstants.CENTER);
@@ -22,26 +17,6 @@ public class AbaloneMenu extends JFrame
 
 	private AbalonePanel abalonePanelS = new AbalonePanel(new AbaloneGraph(), true, false);
 	private AbalonePanel abalonePanelM = new AbalonePanel(new AbaloneGraph(), false, false);
-=======
-	private static JPanel menuPanel;
-	private JPanel LogPanel;
-	private JPanel buttonSectionPanel;
-	private AbalonePanel displayPanel = new AbalonePanel(new AbaloneGraph(), false, true);
-	//private AbalonePanel abalonePanelD = new AbalonePanel(AbaloneGraphD, true);
-	private AbalonePanel abalonePanelS;
-	private AbalonePanel abalonePanelM;
-	//private AbaloneGraph abaloneGraphD = new AbaloneGraoh();
-	private AbaloneGraph abaloneGraphS;
-	private AbaloneGraph abaloneGraphM;
-	private RulesPanel rulesPanel;
-	private JScrollPane rulesScrollPane;
-	private JLabel title;
-	private JButton spButton;
-	private JButton mpButton;
-	private JButton rulesButton;
-	private JButton quitButton;
-	private JButton backToMenuButton;
->>>>>>> main:src/main/java/abalone/AbaloneMenu.java
 	private JMenuBar gameOptionsBar = new JMenuBar();
 	private boolean spGameInProgress = false;
 	private boolean mpGameInProgress = false;
@@ -107,41 +82,7 @@ public class AbaloneMenu extends JFrame
 		}
 		menuButtons[3].setForeground(Color.RED);
 		
-<<<<<<< HEAD:src/AbaloneMenu.java
 		//Initialize panel the main menu buttons will go on
-=======
-		title = new JLabel("ABALONE", SwingConstants.CENTER);
-		title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/10));
-		title.setAlignmentX(CENTER_ALIGNMENT);
-		
-		spButton = new JButton("Singleplayer");
-		mpButton = new JButton("Multiplayer");
-		rulesButton = new JButton("Rules");
-		quitButton = new JButton("Quit");
-		
-		title.setForeground(new Color(75, 45, 30));
-		spButton.setForeground(Color.WHITE);
-		mpButton.setForeground(Color.WHITE);
-		rulesButton.setForeground(Color.WHITE);
-		quitButton.setForeground(Color.RED);
-		
-		spButton.setBackground(new Color(75, 45, 30));
-		mpButton.setBackground(new Color(75, 45, 30));
-		rulesButton.setBackground(new Color(75, 45, 30));
-		quitButton.setBackground(new Color(75, 45, 30));
-		
-		//Add title
-		titlePanel.add(title);
-		menuPanel.add(titlePanel, BorderLayout.NORTH);
-		
-		//Add picture of board
-		menuPanel.add(displayPanel, BorderLayout.CENTER);
-		
-		//Add panels containing buttons, add spacers, add size bounds
-		Dimension buttDimension = new Dimension(250, 40);
-		
-		buttonSectionPanel = new JPanel();
->>>>>>> main:src/main/java/abalone/AbaloneMenu.java
 		buttonSectionPanel.setLayout(new BoxLayout(buttonSectionPanel, BoxLayout.PAGE_AXIS));
 		buttonSectionPanel.setOpaque(false);
 
@@ -221,31 +162,12 @@ public class AbaloneMenu extends JFrame
 		gameQuitMenu.add(quitProgramItem);
 	}
 
-<<<<<<< HEAD:src/AbaloneMenu.java
 	private void goodByePanelSetup()
-=======
-		RulesPanelSetup();
-		GamePanelSetup();
-
-		setName("MenuFrame");
-		setContentPane(menuPanel);
-		setTitle("Abalone");
-		//setSize(screenSize);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setMinimumSize(new Dimension((int)(screenWidth/3), (int)(screenHeight*0.85)));
-		setBackground(boardColorLight);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
-	}
-	
-	public static void main(String[] args)
->>>>>>> main:src/main/java/abalone/AbaloneMenu.java
 	{
 		//Set goodByePanel appearance
 		goodByePanel.setLayout(new BorderLayout());
 		goodByePanel.setBackground(boardColorLight);
 		
-<<<<<<< HEAD:src/AbaloneMenu.java
 		//Set goodByeLabel Appearance
 		goodByeLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/10));
 		goodByeLabel.setForeground(boardColorDark);
@@ -256,16 +178,6 @@ public class AbaloneMenu extends JFrame
 		//Build goodByePanel
 		goodByePanel.add(goodByeLabel, BorderLayout.NORTH);
 		goodByePanel.add(abalonePanelD, BorderLayout.CENTER);
-=======
-		backToMenuButton = new JButton("Back");
-		backToMenuButton.setForeground(Color.RED);
-		backToMenuButton.setBackground(boardColorDark);
-		backToMenuButton.addActionListener(MainListener);
-		rulesScrollPane = new JScrollPane(rulesPanel);
-		rulesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		rulesScrollPane.getVerticalScrollBar().setUnitIncrement(15);
-		rulesPanel.add(backToMenuButton);
->>>>>>> main:src/main/java/abalone/AbaloneMenu.java
 	}
 
 	//Image wouldn't update until resizing the window, so I have it resize to the same size
@@ -282,10 +194,7 @@ public class AbaloneMenu extends JFrame
 		Sound sound = new Sound();
 		public void actionPerformed(ActionEvent actionEvent) 
 	    {
-<<<<<<< HEAD:src/AbaloneMenu.java
 			//Sound plays whenever a button is pressed
-=======
->>>>>>> main:src/main/java/abalone/AbaloneMenu.java
 			sound.setFile(0);
         	sound.play();
 			
