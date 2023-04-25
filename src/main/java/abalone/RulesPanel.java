@@ -44,7 +44,7 @@ public class RulesPanel extends JPanel
         catch(IOException e){
 
         }
-		ruleLabels = new JLabel[42];
+		ruleLabels = new JLabel[44];
 		ruleLabels[0] = new JLabel("   General ");
         ruleLabels[1] = new JLabel("       - Your objective is to push 6 of your opponent's pieces off the board.");
 		ruleLabels[2] = new JLabel("       - You may move up to three adjacent pieces, positioned in a STRAIGHT line, in one direction, one space away from where each piece ");
@@ -62,31 +62,33 @@ public class RulesPanel extends JPanel
         ruleLabels[14] = new JLabel(secondClick);
 		ruleLabels[15] = new JLabel("       - The next step for an in-line move is to right-click the board space that neighbors the selected piece in the direction you wish to move.");
 		ruleLabels[16] = new JLabel("       - NOTE: You should NEVER have more than one piece highlighted when making an in-line move. As well you will NOT click the ");
-		ruleLabels[17] = new JLabel("           final destination that the line will move in.");
+		ruleLabels[17] = new JLabel("           final destination that the line will move to.");
 		ruleLabels[18] = new JLabel("       - The image below shows how the line of 3 pieces moved towards 11 o' clock (like on a clock face) after having right-clicked the piece");
 		ruleLabels[19] = new JLabel("          DIRECTLY after the highlighted piece (i.e. they were 'touching') that was in the 11 o' clock direction relative to the highlighted piece.");
         ruleLabels[20] = new JLabel(inlineMove);
         ruleLabels[21] = new JLabel("       - For a broadside move, you will select two or three pieces that are in a CONTINUOUS and STRAIGHT line by left-clicking.");
         ruleLabels[22] = new JLabel("       - The image below shows three pieces having been selected with left-clicks in a continuous and straight line.");
         ruleLabels[23] = new JLabel(selectMultiple);
-        ruleLabels[24] = new JLabel("       - Next, you will right-click on an EMPTY space neighboring EITHER END of the selected line of pieces.");
-        ruleLabels[25] = new JLabel("       - The image below shows the three pieces moving in the 5 o' clock direction after having right-clicked the EMPTY space bordering the ");
-		ruleLabels[26] = new JLabel("          end of the selected pieces (i.e. the red piece furthest right) in the 5 o' clock direction. To move that line broadside in the");
-		ruleLabels[27] = new JLabel("          7 o' clock direction, you would simply right-click the empty space that borders the furthest left piece in the 7 o' clock direction.");
-        ruleLabels[28] = new JLabel(broadsideRight);
-        ruleLabels[29] = new JLabel("       - NOTE: You should NOT right-click spaces that border MORE THAN ONE PIECE in the selected line of pieces for a broadside move.");
-        ruleLabels[30] = new JLabel("          This is because these spaces do not provide a definitive direction and you won't always move in the direction you intended.");
-        ruleLabels[31] = new JLabel("   Pushing Your Opponent");
-        ruleLabels[32] = new JLabel("       - To push an opponent's piece(s), you must make an IN-LINE move in which your pieces outnumber your opponent's pieces in that line.");
-        ruleLabels[33] = new JLabel("       - The images below show black first left-clicking to select the start of the row they wish to move (highlighted in red).");
-		ruleLabels[34] = new JLabel("          Then right-clicking the black piece that borders the red selected piece in the 7 o' clock direction. This results in ");
-		ruleLabels[35] = new JLabel("          the white piece at the end of the line being pushed off the edge of the board. ");
-        ruleLabels[36] = new JLabel(beforePush);
-        ruleLabels[37] = new JLabel(afterPush);
-        ruleLabels[38] = new JLabel("       - NOTE: You CANNOT ever push a line of more than FIVE pieces, nor can you push your own pieces that are not in a continuous line.");
-        ruleLabels[39] = new JLabel("       - Just remember: 3 pieces push 2 of your opponent's pieces, and 2 pieces push 1 of your opponent's pieces.");
-        ruleLabels[40] = new JLabel("       - 1 single piece can't push another (since 1 is not greater than 1), which means broadside moves can't push opponents.");
-        ruleLabels[41] = new JLabel("   Have fun!");
+        ruleLabels[24] = new JLabel("       - Next, you will right-click on an EMPTY space that is PERPENDICULAR to the selected line and neighbors EITHER END of the selected line.");
+        ruleLabels[25] = new JLabel("       - You will NOT click on an empty spaces that would 'lengthen' the line of selected pieces had an additional piece been there");
+        ruleLabels[26] = new JLabel("          because that would be making an in-line move, which can be done more easily by only selecting one piece, then clicking its neighbor.");
+        ruleLabels[27] = new JLabel("       - The image below shows the three pieces moving in the 5 o' clock direction after having right-clicked the EMPTY space bordering the ");
+		ruleLabels[28] = new JLabel("          end of the selected pieces (i.e. the red piece furthest right) in the 5 o' clock direction. To move that line broadside in the");
+		ruleLabels[29] = new JLabel("          7 o' clock direction, you would simply right-click the empty space that borders the furthest left piece in the 7 o' clock direction.");
+        ruleLabels[30] = new JLabel(broadsideRight);
+        ruleLabels[31] = new JLabel("       - NOTE: You should NOT right-click spaces that border MORE THAN ONE PIECE in the selected line of pieces for a broadside move.");
+        ruleLabels[32] = new JLabel("          This is because these spaces do not provide a definitive direction and you won't always move in the direction you intended.");
+        ruleLabels[33] = new JLabel("   Pushing Your Opponent");
+        ruleLabels[34] = new JLabel("       - To push an opponent's piece(s), you must make an IN-LINE move in which your pieces outnumber your opponent's pieces in that line.");
+        ruleLabels[35] = new JLabel("       - The images below show black first left-clicking to select the start of the row they wish to move (highlighted in red).");
+		ruleLabels[36] = new JLabel("          Then right-clicking the black piece that borders the red selected piece in the 7 o' clock direction. This results in ");
+		ruleLabels[37] = new JLabel("          the white piece at the end of the line being pushed off the edge of the board. ");
+        ruleLabels[38] = new JLabel(beforePush);
+        ruleLabels[39] = new JLabel(afterPush);
+        ruleLabels[40] = new JLabel("       - NOTE: You CANNOT ever push a line of more than FIVE pieces, nor can you push your own pieces that are not in a continuous line.");
+        ruleLabels[41] = new JLabel("       - Just remember: 3 pieces push 2 of your opponent's pieces, and 2 pieces push 1 of your opponent's pieces.");
+        ruleLabels[42] = new JLabel("       - 1 single piece can't push another (since 1 is not greater than 1), which means broadside moves can't push opponents.");
+        ruleLabels[43] = new JLabel("   Have fun!");
 
 		for (int i = 0; i < ruleLabels.length; ++i)
         {
