@@ -12,6 +12,7 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.*;
+import java.awt.geom.Point2D;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
@@ -29,6 +30,8 @@ public class AbalonePanel extends JPanel
     private Polygon hexExterior;
     private Polygon hexInterior;
     private Polygon exteriorShadow;
+    private Polygon exteriorHighlight;
+    private Polygon interiorShadow;
     private Polygon interiorHighlight;
     private int[] startHeights = new int[11];
     private int[] startXCoords = new int[11];
@@ -36,6 +39,24 @@ public class AbalonePanel extends JPanel
     private int[] xCapturedCoords = new int[2];
     private int pieceSize;
     private boolean forDisplay = false;
+
+    //Colors
+    private Color backgroundColor = new Color(160, 130, 105);
+    private Color p1Color = new Color(35, 35, 35);
+    private Color p1Selected = new Color(94, 0, 0);
+    private Color p2Color = new Color(245, 245, 245);
+    private Color p2Selected = new Color(165, 184, 239);
+    private Color boardLight = new Color(145, 115, 90);
+    private Color boardDark = new Color(95, 65, 50);
+    private Color boardShadow = new Color(65, 45, 30);
+    private Color boardHighlight = new Color(200, 170, 150);
+
+    //Radial Paints
+    private RadialGradientPaint p1Paint;
+    private RadialGradientPaint p2Paint;
+    private RadialGradientPaint p1SelectedPaint;
+    private RadialGradientPaint p2SelectedPaint;
+    private RadialGradientPaint boardPaint;
 
     //Functionality
     private Node secondClicked;
@@ -130,6 +151,7 @@ public class AbalonePanel extends JPanel
                 if (rowSize == 11)
                     incrementing = false;
 
+                //Set locations for board spaces
                 if (!graph.getNode(currPosition).isEdge())
                 {
                     Ellipse2D.Double boardSpace = new Ellipse2D.Double(currX, (double) startHeights[i], pieceSize, pieceSize);
@@ -160,20 +182,23 @@ public class AbalonePanel extends JPanel
     {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        this.setBackground(new Color(160, 130, 105));
-
-        Color boardColor = new Color(140, 100, 75);
-        Color boardDark = new Color(75, 45, 30);
+        this.setBackground(backgroundColor);
 
         createHexagons();
         assignBoardSpaces();
 
         //Draw hexagons of the board
-        g.setColor(Color.black);
+        g.setColor(boardShadow);
         g.fillPolygon(exteriorShadow);
+        //g.setColor(boardHighlight);
+        //g.fillPolygon(exteriorHighlight);
         g.setColor(boardDark);
         g.fillPolygon(hexExterior);
-        g.setColor(boardColor);
+        g.setColor(boardShadow);
+        g.fillPolygon(interiorShadow);
+        //g.setColor(boardHighlight);
+        //g.fillPolygon(interiorHighlight);
+        g.setColor(boardLight);
         g.fillPolygon(hexInterior);
 
         //Draw spaces where pieces are/can be
@@ -184,15 +209,64 @@ public class AbalonePanel extends JPanel
             if (currNode.getPiece() != null)
             {
                 if (currNode.getColor()==1 && selected.contains(currNode))
-                    g2.setColor(new Color(150, 150, 220));
+                {
+                    Color[] p1Colors = {new Color(180, 10, 10), p1Selected, Color.black};
+                    Point2D p1Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
+                    float[] p1Floats = {0.5f, 0.9f, 1.0f};
+                    p1Paint = new RadialGradientPaint(p1Highlight, (float)pieceSize/2, p1Floats, p1Colors);
+                    g2.setPaint(p1Paint);
+                    /*
+                    Color[] p1Colors = {Color.white, new Color(140, 8, 8), p1Selected, new Color(70, 0, 0)};
+                    Point2D p1Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/3, currNode.getPiece().getY() + pieceSize/3);
+                    float[] p1Floats = {0.0f, 0.2f, 0.8f, 1.0f};
+                    p1SelectedPaint = new RadialGradientPaint(p1Highlight, (float)pieceSize/1.4f, p1Floats, p1Colors, MultipleGradientPaint.CycleMethod.REFLECT);
+                    g2.setPaint(p1SelectedPaint); */
+                    //g2.setColor(p1Selected);
+                }
                 else if (currNode.getColor() == 2 && selected.contains(currNode))
-                    g2.setColor(new Color(150, 10, 10));
+                {
+                    Color[] p2Colors = {Color.white, p2Selected, Color.black};
+                    Point2D p2Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
+                    float[] p2Floats = {0.0f, 0.9f, 1.0f};
+                    p2SelectedPaint = new RadialGradientPaint(p2Highlight, (float)pieceSize/2, p2Floats, p2Colors);
+                    g2.setPaint(p2SelectedPaint);
+                    //g2.setColor(p2Selected);
+                }
                 else if (currNode.getColor() == 0)
-                    g2.setColor(boardDark);
+                {
+                    Color[] colors = {boardDark, new Color(110, 75, 60)};
+                    Point2D shadow = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
+                    float[] floats = {0.85f, 1.0f};
+                    boardPaint = new RadialGradientPaint(shadow, (float)pieceSize/2, floats, colors);
+                    g2.setPaint(boardPaint);
+                    //g2.setColor(boardDark);
+                }
                 else if (currNode.getColor() == 1)
-                    g2.setColor(Color.white);
+                {
+                    //Set radial paints based on piece size and location
+                    Color[] p1Colors = {p1Color, Color.black};
+                    Point2D p1Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
+                    float[] p1Floats = {0.85f, 1.0f};
+                    p1Paint = new RadialGradientPaint(p1Highlight, (float)pieceSize/2, p1Floats, p1Colors);
+                    g2.setPaint(p1Paint);
+
+                    /* Seemed gimmicky
+                    Color[] p1Colors = {Color.white, Color.black, p1Color, new Color(45, 40, 40)};
+                    Point2D p1Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/3, currNode.getPiece().getY() + pieceSize/3);
+                    float[] p1Floats = {0.0f, 0.2f, 0.8f, 1.0f};
+                    p1Paint = new RadialGradientPaint(p1Highlight, (float)pieceSize/1.4f, p1Floats, p1Colors, MultipleGradientPaint.CycleMethod.REFLECT);
+                    g2.setPaint(p1Paint); */
+                    //g2.setColor(p1Color);
+                }
                 else if (currNode.getColor() == 2)
-                    g2.setColor(Color.black);
+                {
+                    Color[] p2Colors = {p2Color, Color.black};
+                    Point2D p2Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
+                    float[] p2Floats = {0.85f, 1.0f};
+                    p2Paint = new RadialGradientPaint(p2Highlight, (float)pieceSize/2, p2Floats, p2Colors);
+                    g2.setPaint(p2Paint);
+                    //g2.setColor(p2Color);
+                }
                 g2.fill(graph.getPiece(i));
                 //Uncomment to view node positions
                 //g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
@@ -200,12 +274,12 @@ public class AbalonePanel extends JPanel
         }
 
         //Draw any captured pieces
-        g2.setColor(Color.black);
+        g2.setColor(Color.white);
         for (int i = 0; i<player1Score && player1Score<=6; ++i)
         {
             g2.fillOval(xCapturedCoords[0], yCapturedCoords[i], pieceSize, pieceSize);
         }
-        g2.setColor(Color.white);
+        g2.setColor(Color.black);
         for (int i = 0; i<player2Score && player2Score<=6; ++i)
         {
             g2.fillOval(xCapturedCoords[1], yCapturedCoords[i], pieceSize, pieceSize);
@@ -284,8 +358,8 @@ public class AbalonePanel extends JPanel
 
         // Create large hexagon
         Point center = new Point(this.getWidth()/2, this.getHeight()/2);
-        Point offCenterLow = new Point(center.x+4, center.y+2);
-        Point offCenterHigh = new Point(center.x-4, center.y-2);
+        Point offCenterLow = new Point(center.x, center.y+2);
+        Point offCenterHigh = new Point(center.x, center.y-2);
         int radius1 = (int) (this.getHeight()/1.9);
         if (this.getWidth()  < this.getHeight() + pieceSize*2)
             radius1 = (int) (this.getWidth()/2.3);
@@ -297,10 +371,12 @@ public class AbalonePanel extends JPanel
             radius2 = (int) (this.getWidth()/2.9);
         hexInterior = createHexagon(center, radius2);
 
-        // Create offset hexagon as a shadow
-        exteriorShadow = createHexagon(offCenterLow, radius1);
-        // Create offset hexagon as a highlight
-        interiorHighlight = createHexagon(offCenterHigh, radius2);
+        // Create offset hexagons as a shadow
+        exteriorShadow = createHexagon(offCenterLow, radius1+3);
+        interiorShadow = createHexagon(offCenterLow, radius2+3);
+        // Create offset hexagons as a highlight
+        //exteriorHighlight = createHexagon(offCenterHigh, radius1);
+        //interiorHighlight = createHexagon(offCenterHigh, radius2);
     }
 
     private class MoveAdapter extends MouseInputAdapter
