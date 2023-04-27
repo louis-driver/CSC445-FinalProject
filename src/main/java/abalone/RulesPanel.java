@@ -43,7 +43,7 @@ public class RulesPanel extends JPanel
         {
 
         }
-        
+
 		ruleLabels = new JLabel[44];
 		 ruleLabels[0] = new JLabel("   General");
          ruleLabels[1] = new JLabel("      - Your objective is to push six of your opponent's pieces off the board.");
