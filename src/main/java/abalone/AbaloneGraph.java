@@ -283,8 +283,8 @@ public class AbaloneGraph
     }
 
     //Determines if a broadside move can be made for a given array of nodes
-    // The node array should be three nodes or less
-    public boolean canMoveBroadside(Node[] nodes, int direction)
+    //The node array should be three nodes or less
+    public boolean canMoveBroadside(Node[] nodes, int direction, Node clickedDirection)
     {
         boolean canMove = true;
         int color = nodes[0].getColor();
@@ -305,6 +305,15 @@ public class AbaloneGraph
                 canMove=false;
             }
         }
+        //Check if destination is not in the middle
+        int destNeighbors = 0;
+        for(int i=0; i<nodes.length; i++)
+        {
+            if(nodes[i].hasNeighbor(clickedDirection))
+                destNeighbors ++;
+        }
+        if(destNeighbors>1)
+            canMove=false;
         //Check to see if nodes are in line 
         if(nodes.length>2)
         {

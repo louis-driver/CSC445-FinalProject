@@ -421,7 +421,7 @@ public class AbalonePanel extends JPanel
                         nodes[j] = selected.poll();
                     }
                     int direction = graph.getBroadsideDirection(nodes, secondClicked);
-                    if (graph.canMoveBroadside(nodes, direction))
+                    if (graph.canMoveBroadside(nodes, direction, secondClicked))
                     {
                         graph.makeBroadsideMove(nodes, direction);
                         repaint();
