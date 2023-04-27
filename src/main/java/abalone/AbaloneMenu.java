@@ -226,14 +226,15 @@ public class AbaloneMenu extends JFrame
 				updateImage();
 			}
 			//Main menu "quit" button or game panel JMenuBar "Quit to... Desktop" button
-			//Displays goodByePanel for 1.5 seconds before closing program
+			//Displays goodByePanel for roughly 1 second before closing program
+			//User can still press X button to close the program instantly
 			else if (actionEvent.getActionCommand().equals("Quit") || actionEvent.getActionCommand().equals("Desktop"))
 			{
 				setContentPane(goodByePanel);
 				setJMenuBar(null);
 				updateImage();
 
-				Timer timer = new Timer(1500, new ActionListener()
+				Timer timer = new Timer(1250, new ActionListener()
 					{
 						public void actionPerformed(ActionEvent e)
 						{
