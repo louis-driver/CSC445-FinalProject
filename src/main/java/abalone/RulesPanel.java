@@ -48,7 +48,7 @@ public class RulesPanel extends JPanel
 		 ruleLabels[0] = new JLabel("   General");
          ruleLabels[1] = new JLabel("      - Your objective is to push six of your opponent's pieces off the board.");
 		 ruleLabels[2] = new JLabel("      - You may move up to three adjacent pieces, positioned in a straight line, one space in one direction.");
-		 ruleLabels[3] = new JLabel("      - This direction can be either 'in-line' (parallel to your line of selected pieces),");
+		 ruleLabels[3] = new JLabel("      - A move can be either 'in-line' (parallel to your line of selected pieces),");
 		 ruleLabels[4] = new JLabel("           or 'broadside' (perpendicular to the line).");
 		 ruleLabels[5] = new JLabel("      ");
 		 ruleLabels[6] = new JLabel("   How to Move");
