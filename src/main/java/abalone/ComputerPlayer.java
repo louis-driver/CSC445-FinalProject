@@ -141,9 +141,10 @@ public class ComputerPlayer {
                 Node dest= graph.destination(piece1, piece2, j);
                 if(dest!= null && !dest.bordersEdge() && !dest.isEdge())
                 {
-                    toMove = piece1;
-                    direction = j; 
-                    destination = dest;
+                        dest.setColor(0);
+                        toMove = piece1;
+                        direction = j; 
+                        destination = dest;
                 }
             }
         }
@@ -176,9 +177,17 @@ public class ComputerPlayer {
                 Node dest= graph.destination(piece1, piece2, j);
                 if(dest!=null && !dest.isEdge())
                 {
-                    toMove = piece1;
-                    direction =j;
-                    destination = dest;
+                    dest.setColor(2);
+                    danger = graph.inDangerFrom(dest);
+                    if(danger[0]==-1)
+                    {
+                        dest.setColor(0);
+                        toMove = piece1;
+                        direction =j;
+                        destination = dest;
+                    }
+                    else 
+                        dest.setColor(0);
                 }
             }
         } 
@@ -214,7 +223,6 @@ public class ComputerPlayer {
             Node piece2 = piece1.getSibling(direction);
             Node destination = graph.destination(piece1, piece2, direction);
             int[] move = {piece1.getID(), destination.getID(), direction};
-            //System.out.println("capture: " + Arrays.toString(move));
             return move;
         }
         else 
@@ -246,7 +254,6 @@ public class ComputerPlayer {
             Node piece2 = toMove.getSibling(direction);
             Node destination = graph.destination(toMove, piece2, direction);
             int[] move = {toMove.getID(), destination.getID(), direction};
-            //System.out.println("edgePush: " + Arrays.toString(move));
             return move;
         }
         else 
@@ -280,7 +287,6 @@ public class ComputerPlayer {
         if(toMove!=null && direction!=-1 && destination!=null)
         {
             int[] move = {toMove.getID(), destination.getID(), direction};
-            //System.out.println("escapeEdge: " + Arrays.toString(move));
             return move;
         }
         else 
@@ -312,7 +318,6 @@ public class ComputerPlayer {
             Node piece2 = toMove.getSibling(direction);
             Node destination = graph.destination(toMove, piece2, direction);
             int[] move = {toMove.getID(), destination.getID(), direction};
-            //System.out.println("pushOpponent: " + Arrays.toString(move));
             return move;
         }
         else 
@@ -325,7 +330,7 @@ public class ComputerPlayer {
     //Returns a move that will push pieces to join other pieces of its own color
     private int[] uniteFriends()
     {
-        //System.out.println(" Louis is attempting to fix this method for Cole.");
+        //System.out.println(" Cole is attempting to fix this method for Louis.");
         boolean friendsFound = false;
         Node toMove = null;
         int direction = -1;
@@ -383,9 +388,8 @@ public class ComputerPlayer {
                 Node dest = graph.destination(piece1, piece2, j);
                 if(dest!=null && !dest.bordersEdge() && !dest.isEdge())
                 {
-                    int[] move = {piece1.getID(), dest.getID(), j};
-                    //System.out.println("Move:" + Arrays.toString(move));
-                    return move;
+                        int[] move = {piece1.getID(), dest.getID(), j};
+                        return move;
                 }
 
             }
@@ -400,8 +404,17 @@ public class ComputerPlayer {
                 Node dest = graph.destination(piece1, piece2, j);
                 if(dest!=null && !dest.isEdge())
                 {
-                    int[] move = {piece1.getID(), dest.getID(), j};
-                    return move;
+                    dest.setColor(2);
+                    int[] danger = graph.inDangerFrom(dest);
+                    if(danger[0]==-1)
+                    {
+                        dest.setColor(0);
+                        int[] move = {piece1.getID(), dest.getID(), j};
+                        return move;
+                    }
+                    else 
+                        dest.setColor(0);
+
                 }
 
             }

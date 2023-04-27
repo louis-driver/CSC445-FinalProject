@@ -9,24 +9,16 @@ import javax.swing.*;
 public class AbaloneMenu extends JFrame
 {
 	private JPanel menuPanel = new JPanel();
-
 	private JLabel titleLabel = new JLabel("ABALONE", SwingConstants.CENTER);
-	private JButton[] menuButtons = new JButton[4];
-	private JPanel[] buttonPanels = new JPanel[4];
-	private JPanel buttonSectionPanel = new JPanel();
-
 	private AbalonePanel abalonePanelS = new AbalonePanel(new AbaloneGraph(), true, false);
 	private AbalonePanel abalonePanelM = new AbalonePanel(new AbaloneGraph(), false, false);
 	private JMenuBar gameOptionsBar = new JMenuBar();
 	private boolean spGameInProgress = false;
 	private boolean mpGameInProgress = false;
-
 	private RulesPanel rulesPanel = new RulesPanel();
 	private JScrollPane rulesScrollPane = new JScrollPane(rulesPanel);
-
 	private JPanel goodByePanel = new JPanel();
 	private JLabel goodByeLabel = new JLabel("Thanks for playing!", SwingConstants.CENTER);
-	
 	private Color boardColorLight = new Color(160, 130, 105);
 	private Color boardColorDark = new Color(75, 45, 30);
 
@@ -64,11 +56,16 @@ public class AbaloneMenu extends JFrame
 		menuPanel.setBackground(boardColorLight);
 		
 		//Set titleLabel Appearance
-		titleLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getWidth()/10));
+		titleLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/8));
 		titleLabel.setForeground(boardColorDark);
 
 		//Instance of the game panel for display on the main menu
 		AbalonePanel abalonePanelD = new AbalonePanel(new AbaloneGraph(), false, true);
+
+		//Declare buttons and button panels
+		JButton[] menuButtons = new JButton[4];
+		JPanel[] buttonPanels = new JPanel[4];
+		JPanel buttonSectionPanel = new JPanel();
 
 		//Initialize main menu buttons
 		menuButtons[0] = new JButton("Singleplayer");
@@ -112,6 +109,9 @@ public class AbaloneMenu extends JFrame
 	//Add additional button to return to previous panel
 	private void rulesPanelSetup()
 	{
+		//Set JScrollPane scroll speed
+		rulesScrollPane.getVerticalScrollBar().setUnitIncrement(50);
+
 		//Back button takes player from RulesPanel to their previous panel
 		JButton rulesBackButton = new JButton("Back");
 		rulesBackButton.setForeground(Color.RED);
@@ -227,14 +227,15 @@ public class AbaloneMenu extends JFrame
 				updateImage();
 			}
 			//Main menu "quit" button or game panel JMenuBar "Quit to... Desktop" button
-			//Displays goodByePanel for 2 seconds before closing program
+			//Displays goodByePanel for roughly 1 second before closing program
+			//User can still press X button to close the program instantly
 			else if (actionEvent.getActionCommand().equals("Quit") || actionEvent.getActionCommand().equals("Desktop"))
 			{
 				setContentPane(goodByePanel);
 				setJMenuBar(null);
 				updateImage();
 
-				Timer timer = new Timer(1000, new ActionListener()
+				Timer timer = new Timer(1250, new ActionListener()
 					{
 						public void actionPerformed(ActionEvent e)
 						{
@@ -303,7 +304,9 @@ public class AbaloneMenu extends JFrame
 		//Resizes titleLabel and goodByeLabel as JFrame is resized
 		public void componentResized(ComponentEvent ce)
 		{
-			titleLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, menuPanel.getWidth()/10));
+			//goodByeLabel font size depends on width, rather than height
+			//goodbyeLabel is a longer string and can get cut off at minimum frame size if its font size depends on height
+			titleLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, menuPanel.getHeight()/8));
 			goodByeLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getWidth()/10));
 		}
 	};
