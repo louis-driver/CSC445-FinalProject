@@ -48,7 +48,7 @@ public class RulesPanel extends JPanel
 		 ruleLabels[0] = new JLabel("   General");
          ruleLabels[1] = new JLabel("      - Your objective is to push six of your opponent's pieces off the board.");
 		 ruleLabels[2] = new JLabel("      - You may move up to three adjacent pieces, positioned in a straight line, one space in one direction.");
-		 ruleLabels[3] = new JLabel("      - This direction can be either 'in-line' (parallel to your line of selected pieces),");
+		 ruleLabels[3] = new JLabel("      - This move can be either 'in-line' (parallel to your line of selected pieces),");
 		 ruleLabels[4] = new JLabel("           or 'broadside' (perpendicular to the line).");
 		 ruleLabels[5] = new JLabel("      ");
 		 ruleLabels[6] = new JLabel("   How to Move");
@@ -71,8 +71,8 @@ public class RulesPanel extends JPanel
         ruleLabels[23] = new JLabel("      - NOTE: The spaces BETWEEN those indicated by the green arrows should not be selected when making a broadside move.");
         ruleLabels[24] = new JLabel("          ~ The travel direction to these spaces is ambiguous, so selecting them when making a broadside move");
         ruleLabels[25] = new JLabel("               may cause your line of pieces to move in unintended ways.");
-        ruleLabels[26] = new JLabel("      - Do not try to move your line of selected pieces directly east or west. This would be equivalent to");
-        ruleLabels[27] = new JLabel("          an in-line move. Find directions on how to make in-line moves above.");
+        ruleLabels[26] = new JLabel("      - Do not try to move broadside in a direction that would 'lengthen' your selected line. This would be equivalent to");
+        ruleLabels[27] = new JLabel("          an in-line move, except with unnecessary extra clicking. Find directions on how to make in-line moves above.");
         ruleLabels[28] = new JLabel("      ");
         ruleLabels[29] = new JLabel("   Pushing Your Opponent");
         ruleLabels[30] = new JLabel("      - To push an opponent's piece(s), you must make an IN-LINE move in which your line of pieces outnumbers your opponent's.");
