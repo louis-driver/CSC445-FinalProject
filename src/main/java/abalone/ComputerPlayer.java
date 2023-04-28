@@ -4,6 +4,7 @@ package abalone;
 //Player takes a AbaloneGraph Object for construction.
 //For each turn, the updated graph should be passed to the Player to keep track of its nodes and positions
 //Calling the get move method provides the nodes for the next computer move
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -107,6 +108,10 @@ public class ComputerPlayer {
         move = edgePush();
         if(move[0]!=-1)
             return move;
+        move = moveToCenter();
+        if(move[0]!=-1)
+            return move;
+        System.out.println("Didn't move to center");
         move = edgeEscape();
         if(move[0]!=-1)
             return move;
@@ -327,10 +332,83 @@ public class ComputerPlayer {
         }
     }
 
+    //Returns a move than will maximize the sum of the computer's nodes' levels
+    private int[] moveToCenter()
+    {
+        int initialSum = ComputerPlayer.getLevelSum(graph, computerColor);
+        System.out.println("ComputerSumInitial: " + initialSum);
+        int bestSum = initialSum;
+        int[] bestMove = new int[3];
+        AbaloneGraph testGraph = graph.clone();
+
+        int frameWidth = 400;
+        int frameHeight = 300;
+        JFrame frame = new JFrame();
+        AbaloneGraph graph = new AbaloneGraph();
+        AbalonePanel panel = new AbalonePanel(testGraph, true, false);
+
+        frame.setSize(frameWidth, frameHeight);
+        frame.setTitle("Clone Graph");
+        frame.add(panel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(true);
+        frame.setVisible(true);
+
+        for(int i=0; i<computerNodes.size(); i++)
+        {
+            testGraph = graph.clone();
+            int currPieceID = computerNodes.get(i).getID();
+            System.out.println("\n Testing node: " + currPieceID);
+            System.out.println("Best Sum so far: " + bestSum);
+            System.out.println("Best Move so far: " + Arrays.toString(bestMove));
+            Node currPiece = testGraph.getNode(currPieceID);
+            System.out.println("Testing node: " + currPiece);
+            for(int j=1; j<12; j+=2)
+            {
+                testGraph = graph.clone();
+                Node piece2 = currPiece.getSibling(j);
+                if (!piece2.isEdge())
+                {
+                    Node dest = testGraph.destination(currPiece, piece2, j);
+                    System.out.println("TestDestination: " + dest);
+                    if (dest != null && !dest.bordersEdge())
+                    {
+                        int[] testMove = {currPiece.getID(), dest.getID(), j};
+                        System.out.println("Testing Move: " + Arrays.toString(testMove));
+                        testGraph.makeInlineMove(currPiece, dest, j);
+                        int testSum = getLevelSum(testGraph, computerColor);
+                        System.out.println("Test Sum: " + testSum);
+                        if (testSum > bestSum)
+                        {
+                            bestSum = testSum;
+                            bestMove = testMove;
+                            System.out.println("Best Sum so far: " + bestSum);
+                            testGraph = graph.clone();
+                        }
+                    }
+                }
+            }
+        }
+
+        System.out.println("ComputerSumBest: " + bestSum);
+        if (bestSum > initialSum)
+        {
+            int[] move = bestMove;
+            System.out.println("moveToCenter: " + Arrays.toString(move));
+            return move;
+        }
+        else
+        {
+            int[] move = {-1, -1, -1};
+            return move;
+        }
+
+    }
+
     //Returns a move that will push pieces to join other pieces of its own color
     private int[] uniteFriends()
     {
-        //System.out.println(" Cole is attempting to fix this method for Louis.");
+        System.out.println(" Cole is attempting to fix this method for Louis.");
         boolean friendsFound = false;
         Node toMove = null;
         int direction = -1;
@@ -438,6 +516,17 @@ public class ComputerPlayer {
             }
         }
         return playablePositions;
+    }
+
+    private static int getLevelSum(AbaloneGraph g, int player)
+    {
+        int levelSum = 0;
+        for (int i = 0; i < g.GRAPH_SIZE; ++i)
+        {
+            if (g.getNode(i).getColor() == player)
+                levelSum += g.getNode(i).getLevel();
+        }
+        return levelSum;
     }
 
     private void randomizeArray(int[] ints)
