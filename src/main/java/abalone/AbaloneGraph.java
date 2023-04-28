@@ -438,15 +438,21 @@ public class AbaloneGraph
     {
         //System.out.println("destination:" + first.getID() + ", " + second.getID() + "   direction:" + direction);
         Node next = second;
-        int playerColor = first.getColor();
-        int opponentColor = 1;
+        int playerColor = -1;
+        if (first.getColor() != 0)
+            playerColor = first.getColor();
+
+        int opponentColor = -1;
         if (playerColor == 1)
             opponentColor = 2;
+        else if (playerColor == 2)
+            opponentColor = 1;
+
         int numPlayers = 1;
         int numOpponents = 0;
 
-        //Returns null if the two nodes aren't siblings
-        if(!first.hasNeighbor(second))
+        //Returns null if the two nodes aren't siblings or not a player's piece
+        if(!first.hasNeighbor(second) || playerColor == -1)
             return null;
         //Iterates through spaces held by players color until an opposite color, empty space, or edge is found
         //Counts number of pieces in a row of the color whose turn it is
@@ -666,6 +672,52 @@ public class AbaloneGraph
             p2Ints[i] = p2Spaces.get(i);
         }
         return new AbaloneGraph(p1Ints, p2Ints);
+    }
+
+    //Returns a 2D array of ints representing the players' positions on the board, -1 means the player doesn't have a piece
+    //positions[0][n] return the positions of player 1
+    //positions[1][n] return the positions of player 2
+    public int[][] getPlayerPositions()
+    {
+        ArrayList<Integer> p1Spaces = new ArrayList<>();
+        ArrayList<Integer> p2Spaces = new ArrayList<>();
+        for (int i = 0; i < GRAPH_SIZE; ++i)
+        {
+            if(graph[i].getColor() == 1)
+                p1Spaces.add(i);
+            else if(graph[i].getColor() == 2)
+                p2Spaces.add(i);
+        }
+        p1Spaces.trimToSize();
+        p2Spaces.trimToSize();
+        int[] p1Ints = new int[p1Spaces.size()];
+        for (int i = 0; i < p1Ints.length; ++i)
+        {
+            p1Ints[i] = p1Spaces.get(i);
+        }
+        int[] p2Ints = new int[p2Spaces.size()];
+        for (int i = 0; i < p2Ints.length; ++i)
+        {
+            p2Ints[i] = p2Spaces.get(i);
+        }
+        int size = 14;
+        if (p1Ints.length < size)
+            size = p1Ints.length;
+        if (p2Ints.length > size)
+            size = p2Ints.length;
+        int[][] positions = new int[2][size];
+        for (int i = 0; i < size; ++i)
+        {
+            if (i >= p1Ints.length)
+                positions[0][i] = -1;
+            else
+                positions[0][i] = p1Ints[i];
+            if (i >= p2Ints.length)
+                positions[1][i] = -1;
+            else
+                positions[1][i] = p2Ints[i];
+        }
+        return positions;
     }
 
     public int getPlayer1Score()
