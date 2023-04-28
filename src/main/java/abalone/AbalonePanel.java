@@ -269,15 +269,23 @@ public class AbalonePanel extends JPanel
         }
 
         //Draw any captured pieces
-        g2.setColor(Color.white);
         for (int i = 0; i<player1Score && player1Score<=6; ++i)
         {
-            g2.fillOval(xCapturedCoords[0], yCapturedCoords[i], pieceSize, pieceSize);
+            Color[] p2Colors = {p2Color, new Color(60, 60, 60)};
+            Point2D p2Highlight = new Point2D.Double(xCapturedCoords[0] + pieceSize/2.2, yCapturedCoords[i] + pieceSize/2.2);
+            float[] p2Floats = {0.85f, 1.0f};
+            radialPaint = new RadialGradientPaint(p2Highlight, (float)pieceSize/2, p2Floats, p2Colors);
+            g2.setPaint(radialPaint);
+            g2.fill(new Ellipse2D.Double(xCapturedCoords[0], yCapturedCoords[i], pieceSize, pieceSize));
         }
-        g2.setColor(Color.black);
         for (int i = 0; i<player2Score && player2Score<=6; ++i)
         {
-            g2.fillOval(xCapturedCoords[1], yCapturedCoords[i], pieceSize, pieceSize);
+            Color[] p1Colors = {new Color(35, 40, 45), Color.black};
+            Point2D p1Highlight = new Point2D.Double(xCapturedCoords[1] + pieceSize/2.2, yCapturedCoords[i] + pieceSize/2.2);
+            float[] p1Floats = {0.85f, 1.0f};
+            radialPaint = new RadialGradientPaint(p1Highlight, (float)pieceSize/2, p1Floats, p1Colors);
+            g2.setPaint(radialPaint);
+            g2.fill(new Ellipse2D.Double(xCapturedCoords[1], yCapturedCoords[i], pieceSize, pieceSize));
         }
         
         //Display winner if applicable

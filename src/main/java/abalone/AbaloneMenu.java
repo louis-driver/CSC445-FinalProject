@@ -19,6 +19,7 @@ public class AbaloneMenu extends JFrame
 	private JScrollPane rulesScrollPane = new JScrollPane(rulesPanel);
 	private JPanel goodByePanel = new JPanel();
 	private JLabel goodByeLabel = new JLabel("Thanks for playing!", SwingConstants.CENTER);
+	private Color backgroundColor = new Color(182, 155, 136);
 	private Color boardColorLight = new Color(182, 155, 126);
 	private Color boardColorDark = new Color(75, 45, 30);
 
@@ -37,7 +38,7 @@ public class AbaloneMenu extends JFrame
 		setMinimumSize(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/3), (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*0.85)));
 		setSize(getMinimumSize());
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setBackground(boardColorLight);
+		setBackground(backgroundColor);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		addComponentListener(componentListener);
 		setVisible(true);
@@ -53,7 +54,7 @@ public class AbaloneMenu extends JFrame
 	{
 		//Set menuPanel appearance
 		menuPanel.setLayout(new BorderLayout());
-		menuPanel.setBackground(boardColorLight);
+		menuPanel.setBackground(backgroundColor);
 		
 		//Set titleLabel Appearance
 		titleLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getHeight()/8));
@@ -167,7 +168,7 @@ public class AbaloneMenu extends JFrame
 	{
 		//Set goodByePanel appearance
 		goodByePanel.setLayout(new BorderLayout());
-		goodByePanel.setBackground(boardColorLight);
+		goodByePanel.setBackground(backgroundColor);
 		
 		//Set goodByeLabel Appearance
 		goodByeLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, getWidth()/10));
