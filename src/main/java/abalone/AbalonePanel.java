@@ -264,7 +264,7 @@ public class AbalonePanel extends JPanel
                 }
                 g2.fill(graph.getPiece(i));
                 //Uncomment to view node positions or levels
-                g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
+                //g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
                 //g2.drawString(""+graph.getNode(i).getLevel(), (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
             }
         }
@@ -330,15 +330,21 @@ public class AbalonePanel extends JPanel
         int yCoord = (this.getHeight()-strHeight)/2 + strHeight - (this.getHeight()-strHeight)/25;
 
         if (winner == 1)
-            g.setColor(Color.white);
+            g.setColor(p1Selected);
+        else
+            g.setColor(p2Selected);
+        g.fillRect(xCoord - strWidth/18 - 5, (this.getHeight()-strHeight)/2 - 5, strWidth+strWidth/10 + 10, strHeight + 10);
+
+        if (winner == 1)
+            g.setColor(p1Color);
         else 
-            g.setColor(Color.black);
+            g.setColor(p2Color);
         g.fillRect(xCoord - strWidth/18, (this.getHeight()-strHeight)/2, strWidth+strWidth/10, strHeight);
 
         if (winner == 1)
-            g.setColor(Color.black);
+            g.setColor(p2Color);
         else 
-            g.setColor(Color.white);
+            g.setColor(p1Color);
         g.drawString(str, xCoord, yCoord);
     }
 
@@ -571,5 +577,12 @@ public class AbalonePanel extends JPanel
     private void delayComputerMove2()
     {
         scheduler.schedule(new ComputerMove2(), 500l, TimeUnit.MILLISECONDS);
+    }
+
+    //For use in computerTest
+    public void setPlayerScores(int[] scores)
+    {
+        player1Score = scores[0];
+        player2Score = scores[1];
     }
 }
