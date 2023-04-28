@@ -75,7 +75,7 @@ public class AbalonePanel extends JPanel
         int frameHeight = 800;
         JFrame frame = new JFrame();
         AbaloneGraph graph = new AbaloneGraph();
-        AbalonePanel panel = new AbalonePanel(graph, false, false);
+        AbalonePanel panel = new AbalonePanel(graph, true, false);
 
         frame.setSize(frameWidth, frameHeight);
         frame.setTitle("Graph");
@@ -264,7 +264,7 @@ public class AbalonePanel extends JPanel
                 }
                 g2.fill(graph.getPiece(i));
                 //Uncomment to view node positions or levels
-                //g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
+                g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
                 //g2.drawString(""+graph.getNode(i).getLevel(), (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
             }
         }
@@ -415,7 +415,7 @@ public class AbalonePanel extends JPanel
             int nodePosition = -1;
             Node currNode = null;
             // Finds the point that was clicked if one was clicked
-            while (!nodeFound && i < graphSize)
+            while (!nodeFound && i < graph.GRAPH_SIZE)
             {
                 Ellipse2D currPiece = graph.getPiece(i);
                 if(currPiece != null && currPiece.contains(clickedX, clickedY))
