@@ -220,13 +220,14 @@ public class AbaloneMenu extends JFrame
 			//"Rules" button found in main menu or in game panel JMenuBar
 			else if (actionEvent.getActionCommand().equals("Rules"))
 			{
+				rulesScrollPane.getVerticalScrollBar().setUnitIncrement(15);
 				setContentPane(rulesScrollPane);
 				setJMenuBar(null);
 				setTitle("Abalone: Rules");
 				updateImage();
 			}
 			//Main menu "quit" button or game panel JMenuBar "Quit to... Desktop" button
-			//Displays goodByePanel for roughly 1 second before closing program
+			//Displays goodByePanel for 1.5 seconds before closing program
 			//User can still press X button to close the program instantly
 			else if (actionEvent.getActionCommand().equals("Quit") || actionEvent.getActionCommand().equals("Desktop"))
 			{
@@ -234,7 +235,7 @@ public class AbaloneMenu extends JFrame
 				setJMenuBar(null);
 				updateImage();
 
-				Timer timer = new Timer(1250, new ActionListener()
+				Timer timer = new Timer(1500, new ActionListener()
 					{
 						public void actionPerformed(ActionEvent e)
 						{
