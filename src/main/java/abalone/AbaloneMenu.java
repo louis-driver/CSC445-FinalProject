@@ -20,8 +20,7 @@ public class AbaloneMenu extends JFrame
 	private JPanel goodByePanel = new JPanel();
 	private JLabel goodByeLabel = new JLabel("Thanks for playing!", SwingConstants.CENTER);
 	private Color backgroundColor = new Color(182, 155, 136);
-	private Color boardColorLight = new Color(182, 155, 126);
-	private Color boardColorDark = new Color(75, 45, 30);
+	private Color boardColorDark = new Color(75, 55, 45);
 
 	//Constructor
 	public AbaloneMenu()
