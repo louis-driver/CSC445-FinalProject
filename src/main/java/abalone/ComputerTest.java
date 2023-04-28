@@ -25,8 +25,7 @@ public class ComputerTest
     private ComputerPlayer ai2;
 
     //Functionality
-    private Node secondClicked;
-    private ArrayBlockingQueue<Node> selected = new ArrayBlockingQueue<>(3);
+    private ArrayList<int[][]> previousBoards = new ArrayList<>(12);
     private int player1Score;
     private int player2Score;
     private boolean player1Turn = true;
@@ -48,6 +47,13 @@ public class ComputerTest
             testGraph.makeInlineMove(testGraph.getNode(testMove[0]), testGraph.getNode(testMove[1]), testMove[2]);
         else
             System.out.println("unable to make move"); */
+        /*
+        int[][] currBoardState = testGraph.getPlayerPositions();
+        int[][] duplicatBoard = currBoardState.clone();
+        System.out.println(Arrays.toString(currBoardState));
+        System.out.println(Arrays.toString(duplicatBoard));
+        System.out.println("DeepEquals: " + Arrays.deepEquals(currBoardState, duplicatBoard)); */
+
         int move = 1;
         int currC1Score = 0;
         int currC2Score = 0;
@@ -129,6 +135,17 @@ public class ComputerTest
     {
         public void run()
         {
+            if (inLoop())
+            {
+                ai1.setInLoop(true);
+                ai2.setInLoop(true);
+                System.out.println("Was in loop");
+            }
+            else
+            {
+                ai1.setInLoop(false);
+                ai2.setInLoop(false);
+            }
             if (player1Score != graph.getPlayer1Score() || player2Score != graph.getPlayer2Score())
             {
                 player1Score = graph.getPlayer1Score();
@@ -142,6 +159,17 @@ public class ComputerTest
                     //System.out.println("Computer1 move made");
                     player1Turn = !player1Turn;
                     ++numMoves;
+
+                    //Add gameState to previous gameStates
+                    if (previousBoards.size() == 12)
+                    {
+                        previousBoards.remove(0);
+                        previousBoards.add(graph.getPlayerPositions());
+                    }
+                    else
+                    {
+                        previousBoards.add(graph.getPlayerPositions());
+                    }
                 }
                 if (player1Score < 6 && player2Score < 6) {
                     ai2.updatePlayers(graph);
@@ -150,10 +178,46 @@ public class ComputerTest
                     //System.out.println("Computer2 move made");
                     player1Turn = !player1Turn;
                     ++numMoves;
+
+                    //Add gameState to previous gameStates
+                    if (previousBoards.size() == 12)
+                    {
+                        previousBoards.remove(0);
+                        previousBoards.add(graph.getPlayerPositions());
+                    }
+                    else
+                    {
+                        previousBoards.add(graph.getPlayerPositions());
+                    }
                 }
                 int[] scores = {player1Score, player2Score};
                 panel.setPlayerScores(scores);
         }
+    }
+
+    //Used to see if the computer is in a loop and repeating moves
+    public boolean inLoop()
+    {
+        boolean inLoop = false;
+        //Compare each positions[][] to each other, if at least 3 of the arrays equal each other it is in a loop
+        for (int i = 0; i < previousBoards.size() && !inLoop; ++i)
+        {
+            int currDuplicates = 0;
+            int[][] currBoardState = previousBoards.get(i);
+            for (int j = 0; j < previousBoards.size(); ++j)
+            {
+                if (j != i)
+                {
+                    if (Arrays.deepEquals(currBoardState, previousBoards.get(j)))
+                    {
+                        ++currDuplicates;
+                    }
+                }
+            }
+            if (currDuplicates >= 2)
+                inLoop = true;
+        }
+        return inLoop;
     }
 }
 
