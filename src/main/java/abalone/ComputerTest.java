@@ -39,8 +39,8 @@ public class ComputerTest
     //Test Main class
     public static void main(String[] args) {
         AbaloneGraph testGraph = new AbaloneGraph();
-        ComputerTest computerTest = new ComputerTest(testGraph);
-        computerTest.createGameFrame(testGraph);
+        //ComputerTest computerTest = new ComputerTest(testGraph);
+        //computerTest.createGameFrame(testGraph);
         /*
         int[] testMove = computerTest.getComputerPlayer(1).getMove();
         if (testMove[0] != -1)
@@ -54,32 +54,42 @@ public class ComputerTest
         System.out.println(Arrays.toString(duplicatBoard));
         System.out.println("DeepEquals: " + Arrays.deepEquals(currBoardState, duplicatBoard)); */
 
-        int move = 1;
-        int currC1Score = 0;
-        int currC2Score = 0;
-        boolean gameOver = false;
-        while (computerTest.getPlayerScore(1) < 6 && computerTest.getPlayerScore(2) < 6 && !gameOver)
-        {
-            if (computerTest.getPlayerScore(1) >= 6 && computerTest.getPlayerScore(2) >= 6)
-                gameOver = true;
-            if (currC2Score != computerTest.getPlayerScore(2) || currC1Score != computerTest.getPlayerScore(1))
-            {
-                System.out.println("Move : " + computerTest.numMoves);
-                currC1Score = computerTest.getPlayerScore(1);
-                currC2Score = computerTest.getPlayerScore(2);
+        int ai1Wins = 0;
+        int ai2Wins = 0;
+        int numGames = 20;
+        for (int i = 0 ; i < numGames; ++i) {
+            ComputerTest computerTest = new ComputerTest(testGraph);
+            computerTest.createGameFrame(testGraph);
+            int move = 1;
+            int currC1Score = 0;
+            int currC2Score = 0;
+            boolean gameOver = false;
+            while (computerTest.getPlayerScore(1) < 6 && computerTest.getPlayerScore(2) < 6 && !gameOver) {
+                if (computerTest.getPlayerScore(1) >= 6 && computerTest.getPlayerScore(2) >= 6)
+                    gameOver = true;
+                if (currC2Score != computerTest.getPlayerScore(2) || currC1Score != computerTest.getPlayerScore(1)) {
+                    //System.out.println("Move : " + computerTest.numMoves);
+                    currC1Score = computerTest.getPlayerScore(1);
+                    currC2Score = computerTest.getPlayerScore(2);
+                }
+                computerTest.delayComputerMoves();
+                computerTest.refreshFrame();
+                ++move;
             }
-            computerTest.delayComputerMoves();
-            computerTest.refreshFrame();
-            ++move;
+            if (computerTest.getPlayerScore(1) == 6)
+                ++ai1Wins;
+            if (computerTest.getPlayerScore(2) == 6)
+                ++ai2Wins;
         }
-        System.out.println("GameOver");
+        System.out.println("Ai1Wins: " + ai1Wins + " Ai2Wins: " + ai2Wins);
+        //System.out.println("GameOver");
         //computerTest.updateGameFrame(testGraph);
     }
 
     public ComputerTest(AbaloneGraph g) {
         this.graph = g;
         this.ai1 = new ComputerPlayer(this.graph, 1);
-        this.ai2 = new ComputerPlayer(this.graph, 2);
+        this.ai2 = new ComputerPlayerV2(this.graph, 2);
     }
 
     //This method creates a frame to display a passed graph
@@ -139,7 +149,7 @@ public class ComputerTest
             {
                 ai1.setInLoop(true);
                 ai2.setInLoop(true);
-                System.out.println("Was in loop");
+                //System.out.println("Was in loop");
             }
             else
             {
@@ -150,7 +160,7 @@ public class ComputerTest
             {
                 player1Score = graph.getPlayer1Score();
                 player2Score = graph.getPlayer2Score();
-                System.out.println(" C1: " + player1Score + " C2: " + player2Score);
+                //System.out.println(" C1: " + player1Score + " C2: " + player2Score);
             }
                 if (player1Score < 6 && player2Score < 6) {
                     ai1.updatePlayers(graph);
