@@ -5,8 +5,7 @@ package abalone;
 //For each turn, the updated graph should be passed to the Player to keep track of its nodes and positions
 //Calling the get move method provides the nodes for the next computer move
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class ComputerPlayer {
     private ArrayList<Node> computerNodes;
@@ -17,6 +16,7 @@ public class ComputerPlayer {
     private int computerColor;
     private int opponentColor;
     private int[] playablePositions;
+    private boolean inLoop = false;
 
     public ComputerPlayer(AbaloneGraph g, int color)
     {
@@ -99,26 +99,38 @@ public class ComputerPlayer {
         int[] move = dangerEscapeBoth();
         if(move[0]!=-1)
             return move;
-        move = dangerEscapeDanger();
+        if (!inLoop)
+            move = dangerEscapeDanger();
         if(move[0]!=-1)
             return move;
-        move = captureOpponent();
+        if (!inLoop)
+            move = captureOpponent();
         if(move[0]!=-1)
             return move;
-        move = edgePush();
+        if (!inLoop)
+            move = edgePush();
         if(move[0]!=-1)
             return move;
-        /*move = moveToCenter();
+        if (!inLoop)
+            move = moveToCenter();
         if(move[0]!=-1)
             return move;
-        System.out.println("Didn't move to center");*/
-        move = edgeEscape();
+        //System.out.println("Didn't move to center");
+        if (!inLoop)
+            move = edgeEscape();
         if(move[0]!=-1)
             return move;
-        move = pushWhite();
+        if (!inLoop)
+            move = pushWhite();
         if(move[0]!=-1)
             return move;
-        move = uniteFriends();
+        if (!inLoop)
+            move = uniteLonelyFriends();
+        if(move[0]!=-1)
+            return move;
+        System.out.println("Didn't unite lonelies");
+        if (!inLoop)
+            move = uniteFriends();
         if(move[0]!=-1)
             return move;
         move = otherMove();
@@ -336,64 +348,54 @@ public class ComputerPlayer {
     private int[] moveToCenter()
     {
         int initialSum = ComputerPlayer.getLevelSum(graph, computerColor);
-        System.out.println("ComputerSumInitial: " + initialSum);
+        //System.out.println("ComputerSumInitial: " + initialSum);
         int bestSum = initialSum;
         int[] bestMove = {-1, -1, -1};
         AbaloneGraph testGraph = graph.clone();
 
-        int frameWidth = 400;
-        int frameHeight = 300;
-        JFrame frame = new JFrame();
-        AbaloneGraph graph = new AbaloneGraph();
-        AbalonePanel panel = new AbalonePanel(testGraph, true, false);
-
-        frame.setSize(frameWidth, frameHeight);
-        frame.setTitle("Clone Graph");
-        frame.add(panel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(true);
-        frame.setVisible(true);
-
         for(int i=0; i<computerNodes.size(); i++)
         {
             int currPieceID = computerNodes.get(i).getID();
-            System.out.println("\n Testing node: " + currPieceID);
-            System.out.println("Best Sum so far: " + bestSum);
-            System.out.println("Best Move so far: " + Arrays.toString(bestMove));
+            //System.out.println("\n Testing node: " + currPieceID);
+            //System.out.println("Best Sum so far: " + bestSum);
+            //System.out.println("Best Move so far: " + Arrays.toString(bestMove));
             Node currPiece = testGraph.getNode(currPieceID);
-            System.out.println("Testing node: " + currPiece);
+            Node piece2 = null;
+
             for(int j=1; j<12; j+=2)
             {
-                Node piece2 = currPiece.getSibling(j);
-                if (!piece2.isEdge())
+                piece2 = currPiece.getSibling(j);
+                if (!piece2.isEdge() && !piece2.bordersEdge())
                 {
                     Node dest = testGraph.destination(currPiece, piece2, j);
-                    System.out.println("TestDestination: " + dest);
+                    //System.out.println("TestDestination " + j + ": " + dest);
                     if (dest != null && !dest.bordersEdge())
                     {
-                        int[] testMove = {currPiece.getID(), dest.getID(), j};
-                        System.out.println("Testing Move: " + Arrays.toString(testMove));
+                        int[] testMove = {currPieceID, dest.getID(), j};
+                        //System.out.println("Testing Move: " + Arrays.toString(testMove));
                         testGraph.makeInlineMove(currPiece, dest, j);
                         int testSum = ComputerPlayer.getLevelSum(testGraph, computerColor);
-                        System.out.println("Test Sum: " + testSum);
+                        //System.out.println("Test Sum: " + testSum);
+                        //Reset graph and piece after testing move
+                        testGraph = graph.clone();
+                        currPiece = testGraph.getNode(currPieceID);
                         if (testSum > bestSum)
                         {
                             bestSum = testSum;
                             bestMove = testMove;
-                            System.out.println("Best Move so far: " + Arrays.toString(bestMove));
-                            System.out.println("Best Sum so far: " + bestSum);
-                            testGraph = graph.clone();
+                            //System.out.println("Best Move so far: " + Arrays.toString(bestMove));
+                            //System.out.println("Best Sum so far: " + bestSum);
                         }
                     }
                 }
             }
         }
 
-        System.out.println("ComputerSumBest: " + bestSum);
+        //System.out.println("ComputerSumBest: " + bestSum);
         if (bestSum > initialSum)
         {
             int[] move = bestMove;
-            System.out.println("moveToCenter: " + Arrays.toString(move));
+            //System.out.println("moveToCenter: " + Arrays.toString(move));
             return move;
         }
         else
@@ -402,6 +404,75 @@ public class ComputerPlayer {
             return move;
         }
 
+    }
+
+    //Returns a move that will push pieces to join other pieces of its own color
+    private int[] uniteLonelyFriends()
+    {
+        System.out.println(" Unite Lonely friends");
+        PriorityQueue<int[]> sortedLonelies = new PriorityQueue<>(new DescIntArrayComparator());
+        //Find add the number of friends a piece has and its position to a minHeap sorted on least number of friends
+        for (int i = 0; i < computerNodes.size(); ++i)
+        {
+            int[] numFriends =  {computerNodes.get(i).getNumFriends(), computerNodes.get(i).getID()};
+            //System.out.println("i" + i + ": " + Arrays.toString(numFriends));
+            sortedLonelies.add(numFriends);
+        }
+
+        /*System.out.print("Sorted By Loneliness:");
+        while (sortedLonelies.size() != 0)
+        {
+            System.out.print(" " + Arrays.toString(sortedLonelies.poll()));
+        }
+        System.out.println(); */
+
+
+        boolean friendsFound = false;
+        Node toMove = null;
+        int direction = -1;
+        Node destination = null;
+        while (sortedLonelies.size() !=0 && !friendsFound)
+        {
+            System.out.println("Size: " + sortedLonelies.size());
+            int[] polled = sortedLonelies.poll();
+            int currID = polled[1];
+            System.out.println("CurrID:" + currID);
+            Node piece1 = graph.getNode(currID);
+            for(int j=1; j<12; j+=2)
+            {
+                //Sets the piece to search in order of fewest neighbors
+                Node piece2 = piece1.getSibling(j);
+                System.out.println("Checking Node: " + piece1.getID() + " & " + piece2.getID());
+                Node dest = graph.destination(piece1, piece2, j);
+                System.out.println("Testing Destination: " + dest);
+                if (dest != null && !dest.isEdge() && !dest.bordersEdge())
+                {
+                    for (int k = 1; k < 12; k += 2)
+                    {
+                        if ((k == (j + 2) % 12 || k == (j - 2) % 12 || k == j) && dest.getSibling(k).getColor() == piece1.getColor())
+                        {
+                            //System.out.println("k: " + k);
+                            toMove = piece1;
+                            direction = j;
+                            destination = dest;
+                            friendsFound = true;
+                            //System.out.println("toMove: " + toMove + " direction: " + direction + " destination: " + destination);
+                        }
+                    }
+                }
+            }
+        }
+        if(toMove!=null && direction!=-1 && destination!=null)
+        {
+            int[] move = {toMove.getID(), destination.getID(), direction};
+            System.out.println(Arrays.toString(move));
+            return move;
+        }
+        else
+        {
+            int[] move = {-1, -1, -1};
+            return move;
+        }
     }
 
     //Returns a move that will push pieces to join other pieces of its own color
@@ -502,6 +573,11 @@ public class ComputerPlayer {
 
     }
 
+    public void setInLoop(boolean inLoop)
+    {
+        this.inLoop = inLoop;
+    }
+
     private int[] getBoardSpaces()
     {
         int[] playablePositions = new int[61];
@@ -536,6 +612,15 @@ public class ComputerPlayer {
             int temp = ints[i];
             ints[i] = ints[randomPosition];
             ints[randomPosition] = temp;
+        }
+    }
+
+    private static class DescIntArrayComparator implements Comparator<int[]>
+    {
+        @Override
+        public int compare(int[] arr1, int[] arr2)
+        {
+            return arr1[0] > arr2[0] ? 1 : -1;
         }
     }
 
