@@ -19,7 +19,7 @@ public class AbaloneMenu extends JFrame
 	private JScrollPane rulesScrollPane = new JScrollPane(rulesPanel);
 	private JPanel goodByePanel = new JPanel();
 	private JLabel goodByeLabel = new JLabel("Thanks for playing!", SwingConstants.CENTER);
-	private Color boardColorLight = new Color(160, 130, 105);
+	private Color boardColorLight = new Color(182, 155, 126);
 	private Color boardColorDark = new Color(75, 45, 30);
 
 	//Constructor

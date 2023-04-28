@@ -41,22 +41,17 @@ public class AbalonePanel extends JPanel
     private boolean forDisplay = false;
 
     //Colors
-    private Color backgroundColor = new Color(160, 130, 105);
-    private Color p1Color = new Color(35, 35, 35);
+    private Color backgroundColor = new Color(182, 155, 136);
+    private Color p1Color = new Color(30, 35, 40);
     private Color p1Selected = new Color(94, 0, 0);
     private Color p2Color = new Color(245, 245, 245);
     private Color p2Selected = new Color(165, 184, 239);
-    private Color boardLight = new Color(145, 115, 90);
-    private Color boardDark = new Color(95, 65, 50);
+    private Color boardLight = new Color(150, 115, 90);
+    private Color boardDark = new Color(75, 55, 45);
     private Color boardShadow = new Color(65, 45, 30);
-    private Color boardHighlight = new Color(200, 170, 150);
 
     //Radial Paints
-    private RadialGradientPaint p1Paint;
-    private RadialGradientPaint p2Paint;
-    private RadialGradientPaint p1SelectedPaint;
-    private RadialGradientPaint p2SelectedPaint;
-    private RadialGradientPaint boardPaint;
+    private RadialGradientPaint radialPaint;
 
     //Functionality
     private Node secondClicked;
@@ -213,23 +208,23 @@ public class AbalonePanel extends JPanel
                     Color[] p1Colors = {new Color(180, 10, 10), p1Selected, Color.black};
                     Point2D p1Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
                     float[] p1Floats = {0.5f, 0.9f, 1.0f};
-                    p1Paint = new RadialGradientPaint(p1Highlight, (float)pieceSize/2, p1Floats, p1Colors);
-                    g2.setPaint(p1Paint);
+                    radialPaint = new RadialGradientPaint(p1Highlight, (float)pieceSize/2, p1Floats, p1Colors);
+                    g2.setPaint(radialPaint);
                     /*
                     Color[] p1Colors = {Color.white, new Color(140, 8, 8), p1Selected, new Color(70, 0, 0)};
                     Point2D p1Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/3, currNode.getPiece().getY() + pieceSize/3);
                     float[] p1Floats = {0.0f, 0.2f, 0.8f, 1.0f};
-                    p1SelectedPaint = new RadialGradientPaint(p1Highlight, (float)pieceSize/1.4f, p1Floats, p1Colors, MultipleGradientPaint.CycleMethod.REFLECT);
-                    g2.setPaint(p1SelectedPaint); */
+                    radialPaint = new RadialGradientPaint(p1Highlight, (float)pieceSize/1.4f, p1Floats, p1Colors, MultipleGradientPaint.CycleMethod.REFLECT);
+                    g2.setPaint(radialPaint); */
                     //g2.setColor(p1Selected);
                 }
                 else if (currNode.getColor() == 2 && selected.contains(currNode))
                 {
-                    Color[] p2Colors = {Color.white, p2Selected, Color.black};
+                    Color[] p2Colors = {Color.white, p2Selected, new Color(60, 60, 60)};
                     Point2D p2Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
                     float[] p2Floats = {0.0f, 0.9f, 1.0f};
-                    p2SelectedPaint = new RadialGradientPaint(p2Highlight, (float)pieceSize/2, p2Floats, p2Colors);
-                    g2.setPaint(p2SelectedPaint);
+                    radialPaint = new RadialGradientPaint(p2Highlight, (float)pieceSize/2, p2Floats, p2Colors);
+                    g2.setPaint(radialPaint);
                     //g2.setColor(p2Selected);
                 }
                 else if (currNode.getColor() == 0)
@@ -237,8 +232,8 @@ public class AbalonePanel extends JPanel
                     Color[] colors = {boardDark, new Color(110, 75, 60)};
                     Point2D shadow = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
                     float[] floats = {0.85f, 1.0f};
-                    boardPaint = new RadialGradientPaint(shadow, (float)pieceSize/2, floats, colors);
-                    g2.setPaint(boardPaint);
+                    radialPaint = new RadialGradientPaint(shadow, (float)pieceSize/2, floats, colors);
+                    g2.setPaint(radialPaint);
                     //g2.setColor(boardDark);
                 }
                 else if (currNode.getColor() == 1)
@@ -247,10 +242,10 @@ public class AbalonePanel extends JPanel
                     Color[] p1Colors = {p1Color, Color.black};
                     Point2D p1Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
                     float[] p1Floats = {0.85f, 1.0f};
-                    p1Paint = new RadialGradientPaint(p1Highlight, (float)pieceSize/2, p1Floats, p1Colors);
-                    g2.setPaint(p1Paint);
+                    radialPaint = new RadialGradientPaint(p1Highlight, (float)pieceSize/2, p1Floats, p1Colors);
+                    g2.setPaint(radialPaint);
 
-                    /* Seemed gimmicky
+                    /* Seems gimmicky
                     Color[] p1Colors = {Color.white, Color.black, p1Color, new Color(45, 40, 40)};
                     Point2D p1Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/3, currNode.getPiece().getY() + pieceSize/3);
                     float[] p1Floats = {0.0f, 0.2f, 0.8f, 1.0f};
@@ -260,11 +255,11 @@ public class AbalonePanel extends JPanel
                 }
                 else if (currNode.getColor() == 2)
                 {
-                    Color[] p2Colors = {p2Color, Color.black};
+                    Color[] p2Colors = {p2Color, new Color(60, 60, 60)};
                     Point2D p2Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
                     float[] p2Floats = {0.85f, 1.0f};
-                    p2Paint = new RadialGradientPaint(p2Highlight, (float)pieceSize/2, p2Floats, p2Colors);
-                    g2.setPaint(p2Paint);
+                    radialPaint = new RadialGradientPaint(p2Highlight, (float)pieceSize/2, p2Floats, p2Colors);
+                    g2.setPaint(radialPaint);
                     //g2.setColor(p2Color);
                 }
                 g2.fill(graph.getPiece(i));
