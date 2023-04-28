@@ -362,8 +362,8 @@ public class AbalonePanel extends JPanel
 
         // Create large hexagon
         Point center = new Point(this.getWidth()/2, this.getHeight()/2);
-        Point offCenterLow = new Point(center.x, center.y+2);
-        Point offCenterHigh = new Point(center.x, center.y-2);
+        Point offCenterLow = new Point(center.x, center.y+5);
+        Point offCenterHigh = new Point(center.x, center.y-5);
         int radius1 = (int) (this.getHeight()/1.9);
         if (this.getWidth()  < this.getHeight() + pieceSize*2)
             radius1 = (int) (this.getWidth()/2.3);
@@ -376,8 +376,8 @@ public class AbalonePanel extends JPanel
         hexInterior = createHexagon(center, radius2);
 
         // Create offset hexagons as a shadow
-        exteriorShadow = createHexagon(offCenterLow, radius1+3);
-        interiorShadow = createHexagon(offCenterLow, radius2+3);
+        exteriorShadow = createHexagon(offCenterLow, radius1+radius1/30);
+        interiorShadow = createHexagon(offCenterLow, radius2+radius2/30);
         // Create offset hexagons as a highlight
         //exteriorHighlight = createHexagon(offCenterHigh, radius1);
         //interiorHighlight = createHexagon(offCenterHigh, radius2);
