@@ -4,3 +4,9 @@ Images/BeforePush.png
 .idea/
 
 *.class
+*.class
+*.class
+*.class
+*.class
+target/classes/abalone/AbalonePanel.class
+target/classes/abalone/ComputerPlayer.class
