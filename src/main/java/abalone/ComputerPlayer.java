@@ -4,19 +4,19 @@ package abalone;
 //Player takes a AbaloneGraph Object for construction.
 //For each turn, the updated graph should be passed to the Player to keep track of its nodes and positions
 //Calling the get move method provides the nodes for the next computer move
-import javax.swing.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ComputerPlayer {
-    private ArrayList<Node> computerNodes;
-    private ArrayList<Node> edgePieces;
-    private AbaloneGraph graph;
-    private ArrayList<Node> nonEdgePieces;
-    private ArrayList<Node> opponentNodes;
-    private int computerColor;
-    private int opponentColor;
-    private int[] playablePositions;
-    private boolean inLoop = false;
+    protected ArrayList<Node> computerNodes;
+    protected ArrayList<Node> edgePieces;
+    protected AbaloneGraph graph;
+    protected ArrayList<Node> nonEdgePieces;
+    protected ArrayList<Node> opponentNodes;
+    protected int computerColor;
+    protected int opponentColor;
+    protected int[] playablePositions;
+    protected boolean inLoop;
 
     public ComputerPlayer(AbaloneGraph g, int color)
     {
@@ -29,7 +29,7 @@ public class ComputerPlayer {
         opponentColor = 1;
         if (computerColor == 1)
             opponentColor = 2;
-        
+
         playablePositions = getBoardSpaces();
         randomizeArray(playablePositions);
         for(int i=0; i<playablePositions.length; i++)
@@ -42,11 +42,11 @@ public class ComputerPlayer {
                     edgePieces.add(currNode);
                 else if(!currNode.isEdge())
                     nonEdgePieces.add(currNode);
-            }   
+            }
             if(currNode.getColor()==opponentColor)
             {
                 opponentNodes.add(currNode);
-            }   
+            }
         }
         edgePieces.trimToSize();
         nonEdgePieces.trimToSize();
@@ -85,13 +85,13 @@ public class ComputerPlayer {
     //Returns the nodes and direction for the next move
     //The system to determine moves is to prioritise edge pieces and move them from the edge
     //The moves are ranked as follows:
-    // 1. If its on an edge in danger and can escape danger and the edge 
+    // 1. If its on an edge in danger and can escape danger and the edge
     // 2. If its on an edge in danger and can escape danger
     // 3. If it can capture a white piece
-    // 4. If it is an edge and can push a white node 
-    // 5. If it is on an edge and can escape edge 
+    // 4. If it is an edge and can push a white node
+    // 5. If it is on an edge and can escape edge
     // 6. If it can push a white
-    // 7. Some other possible move 
+    // 7. Some other possible move
     //The int[] returned is ordered as follows: [first node ID from graph, destination piece ID from graph, direction]
     public int[] getMove()
     {
@@ -112,11 +112,6 @@ public class ComputerPlayer {
         if(move[0]!=-1)
             return move;
         if (!inLoop)
-            move = moveToCenter();
-        if(move[0]!=-1)
-            return move;
-        //System.out.println("Didn't move to center");
-        if (!inLoop)
             move = edgeEscape();
         if(move[0]!=-1)
             return move;
@@ -124,11 +119,6 @@ public class ComputerPlayer {
             move = pushWhite();
         if(move[0]!=-1)
             return move;
-        if (!inLoop)
-            move = uniteLonelyFriends();
-        if(move[0]!=-1)
-            return move;
-        System.out.println("Didn't unite lonelies");
         if (!inLoop)
             move = uniteFriends();
         if(move[0]!=-1)
@@ -138,12 +128,10 @@ public class ComputerPlayer {
             return move;
         int[] error = {-1, -1, -1};
         return error;
-
-
     }
 
     //Returns a move if a node is found in danger that can escape the edge and danger. Otherwise returns {-1, -1, -1}
-    private int[] dangerEscapeBoth()
+    protected int[] dangerEscapeBoth()
     {
         Node toMove = null;
         int direction = -1;
@@ -151,17 +139,17 @@ public class ComputerPlayer {
         for(int i=0; i<edgePieces.size(); i++)
         {
             Node piece1 = edgePieces.get(i);
-            int[] inDanger = graph.inDangerFrom(piece1); 
+            int[] inDanger = graph.inDangerFrom(piece1);
             for(int j=1; j<12 && inDanger[0]!=-1; j+=2)
             {
                 Node piece2 = piece1.getSibling(j);
                 Node dest= graph.destination(piece1, piece2, j);
                 if(dest!= null && !dest.bordersEdge() && !dest.isEdge())
                 {
-                        dest.setColor(0);
-                        toMove = piece1;
-                        direction = j; 
-                        destination = dest;
+                    dest.setColor(0);
+                    toMove = piece1;
+                    direction = j;
+                    destination = dest;
                 }
             }
         }
@@ -171,7 +159,7 @@ public class ComputerPlayer {
             //System.out.println("escapeDanger&Edge: " + Arrays.toString(move));
             return move;
         }
-        else 
+        else
         {
             int[] move = {-1, -1, -1};
             return move;
@@ -179,7 +167,7 @@ public class ComputerPlayer {
 
     }
     //Returns a move if a node is found in danger that can escape danger. Otherwise returns {-1, -1, -1}
-    private int[] dangerEscapeDanger()
+    protected int[] dangerEscapeDanger()
     {
         Node toMove = null;
         int direction = -1;
@@ -203,25 +191,25 @@ public class ComputerPlayer {
                         direction =j;
                         destination = dest;
                     }
-                    else 
+                    else
                         dest.setColor(0);
                 }
             }
-        } 
+        }
         if(toMove!=null && direction!=-1 && destination!=null)
         {
             int[] move = {toMove.getID(), destination.getID(), direction};
             //System.out.println("dangerEscapeDanger: " + Arrays.toString(move));
             return move;
         }
-        else 
+        else
         {
             int[] move = {-1, -1, -1};
             return move;
-        }  
+        }
     }
     //Returns a move if an opponent piece can be captured. Otherwise returns {-1, -1, -1}
-    private int[] captureOpponent()
+    protected int[] captureOpponent()
     {
         int toMove = -1;
         int direction = -1;
@@ -242,14 +230,14 @@ public class ComputerPlayer {
             int[] move = {piece1.getID(), destination.getID(), direction};
             return move;
         }
-        else 
+        else
         {
             int[] move = {-1, -1, -1};
             return move;
         }
     }
     //Returns a move if a node is found on an edge and can push an opponent. Otherwise returns {-1, -1, -1}
-    private int[] edgePush()
+    protected int[] edgePush()
     {
         Node toMove = null;
         int direction = -1;
@@ -258,7 +246,7 @@ public class ComputerPlayer {
             for(int j=1; j<12; j+=2)
             {
                 Node piece = edgePieces.get(i);
-                boolean canPush = graph.canPush(piece, j); 
+                boolean canPush = graph.canPush(piece, j);
                 if(canPush)
                 {
                     toMove = edgePieces.get(i);
@@ -273,14 +261,14 @@ public class ComputerPlayer {
             int[] move = {toMove.getID(), destination.getID(), direction};
             return move;
         }
-        else 
+        else
         {
             int[] move = {-1, -1, -1};
             return move;
         }
     }
     //Returns a move if a node is found on an edge and can escape edge. Otherwise returns {-1, -1, -1}
-    private int[] edgeEscape()
+    protected int[] edgeEscape()
     {
         Node toMove = null;
         int direction = -1;
@@ -306,14 +294,14 @@ public class ComputerPlayer {
             int[] move = {toMove.getID(), destination.getID(), direction};
             return move;
         }
-        else 
+        else
         {
             int[] move = {-1, -1, -1};
             return move;
-        } 
+        }
     }
     //Returns a move if a node is found that can push an opponent. Otherwise returns {-1, -1, -1}
-    private int[] pushWhite()
+    protected int[] pushWhite()
     {
         Node toMove = null;
         int direction = -1;
@@ -337,137 +325,6 @@ public class ComputerPlayer {
             int[] move = {toMove.getID(), destination.getID(), direction};
             return move;
         }
-        else 
-        {
-            int[] move = {-1, -1, -1};
-            return move;
-        }
-    }
-
-    //Returns a move than will maximize the sum of the computer's nodes' levels
-    private int[] moveToCenter()
-    {
-        int initialSum = ComputerPlayer.getLevelSum(graph, computerColor);
-        //System.out.println("ComputerSumInitial: " + initialSum);
-        int bestSum = initialSum;
-        int[] bestMove = {-1, -1, -1};
-        AbaloneGraph testGraph = graph.clone();
-
-        for(int i=0; i<computerNodes.size(); i++)
-        {
-            int currPieceID = computerNodes.get(i).getID();
-            //System.out.println("\n Testing node: " + currPieceID);
-            //System.out.println("Best Sum so far: " + bestSum);
-            //System.out.println("Best Move so far: " + Arrays.toString(bestMove));
-            Node currPiece = testGraph.getNode(currPieceID);
-            Node piece2 = null;
-
-            for(int j=1; j<12; j+=2)
-            {
-                piece2 = currPiece.getSibling(j);
-                if (!piece2.isEdge() && !piece2.bordersEdge())
-                {
-                    Node dest = testGraph.destination(currPiece, piece2, j);
-                    //System.out.println("TestDestination " + j + ": " + dest);
-                    if (dest != null && !dest.bordersEdge())
-                    {
-                        int[] testMove = {currPieceID, dest.getID(), j};
-                        //System.out.println("Testing Move: " + Arrays.toString(testMove));
-                        testGraph.makeInlineMove(currPiece, dest, j);
-                        int testSum = ComputerPlayer.getLevelSum(testGraph, computerColor);
-                        //System.out.println("Test Sum: " + testSum);
-                        //Reset graph and piece after testing move
-                        testGraph = graph.clone();
-                        currPiece = testGraph.getNode(currPieceID);
-                        if (testSum > bestSum)
-                        {
-                            bestSum = testSum;
-                            bestMove = testMove;
-                            //System.out.println("Best Move so far: " + Arrays.toString(bestMove));
-                            //System.out.println("Best Sum so far: " + bestSum);
-                        }
-                    }
-                }
-            }
-        }
-
-        //System.out.println("ComputerSumBest: " + bestSum);
-        if (bestSum > initialSum)
-        {
-            int[] move = bestMove;
-            //System.out.println("moveToCenter: " + Arrays.toString(move));
-            return move;
-        }
-        else
-        {
-            int[] move = {-1, -1, -1};
-            return move;
-        }
-
-    }
-
-    //Returns a move that will push pieces to join other pieces of its own color
-    private int[] uniteLonelyFriends()
-    {
-        System.out.println(" Unite Lonely friends");
-        PriorityQueue<int[]> sortedLonelies = new PriorityQueue<>(new DescIntArrayComparator());
-        //Find add the number of friends a piece has and its position to a minHeap sorted on least number of friends
-        for (int i = 0; i < computerNodes.size(); ++i)
-        {
-            int[] numFriends =  {computerNodes.get(i).getNumFriends(), computerNodes.get(i).getID()};
-            //System.out.println("i" + i + ": " + Arrays.toString(numFriends));
-            sortedLonelies.add(numFriends);
-        }
-
-        /*System.out.print("Sorted By Loneliness:");
-        while (sortedLonelies.size() != 0)
-        {
-            System.out.print(" " + Arrays.toString(sortedLonelies.poll()));
-        }
-        System.out.println(); */
-
-
-        boolean friendsFound = false;
-        Node toMove = null;
-        int direction = -1;
-        Node destination = null;
-        while (sortedLonelies.size() !=0 && !friendsFound)
-        {
-            System.out.println("Size: " + sortedLonelies.size());
-            int[] polled = sortedLonelies.poll();
-            int currID = polled[1];
-            System.out.println("CurrID:" + currID);
-            Node piece1 = graph.getNode(currID);
-            for(int j=1; j<12; j+=2)
-            {
-                //Sets the piece to search in order of fewest neighbors
-                Node piece2 = piece1.getSibling(j);
-                System.out.println("Checking Node: " + piece1.getID() + " & " + piece2.getID());
-                Node dest = graph.destination(piece1, piece2, j);
-                System.out.println("Testing Destination: " + dest);
-                if (dest != null && !dest.isEdge() && !dest.bordersEdge())
-                {
-                    for (int k = 1; k < 12; k += 2)
-                    {
-                        if ((k == (j + 2) % 12 || k == (j - 2) % 12 || k == j) && dest.getSibling(k).getColor() == piece1.getColor())
-                        {
-                            //System.out.println("k: " + k);
-                            toMove = piece1;
-                            direction = j;
-                            destination = dest;
-                            friendsFound = true;
-                            //System.out.println("toMove: " + toMove + " direction: " + direction + " destination: " + destination);
-                        }
-                    }
-                }
-            }
-        }
-        if(toMove!=null && direction!=-1 && destination!=null)
-        {
-            int[] move = {toMove.getID(), destination.getID(), direction};
-            System.out.println(Arrays.toString(move));
-            return move;
-        }
         else
         {
             int[] move = {-1, -1, -1};
@@ -476,7 +333,7 @@ public class ComputerPlayer {
     }
 
     //Returns a move that will push pieces to join other pieces of its own color
-    private int[] uniteFriends()
+    protected int[] uniteFriends()
     {
         //System.out.println(" Cole is attempting to fix this method for Louis.");
         boolean friendsFound = false;
@@ -523,7 +380,7 @@ public class ComputerPlayer {
     }
 
     //Returns a move the next possible move. Otherwise returns {-1, -1, -1}
-    private int[] otherMove()
+    protected int[] otherMove()
     {
         //System.out.println("OtherMove");
         //Moves on that won't go to an edge
@@ -536,8 +393,8 @@ public class ComputerPlayer {
                 Node dest = graph.destination(piece1, piece2, j);
                 if(dest!=null && !dest.bordersEdge() && !dest.isEdge())
                 {
-                        int[] move = {piece1.getID(), dest.getID(), j};
-                        return move;
+                    int[] move = {piece1.getID(), dest.getID(), j};
+                    return move;
                 }
 
             }
@@ -560,7 +417,7 @@ public class ComputerPlayer {
                         int[] move = {piece1.getID(), dest.getID(), j};
                         return move;
                     }
-                    else 
+                    else
                         dest.setColor(0);
 
                 }
@@ -572,13 +429,12 @@ public class ComputerPlayer {
         return move;
 
     }
-
     public void setInLoop(boolean inLoop)
     {
         this.inLoop = inLoop;
     }
 
-    private int[] getBoardSpaces()
+    protected int[] getBoardSpaces()
     {
         int[] playablePositions = new int[61];
         int currPosition = 0;
@@ -593,18 +449,7 @@ public class ComputerPlayer {
         return playablePositions;
     }
 
-    private static int getLevelSum(AbaloneGraph g, int player)
-    {
-        int levelSum = 0;
-        for (int i = 0; i < g.GRAPH_SIZE; ++i)
-        {
-            if (g.getNode(i).getColor() == player)
-                levelSum += g.getNode(i).getLevel();
-        }
-        return levelSum;
-    }
-
-    private void randomizeArray(int[] ints)
+    protected void randomizeArray(int[] ints)
     {
         for (int i = 0; i < ints.length; ++i)
         {
@@ -612,15 +457,6 @@ public class ComputerPlayer {
             int temp = ints[i];
             ints[i] = ints[randomPosition];
             ints[randomPosition] = temp;
-        }
-    }
-
-    private static class DescIntArrayComparator implements Comparator<int[]>
-    {
-        @Override
-        public int compare(int[] arr1, int[] arr2)
-        {
-            return arr1[0] > arr2[0] ? 1 : -1;
         }
     }
 
