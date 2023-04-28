@@ -108,10 +108,10 @@ public class ComputerPlayer {
         move = edgePush();
         if(move[0]!=-1)
             return move;
-        move = moveToCenter();
+        /*move = moveToCenter();
         if(move[0]!=-1)
             return move;
-        System.out.println("Didn't move to center");
+        System.out.println("Didn't move to center");*/
         move = edgeEscape();
         if(move[0]!=-1)
             return move;
@@ -338,7 +338,7 @@ public class ComputerPlayer {
         int initialSum = ComputerPlayer.getLevelSum(graph, computerColor);
         System.out.println("ComputerSumInitial: " + initialSum);
         int bestSum = initialSum;
-        int[] bestMove = new int[3];
+        int[] bestMove = {-1, -1, -1};
         AbaloneGraph testGraph = graph.clone();
 
         int frameWidth = 400;
@@ -356,7 +356,6 @@ public class ComputerPlayer {
 
         for(int i=0; i<computerNodes.size(); i++)
         {
-            testGraph = graph.clone();
             int currPieceID = computerNodes.get(i).getID();
             System.out.println("\n Testing node: " + currPieceID);
             System.out.println("Best Sum so far: " + bestSum);
@@ -365,7 +364,6 @@ public class ComputerPlayer {
             System.out.println("Testing node: " + currPiece);
             for(int j=1; j<12; j+=2)
             {
-                testGraph = graph.clone();
                 Node piece2 = currPiece.getSibling(j);
                 if (!piece2.isEdge())
                 {
@@ -376,12 +374,13 @@ public class ComputerPlayer {
                         int[] testMove = {currPiece.getID(), dest.getID(), j};
                         System.out.println("Testing Move: " + Arrays.toString(testMove));
                         testGraph.makeInlineMove(currPiece, dest, j);
-                        int testSum = getLevelSum(testGraph, computerColor);
+                        int testSum = ComputerPlayer.getLevelSum(testGraph, computerColor);
                         System.out.println("Test Sum: " + testSum);
                         if (testSum > bestSum)
                         {
                             bestSum = testSum;
                             bestMove = testMove;
+                            System.out.println("Best Move so far: " + Arrays.toString(bestMove));
                             System.out.println("Best Sum so far: " + bestSum);
                             testGraph = graph.clone();
                         }
@@ -408,7 +407,7 @@ public class ComputerPlayer {
     //Returns a move that will push pieces to join other pieces of its own color
     private int[] uniteFriends()
     {
-        System.out.println(" Cole is attempting to fix this method for Louis.");
+        //System.out.println(" Cole is attempting to fix this method for Louis.");
         boolean friendsFound = false;
         Node toMove = null;
         int direction = -1;
