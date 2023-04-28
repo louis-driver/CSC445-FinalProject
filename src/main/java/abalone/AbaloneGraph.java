@@ -28,7 +28,7 @@ public class AbaloneGraph
         this.setLevels();
     }
 
-    //Default constructor creates the classic board
+    //Constructor creates a board with pieces for each player given the passed directions
     public AbaloneGraph(int[] p1Spaces, int[] p2Spaces)
     {
         this.createGraph(p1Spaces, p2Spaces);
@@ -41,6 +41,7 @@ public class AbaloneGraph
     {
         Arrays.sort(p1Spaces);
         Arrays.sort(p2Spaces);
+        //TODO prevent duplicate positions in both arrays
 
         boolean incrementing = true;
         int rowSize = 6;
