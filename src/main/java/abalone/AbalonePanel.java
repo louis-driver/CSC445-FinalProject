@@ -263,8 +263,9 @@ public class AbalonePanel extends JPanel
                     //g2.setColor(p2Color);
                 }
                 g2.fill(graph.getPiece(i));
-                //Uncomment to view node positions
+                //Uncomment to view node positions or levels
                 //g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
+                //g2.drawString(""+graph.getNode(i).getLevel(), (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
             }
         }
 

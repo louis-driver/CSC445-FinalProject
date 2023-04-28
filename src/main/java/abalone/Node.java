@@ -13,6 +13,7 @@ public class Node
     private Node sibling9;
     private Node sibling11;
     private boolean isEdge;
+    private int level = -1;
     private Ellipse2D.Double piece;
     private Node next;
 
@@ -60,6 +61,12 @@ public class Node
         this.piece = piece;
     }
 
+    //Sets the distance from the edge of the board, an edge will be 0, bordering an edge is 1, and so on
+    public void setLevel(int lvl)
+    {
+        level = lvl;
+    }
+
     //Returns the sibling node for a given clock
     // orientation
     public Node getSibling(int sibNum)
@@ -99,6 +106,12 @@ public class Node
     public Ellipse2D getPiece()
     {
         return this.piece;
+    }
+
+    //Returns the level of a piece, 0 signifies an edge, a node with level 1 borders and edge, and so on
+    public int getLevel()
+    {
+        return level;
     }
 
     //Specifies if the node is a playable location (false)
@@ -149,6 +162,16 @@ public class Node
             return false;  
     }
 
+    public int minSiblingLevel()
+    {
+        int minLevel = 10;
+        for (int i = 1; i < 12; i+=2)
+        {
+            if (this.getSibling(i).getLevel() < minLevel && this.getSibling(i).getLevel() != -1)
+                minLevel = this.getSibling(i).getLevel();
+        }
+        return minLevel;
+    }
 
     public String toString()
     {

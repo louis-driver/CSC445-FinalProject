@@ -14,8 +14,9 @@ public class AbaloneGraph
 
     public AbaloneGraph()
     {
-        createGraph();
+        this.createGraph();
         this.setSiblings();
+        this.setLevels();
     }
 
     //Creates all nodes in the abalone board graph
@@ -574,6 +575,29 @@ public class AbaloneGraph
         }
         else 
             return false;
+    }
+
+    private void setLevels()
+    {
+        for (int i = 0; i < graph.length/2; ++i)
+        {
+            if (graph[i].isEdge())
+                graph[i].setLevel(0);
+            else if(graph[i].bordersEdge())
+                graph[i].setLevel(1);
+            else
+                graph[i].setLevel(graph[i].minSiblingLevel() + 1);
+        }
+        //Call the reverse because the first for loop messes up around the middle of the board
+        for (int i = graph.length-1; i >= graph.length/2; --i)
+        {
+            if (graph[i].isEdge())
+                graph[i].setLevel(0);
+            else if(graph[i].bordersEdge())
+                graph[i].setLevel(1);
+            else
+                graph[i].setLevel(graph[i].minSiblingLevel() + 1);
+        }
     }
 
     public int getPlayer1Score()
