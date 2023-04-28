@@ -1,31 +1,53 @@
 package abalone;
 import javax.print.attribute.standard.Destination;
 import java.awt.geom.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class AbaloneGraph
 
 //Bubble sort from https://www.geeksforgeeks.org/bubble-sort/
 
 //This class creates a graph data structure from linked nodes and represents a game of Abalone
 {
-    private Node[] graph = new Node[91];
+    public final int GRAPH_SIZE = 91;
+    private Node[] graph = new Node[GRAPH_SIZE];
     private int player1Score;
     private int player2Score;
 
+    //Traditional starting positions
+    public final int[] P1_CLASSIC = {64, 65, 66, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83};
+    public final int[] P2_CLASSIC = {7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 19, 24, 25, 26};
 
+
+    //Default constructor creates the classic board
     public AbaloneGraph()
     {
-        this.createGraph();
+        this.createGraph(P1_CLASSIC, P2_CLASSIC);
+        this.setSiblings();
+        this.setLevels();
+    }
+
+    //Default constructor creates the classic board
+    public AbaloneGraph(int[] p1Spaces, int[] p2Spaces)
+    {
+        this.createGraph(p1Spaces, p2Spaces);
         this.setSiblings();
         this.setLevels();
     }
 
     //Creates all nodes in the abalone board graph
-    private void createGraph()
+    private void createGraph(int[] p1Spaces, int[] p2Spaces)
     {
+        Arrays.sort(p1Spaces);
+        Arrays.sort(p2Spaces);
+
         boolean incrementing = true;
         int rowSize = 6;
         int numRows = 11;
         int currPosition = 0;
+        int currP1Position = 0;
+        int currP2Position = 0;
 
         for (int i = 0; i < numRows; ++i)
         {
@@ -39,12 +61,20 @@ public class AbaloneGraph
                     //Starting edge of board or an edge along the side
                     if (rowSize==6 || j==0 || j==rowSize-1)
                         graph[currPosition] = new Node(0, currPosition, true);
-                    //Starting row for Player2's pieces
-                    else if (rowSize==7 || rowSize==8)
+                    //Any spaces where the passed p1Space position equals the currPosition should have a p1 piece
+                    else if (p1Spaces[currP1Position] == currPosition)
+                    {
+                        graph[currPosition] = new Node(1, currPosition, false);
+                        if (currP1Position < p1Spaces.length-1)
+                            ++currP1Position;
+                    }
+                    //Any spaces where the passed p2Space position equals the currPosition should have a p2 piece
+                    else if (p2Spaces[currP2Position] == currPosition)
+                    {
                         graph[currPosition] = new Node(2, currPosition, false);
-                    //Extra three pieces in middle of the third row out
-                    else if (rowSize==9 && (j==3 || j==4 || j==5))
-                        graph[currPosition] = new Node(2, currPosition, false);
+                        if (currP2Position < p2Spaces.length-1)
+                            ++currP2Position;
+                    }
                     //Any other empty board space that is not an edge
                     else
                         graph[currPosition] = new Node(0, currPosition, false);
@@ -54,12 +84,20 @@ public class AbaloneGraph
                     //Starting edge of board or an edge along the side
                     if (rowSize==6 || j==0 || j==rowSize-1)
                         graph[currPosition] = new Node(0, currPosition, true);
-                    //Starting row for Player1's pieces
-                    else if (rowSize==7 || rowSize==8)
+                    //Any spaces where the passed p1Space position equals the currPosition should have a p1 piece
+                    else if (p1Spaces[currP1Position] == currPosition)
+                    {
                         graph[currPosition] = new Node(1, currPosition, false);
-                    //Extra three pieces in middle of the third row out
-                    else if (rowSize==9 && (j==3 || j==4 || j==5))
-                        graph[currPosition] = new Node(1, currPosition, false);
+                        if (currP1Position < p1Spaces.length-1)
+                            ++currP1Position;
+                    }
+                    //Any spaces where the passed p2Space position equals the currPosition should have a p2 piece
+                    else if (p2Spaces[currP2Position] == currPosition)
+                    {
+                        graph[currPosition] = new Node(2, currPosition, false);
+                        if (currP2Position < p2Spaces.length-1)
+                            ++currP2Position;
+                    }
                     //Any other empty board space that is not an edge
                     else
                         graph[currPosition] = new Node(0, currPosition, false);
@@ -397,7 +435,8 @@ public class AbaloneGraph
     // Returns null if the move is not valid 
     public Node destination(Node first, Node second, int direction)
     {
-        Node next = first.getSibling(direction);
+        //System.out.println("destination:" + first.getID() + ", " + second.getID() + "   direction:" + direction);
+        Node next = second;
         int playerColor = first.getColor();
         int opponentColor = 1;
         if (playerColor == 1)
@@ -405,16 +444,17 @@ public class AbaloneGraph
         int numPlayers = 1;
         int numOpponents = 0;
 
-        //Returns null if the two nodes arent siblings 
-        if(direction==-1)
+        //Returns null if the two nodes aren't siblings
+        if(!first.hasNeighbor(second))
             return null;
-        //Iterates through spaces held by players color until a opposite color, empty space, or edge is found
+        //Iterates through spaces held by players color until an opposite color, empty space, or edge is found
         //Counts number of pieces in a row of the color whose turn it is
         while(next!=null && next.getColor()==playerColor)
         {
+            //System.out.print("next Color: " + next.getColor() + " playerColor: " + playerColor);
             next = next.getSibling(direction);
             numPlayers++;
-            //System.out.println("numPlayers:" + numPlayers);
+            //System.out.println(" numPlayers:" + numPlayers);
         }
         //If player's pieces exceed 3 return null or pushing self off edge
         if(numPlayers > 3 || next.isEdge())
@@ -431,6 +471,7 @@ public class AbaloneGraph
         {
             next = next.getSibling(direction);
             numOpponents++;
+            //System.out.println("numOpponents:" + numPlayers);
         }
         //If number of opponents pieces is less than players pieces return 
         // the empty space after last opponents node in the row
@@ -598,6 +639,32 @@ public class AbaloneGraph
             else
                 graph[i].setLevel(graph[i].minSiblingLevel() + 1);
         }
+    }
+
+    public AbaloneGraph clone()
+    {
+        ArrayList<Integer> p1Spaces = new ArrayList<>();
+        ArrayList<Integer> p2Spaces = new ArrayList<>();
+        for (int i = 0; i < GRAPH_SIZE; ++i)
+        {
+            if(graph[i].getColor() == 1)
+                p1Spaces.add(i);
+            else if(graph[i].getColor() == 2)
+                p2Spaces.add(i);
+        }
+        p1Spaces.trimToSize();
+        p2Spaces.trimToSize();
+        int[] p1Ints = new int[p1Spaces.size()];
+        for (int i = 0; i < p1Ints.length; ++i)
+        {
+            p1Ints[i] = p1Spaces.get(i);
+        }
+        int[] p2Ints = new int[p2Spaces.size()];
+        for (int i = 0; i < p2Ints.length; ++i)
+        {
+            p2Ints[i] = p2Spaces.get(i);
+        }
+        return new AbaloneGraph(p1Ints, p2Ints);
     }
 
     public int getPlayer1Score()
