@@ -173,6 +173,28 @@ public class Node
         return minLevel;
     }
 
+    //Returns the number of neighbors that are it's same color
+    public int getNumFriends()
+    {
+        int numFriends = 0;
+        for (int i = 1; i < 12; i+=2)
+        {
+            if (getSibling(i).getColor() == color)
+                ++numFriends;
+        }
+        return numFriends;
+    }
+
+    public void printSiblings()
+    {
+        String siblings = "";
+        for (int i = 1; i < 12; i+=2)
+        {
+            siblings += " " + getSibling(i).getID();
+        }
+        System.out.println(siblings);
+    }
+
     public String toString()
     {
         String result = "Position: " + getID() + " Color: " + getColor() + " IsEdge: " + isEdge();
