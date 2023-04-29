@@ -434,6 +434,11 @@ public class ComputerPlayer {
         this.inLoop = inLoop;
     }
 
+    public int getComputerColor()
+    {
+        return computerColor;
+    }
+
     protected int[] getBoardSpaces()
     {
         int[] playablePositions = new int[61];
