@@ -9,9 +9,11 @@ abalone\AbalonePanel$1.class
 abalone\ComputerPlayer.class
 abalone\ComputerTest$ComputerMoves.class
 abalone\AbalonePanel$ComputerMove2.class
+abalone\ComputerPlayerV2.class
 abalone\AbaloneMenu$1.class
 abalone\Sound.class
 abalone\AbaloneGraph.class
+abalone\ComputerPlayerV2$DescIntArrayComparator.class
 abalone\RulesPanel.class
 abalone\AbaloneMenu.class
 abalone\AbalonePanel.class
