@@ -92,7 +92,9 @@ public class AbalonePanel extends JPanel
         if (playComputer)
         {
             playingComputer = true;
-            this.ai1 = new ComputerPlayer(this.graph, 2);
+            //Uncomment to test new ComputerPlayer
+            this.ai1 = new ComputerPlayerV2(this.graph, 2);
+            //this.ai1 = new ComputerPlayer(this.graph, 2);
         }
         //this.ai2 = new ComputerPlayer(graph, 1);
         if (displayOnly)
@@ -264,7 +266,7 @@ public class AbalonePanel extends JPanel
                 }
                 g2.fill(graph.getPiece(i));
                 //Uncomment to view node positions or levels
-                //g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
+                g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
                 //g2.drawString(""+graph.getNode(i).getLevel(), (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
             }
         }
