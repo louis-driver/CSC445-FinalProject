@@ -720,6 +720,12 @@ public class AbaloneGraph
         return positions;
     }
 
+    public void resetGraph()
+    {
+        this.graph = new Node[GRAPH_SIZE];
+        this.createGraph(P1_CLASSIC, P2_CLASSIC);
+    }
+
     public int getPlayer1Score()
     {
         return player1Score;
