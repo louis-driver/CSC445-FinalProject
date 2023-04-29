@@ -77,6 +77,7 @@ public class AbaloneMenu extends JFrame
 			menuButtons[i].addActionListener(actionListener);
 			menuButtons[i].setForeground(Color.WHITE);
 			menuButtons[i].setBackground(boardColorDark);
+			menuButtons[i].setFont(new Font("Times New Roman", Font.ITALIC, 30));
 		}
 		menuButtons[3].setForeground(Color.RED);
 		
@@ -93,8 +94,8 @@ public class AbaloneMenu extends JFrame
 			buttonPanels[i].setLayout(new BorderLayout());
 			buttonPanels[i].setOpaque(false);
 			buttonPanels[i].add(menuButtons[i]);
-			buttonPanels[i].setMinimumSize(new Dimension(250, 40));
-			buttonPanels[i].setMaximumSize(new Dimension(250, 40));
+			buttonPanels[i].setMinimumSize(new Dimension(300, 60));
+			buttonPanels[i].setMaximumSize(new Dimension(300, 60));
 
 			buttonSectionPanel.add(buttonPanels[i]);
 			buttonSectionPanel.add(Box.createRigidArea(new Dimension(0,10)));
