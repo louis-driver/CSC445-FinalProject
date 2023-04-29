@@ -102,6 +102,15 @@ public class AbalonePanel extends JPanel
         
     }
 
+    public AbalonePanel(AbaloneGraph g, ComputerPlayer computerPlayer)
+    {
+        this.graph = g;
+        this.addMouseListener(new MoveAdapter());
+        playingComputer = true;
+        //Uncomment to test new ComputerPlayer
+        this.ai1 = computerPlayer;
+        //this.ai1 = new ComputerPlayer(this.graph, 2);
+    }
     //Iterates through the graph to assign board spaces proportional to the size
     // of the panel.
     private void assignBoardSpaces()
@@ -266,7 +275,7 @@ public class AbalonePanel extends JPanel
                 }
                 g2.fill(graph.getPiece(i));
                 //Uncomment to view node positions or levels
-                g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
+                //g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
                 //g2.drawString(""+graph.getNode(i).getLevel(), (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
             }
         }
