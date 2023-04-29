@@ -56,7 +56,7 @@ public class RulesPanel extends JPanel
 		 ruleLabels[8] = new JLabel("          ~ First, left-click the piece at the beginning of the line. Then, right-click");
 		 ruleLabels[9] = new JLabel("               another piece that is adjacent to the piece you selected.");
 		ruleLabels[10] = new JLabel("      - Think of in-line moves like using the first piece in the line to push the other pieces. You can only move");
-        ruleLabels[11] = new JLabel("          up to three pieces total, though: The piece you selected, and the other two pieces you're pushing.");
+        ruleLabels[11] = new JLabel("          up to three pieces total, though: The piece you selected, and the other piece(s) being pushed.");
         ruleLabels[12] = new JLabel("      - The images below show the board before and after an in-line move.");
 		ruleLabels[13] = new JLabel("          ~ Green arrows indicate directions in which the selected piece(s) can move,");
         ruleLabels[14] = new JLabel("               and blue arrows indicate the direction in which a piece has moved.");
