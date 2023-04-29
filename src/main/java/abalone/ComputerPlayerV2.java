@@ -33,50 +33,69 @@ public class ComputerPlayerV2  extends ComputerPlayer
     {
         updatePlayers(graph);
         int[] move = dangerEscapeBoth();
-        if(move[0]!=-1)
+        if(move[0]!=-1){
+            System.out.println("DangerEscapeBoth Move:" + Arrays.toString(move));
             return move;
+        }
         if (!inLoop)
             move = dangerEscapeDanger();
-        if(move[0]!=-1)
+        if(move[0]!=-1){
+            System.out.println("DangerEscapeDanger Move:" + Arrays.toString(move));
             return move;
+        }
         if (!inLoop)
             move = captureOpponent();
-        if(move[0]!=-1)
+        if(move[0]!=-1){
+            System.out.println("CaptureOpponent Move:" + Arrays.toString(move));
             return move;
+        }
         if (!inLoop)
             move = edgePush();
-        if(move[0]!=-1)
+        if(move[0]!=-1){
+            System.out.println("EdgePush Move:" + Arrays.toString(move));
             return move;
+        }
         if (!inLoop)
             move = moveToCenter();
-        if(move[0]!=-1)
+        if(move[0]!=-1){
+            System.out.println("ToCenter Move:" + Arrays.toString(move));
             return move;
-        //System.out.println("Didn't move to center");
+        }
         if (!inLoop)
             move = edgeEscape();
-        if(move[0]!=-1)
+        if(move[0]!=-1){
+            System.out.println("EscapeEdge Move:" + Arrays.toString(move));
             return move;
+        }
         if (!inLoop)
             move = pushWhite();
-        if(move[0]!=-1)
+        if(move[0]!=-1){
+            System.out.println("PushWhite Move:" + Arrays.toString(move));
             return move;
+        }
         if (!inLoop)
             move = uniteLonelyFriends();
-        if(move[0]!=-1)
+        if(move[0]!=-1){
+            System.out.println("UniteLonely Move:" + Arrays.toString(move));
             return move;
-        //System.out.println("Didn't unite lonelies");
+        }
         if (!inLoop)
             move = uniteFriends();
-        if(move[0]!=-1)
+        if(move[0]!=-1){
+            System.out.println("UniteFriends Move:" + Arrays.toString(move));
             return move;
+        }
         move = otherMove();
-        if(move[0]!=-1)
+        if(move[0]!=-1){
+            System.out.println("Other Move:" + Arrays.toString(move));
             return move;
+        }
         int[] error = {-1, -1, -1};
         return error;
     }
 
     //Returns a move than will maximize the sum of the computer's nodes' levels
+    // Essentially moving as many pieces as possible to the center of the board
     protected int[] moveToCenter()
     {
         int initialSum = ComputerPlayerV2.getLevelSum(graph, computerColor);
@@ -139,6 +158,7 @@ public class ComputerPlayerV2  extends ComputerPlayer
     }
 
     //Returns a move that will push pieces to join other pieces of its own color
+    // Prioritizes pieces that neighbor the least amount of friendly pieces
     protected int[] uniteLonelyFriends()
     {
         //System.out.println(" Unite Lonely friends");
@@ -197,7 +217,7 @@ public class ComputerPlayerV2  extends ComputerPlayer
         if(toMove!=null && direction!=-1 && destination!=null)
         {
             int[] move = {toMove.getID(), destination.getID(), direction};
-            System.out.println(Arrays.toString(move));
+            //System.out.println(" Unite Lonely friends: " + Arrays.toString(move));
             return move;
         }
         else
@@ -207,12 +227,7 @@ public class ComputerPlayerV2  extends ComputerPlayer
         }
     }
 
-    public void setInLoop(boolean inLoop)
-    {
-        this.inLoop = inLoop;
-    }
-
-
+    //Sums all of a player's pieces distance from the edge of the board
     protected static int getLevelSum(AbaloneGraph g, int player)
     {
         int levelSum = 0;
@@ -224,6 +239,7 @@ public class ComputerPlayerV2  extends ComputerPlayer
         return levelSum;
     }
 
+    //Used to sort list of int[] by comparing their values at 0
     protected static class DescIntArrayComparator implements Comparator<int[]>
     {
         @Override
