@@ -73,7 +73,7 @@ public class RulesPanel extends JPanel
         ruleLabels[25] = new JLabel(broadsideRight);
         ruleLabels[26] = new JLabel("      - NOTE: The spaces BETWEEN those indicated by the green arrows cannot be selected when making a broadside move.");
         ruleLabels[27] = new JLabel("          ~ The travel direction to these spaces is ambiguous, so selecting them when making a broadside move");
-        ruleLabels[28] = new JLabel("               may cause your line of pieces to move in ways you might not have intended.");
+        ruleLabels[28] = new JLabel("               would cause your line of pieces to move in ways you might not have intended.");
         ruleLabels[29] = new JLabel("      - Do not try to move in directions parallel the your line of pieces when attempting a broadside move.");
         ruleLabels[30] = new JLabel("          ~ This would be equivalent to an in-line move. Find directions on how to make in-line moves above.");
         ruleLabels[31] = new JLabel("      ");
