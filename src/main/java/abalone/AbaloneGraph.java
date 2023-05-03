@@ -346,14 +346,16 @@ public class AbaloneGraph
             }
         }
         //Check if destination is not in the middle
-        int destNeighbors = 0;
-        for(int i=0; i<nodes.length; i++)
+        if (clickedDirection != null)
         {
-            if(nodes[i].hasNeighbor(clickedDirection))
-                destNeighbors ++;
+            int destNeighbors = 0;
+            for (int i = 0; i < nodes.length; i++) {
+                if (nodes[i].hasNeighbor(clickedDirection))
+                    destNeighbors++;
+            }
+            if (destNeighbors > 1)
+                canMove = false;
         }
-        if(destNeighbors>1)
-            canMove=false;
         //Check to see if nodes are in line 
         if(nodes.length>2)
         {
@@ -718,6 +720,79 @@ public class AbaloneGraph
                 positions[1][i] = p2Ints[i];
         }
         return positions;
+    }
+
+    //Returns an array of the possible destinations that could be clicked to make a move given the passed node(s)
+    //TODO
+    public Node[] findPossibleClicks(Node[] selected)
+    {
+        ArrayList<Node> possibles = new ArrayList<>();
+
+        //If one node is selected show options for an inline move
+        if (selected.length == 1)
+        {
+            Node start = selected[0];
+            Node testNode = null;
+            //Iterate through the selected, adding a sibling if the move is possible
+            for (int direction = 1; direction < 12; direction += 2)
+            {
+                testNode = start.getSibling(direction);
+                if (destination(start, testNode, direction) != null)
+                    possibles.add(testNode);
+            }
+        }
+        //A broadside move is attempting to be made
+        else
+        {
+            for (int direction = 1; direction < 12; direction +=2)
+            {
+                if (canMoveBroadside(selected, direction, null))
+                {
+                    int[] numSiblings = new int[selected.length];
+                    //Find the nodes that are on the end of the line
+                    // if the node is only a neighbor with one of the other nodes in the array, it is on the end
+                    for (int i = 0; i < selected.length; ++i)
+                    {
+                        int numSibs = 0;
+                        for (int j = 0; j < selected.length; ++j)
+                        {
+                            if (selected[i].hasNeighbor(selected[j]))
+                                ++numSibs;
+                        }
+                        numSiblings[i] = numSibs;
+                    }
+                    for (int i = 0; i < selected.length; ++i)
+                    {
+                        //Then get the node adjacent to the end pieces in the current direction
+                        if (numSiblings[i] == 1)
+                        {
+                            possibles.add(selected[i].getSibling(direction));
+                        }
+                    }
+                }
+            }
+            //Now remove any possible locations that border more than one piece
+            ArrayList<Node> removes = new ArrayList<>();
+            for (int i = 0; i < possibles.size(); ++i)
+            {
+                Node currNode = possibles.get(i);
+                int selectedNeighbors = 0;
+                for (int j = 0; j < selected.length; j++) {
+                    if (currNode.hasNeighbor(selected[j]))
+                        selectedNeighbors++;
+                }
+                if (selectedNeighbors > 1)
+                    removes.add(currNode);
+            }
+            for (int i = 0; i < removes.size(); ++i)
+            {
+                possibles.remove(removes.get(i));
+            }
+        }
+
+        possibles.trimToSize();
+        Node[] nodes = possibles.toArray(new Node[0]);
+        return nodes;
     }
 
     public void resetGraph()

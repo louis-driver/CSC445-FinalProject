@@ -30,9 +30,7 @@ public class AbalonePanel extends JPanel
     private Polygon hexExterior;
     private Polygon hexInterior;
     private Polygon exteriorShadow;
-    private Polygon exteriorHighlight;
     private Polygon interiorShadow;
-    private Polygon interiorHighlight;
     private int[] startHeights = new int[11];
     private int[] startXCoords = new int[11];
     private int[] yCapturedCoords = new int[6];
@@ -56,6 +54,7 @@ public class AbalonePanel extends JPanel
     //Functionality
     private Node secondClicked;
     private ArrayBlockingQueue<Node> selected = new ArrayBlockingQueue<>(3);
+    private ArrayList<Node> possibleMoves = new ArrayList<>(3);
     private int player1Score;
     private int player2Score;
     private boolean player1Turn = true;
@@ -75,7 +74,7 @@ public class AbalonePanel extends JPanel
         int frameHeight = 800;
         JFrame frame = new JFrame();
         AbaloneGraph graph = new AbaloneGraph();
-        AbalonePanel panel = new AbalonePanel(graph, true, false);
+        AbalonePanel panel = new AbalonePanel(graph, false, false);
 
         frame.setSize(frameWidth, frameHeight);
         frame.setTitle("Graph");
@@ -220,14 +219,6 @@ public class AbalonePanel extends JPanel
                     Point2D p1Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
                     float[] p1Floats = {0.5f, 0.9f, 1.0f};
                     radialPaint = new RadialGradientPaint(p1Highlight, (float)pieceSize/2, p1Floats, p1Colors);
-                    g2.setPaint(radialPaint);
-                    /*
-                    Color[] p1Colors = {Color.white, new Color(140, 8, 8), p1Selected, new Color(70, 0, 0)};
-                    Point2D p1Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/3, currNode.getPiece().getY() + pieceSize/3);
-                    float[] p1Floats = {0.0f, 0.2f, 0.8f, 1.0f};
-                    radialPaint = new RadialGradientPaint(p1Highlight, (float)pieceSize/1.4f, p1Floats, p1Colors, MultipleGradientPaint.CycleMethod.REFLECT);
-                    g2.setPaint(radialPaint); */
-                    //g2.setColor(p1Selected);
                 }
                 else if (currNode.getColor() == 2 && selected.contains(currNode))
                 {
@@ -235,8 +226,6 @@ public class AbalonePanel extends JPanel
                     Point2D p2Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
                     float[] p2Floats = {0.0f, 0.9f, 1.0f};
                     radialPaint = new RadialGradientPaint(p2Highlight, (float)pieceSize/2, p2Floats, p2Colors);
-                    g2.setPaint(radialPaint);
-                    //g2.setColor(p2Selected);
                 }
                 else if (currNode.getColor() == 0)
                 {
@@ -244,8 +233,6 @@ public class AbalonePanel extends JPanel
                     Point2D shadow = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
                     float[] floats = {0.85f, 1.0f};
                     radialPaint = new RadialGradientPaint(shadow, (float)pieceSize/2, floats, colors);
-                    g2.setPaint(radialPaint);
-                    //g2.setColor(boardDark);
                 }
                 else if (currNode.getColor() == 1)
                 {
@@ -254,15 +241,6 @@ public class AbalonePanel extends JPanel
                     Point2D p1Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
                     float[] p1Floats = {0.85f, 1.0f};
                     radialPaint = new RadialGradientPaint(p1Highlight, (float)pieceSize/2, p1Floats, p1Colors);
-                    g2.setPaint(radialPaint);
-
-                    /* Seems gimmicky
-                    Color[] p1Colors = {Color.white, Color.black, p1Color, new Color(45, 40, 40)};
-                    Point2D p1Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/3, currNode.getPiece().getY() + pieceSize/3);
-                    float[] p1Floats = {0.0f, 0.2f, 0.8f, 1.0f};
-                    p1Paint = new RadialGradientPaint(p1Highlight, (float)pieceSize/1.4f, p1Floats, p1Colors, MultipleGradientPaint.CycleMethod.REFLECT);
-                    g2.setPaint(p1Paint); */
-                    //g2.setColor(p1Color);
                 }
                 else if (currNode.getColor() == 2)
                 {
@@ -270,12 +248,19 @@ public class AbalonePanel extends JPanel
                     Point2D p2Highlight = new Point2D.Double(currNode.getPiece().getX() + pieceSize/2.2, currNode.getPiece().getY() + pieceSize/2.2);
                     float[] p2Floats = {0.85f, 1.0f};
                     radialPaint = new RadialGradientPaint(p2Highlight, (float)pieceSize/2, p2Floats, p2Colors);
-                    g2.setPaint(radialPaint);
-                    //g2.setColor(p2Color);
                 }
+                g2.setPaint(radialPaint);
                 g2.fill(graph.getPiece(i));
+
+                //Draw transparency over possible moves
+                if (possibleMoves.contains(currNode))
+                {
+                    g.setColor(new Color(0, 250, 0, 40));
+                    g2.fill(graph.getPiece(i));
+                }
+
                 //Uncomment to view node positions or levels
-                g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
+                //g2.drawString(""+i, (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
                 //g2.drawString(""+graph.getNode(i).getLevel(), (int)graph.getPiece(i).getX(), (int)graph.getPiece(i).getY());
             }
         }
@@ -469,6 +454,21 @@ public class AbalonePanel extends JPanel
                 }
                 //Prevents user from accidentally right-clicking a direction before selecting all pieces
                 secondClicked = null;
+
+                //Get the possible spaces the player can move to
+                if (selected.size() > 0)
+                {
+                    Node[] testMove = selected.toArray(new Node[0]);
+                    Node[] moves = graph.findPossibleClicks(testMove);
+                    possibleMoves.clear();
+                    for (Node n : moves) {
+                        possibleMoves.add(n);
+                    }
+                }
+                else
+                {
+                    possibleMoves.clear();
+                }
                 repaint();
             }
             if (SwingUtilities.isRightMouseButton(e) && nodePosition != -1)
@@ -494,6 +494,9 @@ public class AbalonePanel extends JPanel
                         //Make computer move after the user moves
                         if (graph.getPlayer1Score() < 6)
                             delayComputerMove1();
+
+                        //Clear the possible moves
+                        possibleMoves.clear();
                     }
                 }
                 catch (RuntimeException ex)
@@ -530,6 +533,8 @@ public class AbalonePanel extends JPanel
                         if (graph.getPlayer1Score() < 6)
                             delayComputerMove1();
                     }
+                    //Clear the possible moves
+                    possibleMoves.clear();
                     repaint();
                 }
                 catch (RuntimeException ex)
