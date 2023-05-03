@@ -1,8 +1,10 @@
 package abalone;
 
-//Louis Driver test commit
+//Louis Driver
 
-//This is a JPanel that represents an Abalone board during play
+//This allows multiple ComputerPlayers to play games against each other to compare who wins more often
+
+//Source for a free online version to compare against, albeit manually: https://www.lutanho.net/play/abalone.html
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -31,7 +33,8 @@ public class ComputerTest
     private boolean player1Turn = true;
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private int numMoves;
-    private static double[][] testWeights = {{0.1, 0.9}, {0.2, 0.8}, {0.3, 0.7}, {0.0, 1.0}};
+    private static double[][] testWeightsAll = {{0.0, 1.0}, {0.1, 0.9}, {0.2, 0.8}, {0.3, 0.7}, {0.4, 0.6}, {0.5, 0.5}, {0.6, 0.4}, {0.7, 0.3}, {0.8, 0.2}, {0.9, 0.1}, {1.0, 0.0}};
+    private static double[][] testWeights = {{0.0, 1.0}, {0.1, 0.9}, {0.2, 0.8}, {0.3, 0.7}, {0.4, 0.6}, {0.5, 0.5}, {0.6, 0.4}, {0.7, 0.3}, {0.8, 0.2}, {0.9, 0.1}, {1.0, 0.0}};
 
     //Display
     JFrame frame = new JFrame();
@@ -53,10 +56,10 @@ public class ComputerTest
                 coms.add(new ComputerPlayerV3(graph, 2, testWeights[numWeights]));
 
              */
-            coms.add(new ComputerPlayerV3(graph, 2, testWeights[numWeights]));
+            coms.add(new ComputerPlayerV3(graph, 1, testWeights[numWeights]));
         }
 
-        ComputerPlayer cmV2 = new ComputerPlayer(graph, 1);
+        ComputerPlayer cmV2 = new ComputerPlayer(graph, 2);
 
         int comNum = 0;
         ComputerTest computerTest = null;
@@ -70,7 +73,7 @@ public class ComputerTest
                 //System.out.println(currCom1.getComputerColor());
             }
 
-            /*
+            /* Uncomment to run ComputerV3 against each other
             if (coms.size() >= 1) {
                 currCom2 = coms.get(coms.size() - 1);
                 coms.remove(currCom2);
@@ -80,29 +83,35 @@ public class ComputerTest
             if (currCom2 != null && currCom1 != null) {
                 int ai1Wins = 0;
                 int ai2Wins = 0;
-                int numGames = 50;
+                int numGames = 1;
 
                 testGraph.resetGraph();
                 //System.out.println("graph reset");
-                computerTest = new ComputerTest(testGraph, currCom1, currCom2);
                 //System.out.println("New computer test made");
                 //System.out.println("Ai1Weights: " + Arrays.toString(currCom1.getWeights()) + " Ai2Weights: " + Arrays.toString(currCom2.getWeights()));
-                computerTest.createGameFrame(testGraph);
                 for (int i = 0; i < numGames; ++i) {
                     testGraph.resetGraph();
+                    computerTest = new ComputerTest(testGraph, currCom1, currCom2);
+                    computerTest.createGameFrame(testGraph);
+                    //System.out.println(" Ai1Score: " + testGraph.getPlayer1Score() + "  Ai2Score: " + testGraph.getPlayer2Score());
                     //System.out.println("graph reset");
                     //computerTest.updateGameFrame(testGraph);
                     int move = 1;
                     int currC1Score = 0;
                     int currC2Score = 0;
                     boolean gameOver = false;
+                    //System.out.println(" ComputerTest Before While Ai1Score: " + computerTest.getPlayerScore(1) + "  Ai2Score: " + computerTest.getPlayerScore(2));
+                    //System.out.println(" Graph Before While Ai1Score: " + testGraph.getPlayer1Score() + "  Ai2Score: " + testGraph.getPlayer2Score());
                     while (computerTest.getPlayerScore(1) < 6 && computerTest.getPlayerScore(2) < 6 && !gameOver) {
-                        if (computerTest.getPlayerScore(1) >= 6 && computerTest.getPlayerScore(2) >= 6)
+                        if (computerTest.getPlayerScore(1) >= 6 || computerTest.getPlayerScore(2) >= 6) {
                             gameOver = true;
+                            //System.out.println("Game" + i +" Over   Ai1Wins: " + ai1Wins + " Ai2Wins: " + ai2Wins);
+                        }
                         if (currC2Score != computerTest.getPlayerScore(2) || currC1Score != computerTest.getPlayerScore(1)) {
-                            //System.out.println("Move : " + computerTest.numMoves);
                             currC1Score = computerTest.getPlayerScore(1);
                             currC2Score = computerTest.getPlayerScore(2);
+                            //System.out.println("Move : " + computerTest.numMoves + " Ai1Score: " + currC1Score + "  Ai2Score: " + currC2Score);
+                            //System.out.println(" Graph In While Ai1Score: " + testGraph.getPlayer1Score() + "  Ai2Score: " + testGraph.getPlayer2Score());
                         }
                         computerTest.delayComputerMoves();
                         computerTest.refreshFrame();
@@ -112,13 +121,21 @@ public class ComputerTest
                         ++ai1Wins;
                     if (computerTest.getPlayerScore(2) == 6)
                         ++ai2Wins;
-                    //System.out.println("Game" + i +" Over   Ai1Wins: " + ai1Wins + " Ai2Wins: " + ai2Wins);
+
+                    computerTest.resetScores();
+                    computerTest.closeFrame();
+                    //System.out.println(" ComputerTest After While Ai1Score: " + computerTest.getPlayerScore(1) + "  Ai2Score: " + computerTest.getPlayerScore(2));
+                    //System.out.println(" Graph After While Ai1Score: " + testGraph.getPlayer1Score() + "  Ai2Score: " + testGraph.getPlayer2Score());
+                    System.out.println("Game" + i +" Over   Ai1Wins: " + ai1Wins + " Ai2Wins: " + ai2Wins);
                 }
                 //System.out.println("Ai1Weights: " + Arrays.toString(currCom1.getWeights()) + " Ai2Weights: " + Arrays.toString(currCom2.getWeights()));
                 System.out.println("Ai1Weights: " + Arrays.toString(currCom1.getWeights()));
                 System.out.println("Ai1Wins: " + ai1Wins + " AiV2Wins: " + ai2Wins);
+                testGraph.resetGraph();
+                computerTest.refreshFrame();
             }
         }
+
         //System.out.println("GameOver");
         //computerTest.updateGameFrame(testGraph);
     }
@@ -148,6 +165,11 @@ public class ComputerTest
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
         frame.setVisible(true);
+    }
+
+    public void closeFrame()
+    {
+        frame.dispose();
     }
 
     //Updates the frame to display a passed AbaloneGraph
@@ -246,8 +268,16 @@ public class ComputerTest
                     }
                 }
                 int[] scores = {player1Score, player2Score};
-                panel.setPlayerScores(scores);
+                //panel.setPlayerScores(scores);
         }
+    }
+
+    public void resetScores()
+    {
+        player1Score = 0;
+        player2Score = 0;
+        //System.out.println("Player Scores reset");
+        //System.out.println("Reset Score Ai1Score: " + getPlayerScore(1) + "  Ai2Score: " + getPlayerScore(2));
     }
 
     //Used to see if the computer is in a loop and repeating moves

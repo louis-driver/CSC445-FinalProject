@@ -724,6 +724,8 @@ public class AbaloneGraph
     {
         this.graph = new Node[GRAPH_SIZE];
         this.createGraph(P1_CLASSIC, P2_CLASSIC);
+        player1Score = 0;
+        player2Score = 0;
     }
 
     public int getPlayer1Score()

@@ -5,6 +5,7 @@ package abalone;
 //For each turn, the updated graph should be passed to the Player to keep track of its nodes and positions
 //Calling the get move method provides the nodes for the next computer move
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -15,6 +16,24 @@ public class ComputerPlayerV2  extends ComputerPlayer
     public ComputerPlayerV2(AbaloneGraph g, int color)
     {
         super(g, color);
+    }
+
+    public static void main(String[] args)
+    {
+        int frameWidth = 800;
+        int frameHeight = 500;
+        AbaloneGraph g = new AbaloneGraph();
+        double[] weights = {0.0, 1.0};
+        ComputerPlayer cp = new ComputerPlayerV2(g, 2);
+        AbalonePanel panel = new AbalonePanel(g, cp);
+
+        JFrame frame = new JFrame();
+        frame.setSize(frameWidth, frameHeight);
+        frame.setTitle("ComputerGraph");
+        frame.add(panel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(true);
+        frame.setVisible(true);
     }
 
     //Returns the nodes and direction for the next move
