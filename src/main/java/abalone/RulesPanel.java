@@ -46,8 +46,8 @@ public class RulesPanel extends JPanel
 		ruleLabels = new JLabel[47];
 		 ruleLabels[0] = new JLabel("   General");
          ruleLabels[1] = new JLabel("      - Your objective is to push six of your opponent's pieces off the board.");
-		 ruleLabels[2] = new JLabel("      - You may move up to three adjacent pieces, positioned in a straight line, one space in one direction.");
-		 ruleLabels[3] = new JLabel("      - A move can be either 'in-line' (parallel to your line of selected pieces),");
+		 ruleLabels[2] = new JLabel("      - You may move up to three adjacent pieces, positioned in a straight line, one space in any direction.");
+		 ruleLabels[3] = new JLabel("      - A move can be either 'in-line' (parallel to your line of selected pieces)");
 		 ruleLabels[4] = new JLabel("           or 'broadside' (perpendicular to the line).");
 		 ruleLabels[5] = new JLabel("      ");
 		 ruleLabels[6] = new JLabel("   How to Move");
@@ -57,12 +57,12 @@ public class RulesPanel extends JPanel
 		ruleLabels[10] = new JLabel("      - Think of in-line moves like using the first piece in the line to push the other pieces. You can only move");
         ruleLabels[11] = new JLabel("          up to three pieces total, though: The piece you selected, and the other two pieces you're pushing.");
         ruleLabels[12] = new JLabel("      - The images below show the board before and after an in-line move.");
-		ruleLabels[13] = new JLabel("          ~ Green arrows indicate directions in which the selected piece(s) can move,");
-        ruleLabels[14] = new JLabel("               and blue arrows indicate the direction in which a piece has moved.");
+		ruleLabels[13] = new JLabel("          ~ Green arrows indicate directions in which the selected piece(s) can move, i.e. which spaces can be right-clicked,");
+        ruleLabels[14] = new JLabel("               and blue arrows indicate the direction in which a piece has moved, i.e. which space was right-clicked.");
         ruleLabels[15] = new JLabel(secondClick);
         ruleLabels[16] = new JLabel(inlineMove);
         ruleLabels[17] = new JLabel("      - Since moving directly left or right would push other white pieces off the board,");
-        ruleLabels[18] = new JLabel("          the selected piece in the above example can only move northwest or northeast.");
+        ruleLabels[18] = new JLabel("          the selected piece in the above example can only move southwest or southeast.");
         ruleLabels[19] = new JLabel("      - NOTE: You should not have more than one piece highlighted when making an in-line move.");
         ruleLabels[20] = new JLabel("      ");
         ruleLabels[21] = new JLabel("      - For a broadside move, select two or three pieces in a straight, unbroken line by left-clicking. Then,");
