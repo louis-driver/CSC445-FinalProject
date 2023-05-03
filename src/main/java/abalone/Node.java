@@ -15,18 +15,16 @@ public class Node
     private boolean isEdge;
     private int level = -1;
     private Ellipse2D.Double piece;
-    private Node next;
 
     //Creates a node that has a value for:
-    // color: a state to determine whose piece is on the node; 0=board, 1=white/player1, 2=black/player2
+    // color: a state to determine whose piece is on the node; 0=board, 1=player1, 2=player2
     // ID: the position of the node on the Abalone board
     // isEdge: if the node is valid place for a playing piece
     public Node(int color, int ID, boolean edge)
     {
         this.color = color;
         positionID = ID;
-        isEdge = edge; 
-        next = null;
+        isEdge = edge;
     }
 
     //Sets the sibling node in a given direction based on 
@@ -71,20 +69,20 @@ public class Node
     // orientation
     public Node getSibling(int sibNum)
     {
-    if(sibNum == 1)
-        return sibling1;
-    else if(sibNum == 3)
-        return sibling3;
-    else if(sibNum == 5)
-        return sibling5;
-    else if(sibNum == 7)
-        return sibling7;
-    else if(sibNum == 9)
-        return sibling9;
-    else if(sibNum == 11)
-        return sibling11;
-    else
-        return null;
+        if(sibNum == 1)
+            return sibling1;
+        else if(sibNum == 3)
+            return sibling3;
+        else if(sibNum == 5)
+            return sibling5;
+        else if(sibNum == 7)
+            return sibling7;
+        else if(sibNum == 9)
+            return sibling9;
+        else if(sibNum == 11)
+            return sibling11;
+        else
+            return null;
     }
 
     //Returns an int representation of a node's color
@@ -108,7 +106,7 @@ public class Node
         return this.piece;
     }
 
-    //Returns the level of a piece, 0 signifies an edge, a node with level 1 borders and edge, and so on
+    //Returns the distance a piece is from the edge, 0 signifies an edge, a node with level 1 borders and edge, and so on
     public int getLevel()
     {
         return level;
@@ -121,6 +119,7 @@ public class Node
     {
         return isEdge;
     }
+
     //Checks to see if the piece is next to the edge
     public boolean bordersEdge()
     {   
@@ -162,6 +161,7 @@ public class Node
             return false;  
     }
 
+    //Returns the smallest distance the node's siblings are from an edge
     public int minSiblingLevel()
     {
         int minLevel = 10;
@@ -183,16 +183,6 @@ public class Node
                 ++numFriends;
         }
         return numFriends;
-    }
-
-    public void printSiblings()
-    {
-        String siblings = "";
-        for (int i = 1; i < 12; i+=2)
-        {
-            siblings += " " + getSibling(i).getID();
-        }
-        System.out.println(siblings);
     }
 
     public String toString()

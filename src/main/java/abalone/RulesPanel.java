@@ -5,7 +5,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 //A class to display the abalone rules in a JPanel
-//Don't make any components here private, the ComponentListener for this is still on AbaloneMenu
 
 public class RulesPanel extends JPanel
 {
@@ -41,7 +40,7 @@ public class RulesPanel extends JPanel
         }
         catch(IOException e)
         {
-
+            System.out.println("Images unable to be loaded");
         }
 
 		ruleLabels = new JLabel[47];

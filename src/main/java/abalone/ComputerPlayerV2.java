@@ -18,15 +18,17 @@ public class ComputerPlayerV2  extends ComputerPlayer
     }
 
     //Returns the nodes and direction for the next move
-    //The system to determine moves is to prioritise edge pieces and move them from the edge
+    //The system to determine moves is to prioritize edge pieces and move them from the edge
     //The moves are ranked as follows:
-    // 1. If its on an edge in danger and can escape danger and the edge 
-    // 2. If its on an edge in danger and can escape danger
-    // 3. If it can capture a white piece
-    // 4. If it is an edge and can push a white node 
-    // 5. If it is on an edge and can escape edge 
-    // 6. If it can push a white
-    // 7. Some other possible move 
+    // 1. If it's on an edge in danger and can escape danger and the edge
+    // 2. If it's on an edge in danger and can escape danger
+    // 3. If it can capture an opponent's piece
+    // 4. If it is near an edge and can push a white node
+    // 5. If it can move closer towards the center
+    // 6. If it is on an edge and can escape edge
+    // 7. If it can push the opponent
+    // 8, If it can find friends to move to
+    // 9. Some other possible move
     //The int[] returned is ordered as follows: [first node ID from graph, destination piece ID from graph, direction]
     @Override
     public int[] getMove()
@@ -34,60 +36,45 @@ public class ComputerPlayerV2  extends ComputerPlayer
         updatePlayers(graph);
         int[] move = dangerEscapeBoth();
         if(move[0]!=-1){
-            System.out.println("DangerEscapeBoth Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = dangerEscapeDanger();
         if(move[0]!=-1){
-            System.out.println("DangerEscapeDanger Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = captureOpponent();
         if(move[0]!=-1){
-            System.out.println("CaptureOpponent Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = edgePush();
         if(move[0]!=-1){
-            System.out.println("EdgePush Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = moveToCenter();
         if(move[0]!=-1){
-            System.out.println("ToCenter Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = edgeEscape();
         if(move[0]!=-1){
-            System.out.println("EscapeEdge Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = pushWhite();
         if(move[0]!=-1){
-            System.out.println("PushWhite Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = uniteLonelyFriends();
         if(move[0]!=-1){
-            System.out.println("UniteLonely Move:" + Arrays.toString(move));
-            return move;
-        }
-        if (!inLoop)
-            move = uniteFriends();
-        if(move[0]!=-1){
-            System.out.println("UniteFriends Move:" + Arrays.toString(move));
             return move;
         }
         move = otherMove();
         if(move[0]!=-1){
-            System.out.println("Other Move:" + Arrays.toString(move));
             return move;
         }
         int[] error = {-1, -1, -1};
@@ -99,7 +86,6 @@ public class ComputerPlayerV2  extends ComputerPlayer
     protected int[] moveToCenter()
     {
         int initialSum = ComputerPlayerV2.getLevelSum(graph, computerColor);
-        //System.out.println("ComputerSumInitial: " + initialSum);
         int bestSum = initialSum;
         int[] bestMove = {-1, -1, -1};
         AbaloneGraph testGraph = graph.clone();
@@ -107,9 +93,6 @@ public class ComputerPlayerV2  extends ComputerPlayer
         for(int i=0; i<computerNodes.size(); i++)
         {
             int currPieceID = computerNodes.get(i).getID();
-            //System.out.println("\n Testing node: " + currPieceID);
-            //System.out.println("Best Sum so far: " + bestSum);
-            //System.out.println("Best Move so far: " + Arrays.toString(bestMove));
             Node currPiece = testGraph.getNode(currPieceID);
             Node piece2 = null;
 
@@ -119,14 +102,11 @@ public class ComputerPlayerV2  extends ComputerPlayer
                 if (!piece2.isEdge() && !piece2.bordersEdge())
                 {
                     Node dest = testGraph.destination(currPiece, piece2, j);
-                    //System.out.println("TestDestination " + j + ": " + dest);
                     if (dest != null && !dest.bordersEdge())
                     {
                         int[] testMove = {currPieceID, dest.getID(), j};
-                        //System.out.println("Testing Move: " + Arrays.toString(testMove));
                         testGraph.makeInlineMove(currPiece, dest, j);
                         int testSum = ComputerPlayerV2.getLevelSum(testGraph, computerColor);
-                        //System.out.println("Test Sum: " + testSum);
                         //Reset graph and piece after testing move
                         testGraph = graph.clone();
                         currPiece = testGraph.getNode(currPieceID);
@@ -134,19 +114,15 @@ public class ComputerPlayerV2  extends ComputerPlayer
                         {
                             bestSum = testSum;
                             bestMove = testMove;
-                            //System.out.println("Best Move so far: " + Arrays.toString(bestMove));
-                            //System.out.println("Best Sum so far: " + bestSum);
                         }
                     }
                 }
             }
         }
 
-        //System.out.println("ComputerSumBest: " + bestSum);
         if (bestSum > initialSum)
         {
             int[] move = bestMove;
-            //System.out.println("moveToCenter: " + Arrays.toString(move));
             return move;
         }
         else
@@ -161,23 +137,13 @@ public class ComputerPlayerV2  extends ComputerPlayer
     // Prioritizes pieces that neighbor the least amount of friendly pieces
     protected int[] uniteLonelyFriends()
     {
-        //System.out.println(" Unite Lonely friends");
         PriorityQueue<int[]> sortedLonelies = new PriorityQueue<>(new DescIntArrayComparator());
-        //Find add the number of friends a piece has and its position to a minHeap sorted on least number of friends
+        //Find the number of friends a piece has and its position to a minHeap sorted on least number of friends
         for (int i = 0; i < computerNodes.size(); ++i)
         {
             int[] numFriends =  {computerNodes.get(i).getNumFriends(), computerNodes.get(i).getID()};
-            //System.out.println("i" + i + ": " + Arrays.toString(numFriends));
             sortedLonelies.add(numFriends);
         }
-
-        /*System.out.print("Sorted By Loneliness:");
-        while (sortedLonelies.size() != 0)
-        {
-            System.out.print(" " + Arrays.toString(sortedLonelies.poll()));
-        }
-        System.out.println(); */
-
 
         boolean friendsFound = false;
         Node toMove = null;
@@ -185,30 +151,24 @@ public class ComputerPlayerV2  extends ComputerPlayer
         Node destination = null;
         while (sortedLonelies.size() !=0 && !friendsFound)
         {
-            //System.out.println("Size: " + sortedLonelies.size());
             int[] polled = sortedLonelies.poll();
+            //Sets the piece to search in order of fewest neighbors from the position
             int currID = polled[1];
-            //System.out.println("CurrID:" + currID);
             Node piece1 = graph.getNode(currID);
             for(int j=1; j<12; j+=2)
             {
-                //Sets the piece to search in order of fewest neighbors
                 Node piece2 = piece1.getSibling(j);
-                //System.out.println("Checking Node: " + piece1.getID() + " & " + piece2.getID());
                 Node dest = graph.destination(piece1, piece2, j);
-                //System.out.println("Testing Destination: " + dest);
                 if (dest != null && !dest.isEdge() && !dest.bordersEdge())
                 {
                     for (int k = 1; k < 12; k += 2)
                     {
                         if ((k == (j + 2) % 12 || k == (j - 2) % 12 || k == j) && dest.getSibling(k).getColor() == piece1.getColor())
                         {
-                            //System.out.println("k: " + k);
                             toMove = piece1;
                             direction = j;
                             destination = dest;
                             friendsFound = true;
-                            //System.out.println("toMove: " + toMove + " direction: " + direction + " destination: " + destination);
                         }
                     }
                 }
@@ -217,7 +177,6 @@ public class ComputerPlayerV2  extends ComputerPlayer
         if(toMove!=null && direction!=-1 && destination!=null)
         {
             int[] move = {toMove.getID(), destination.getID(), direction};
-            //System.out.println(" Unite Lonely friends: " + Arrays.toString(move));
             return move;
         }
         else

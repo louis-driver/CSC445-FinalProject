@@ -41,7 +41,6 @@ public class AbaloneGraph
     {
         Arrays.sort(p1Spaces);
         Arrays.sort(p2Spaces);
-        //TODO prevent duplicate positions in both arrays
 
         boolean incrementing = true;
         int rowSize = 6;
@@ -385,25 +384,6 @@ public class AbaloneGraph
         return canMove;
     }
 
-
-    public void printNodes()
-    {
-        for (Node n : graph)
-        {
-            System.out.println(n);
-        }
-    }
-
-    public void printSiblings(int nodePosition)
-    {
-        System.out.println("Node: " + nodePosition);
-        for (int i = 1; i <= 11; i+=2)
-        {
-            System.out.println("Sibling" + i + " " + graph[nodePosition].getSibling(i));
-        }
-        System.out.println();
-    }
-
     //Returns the direction to traverse between two sibling nodes
     //Returns -1 if the nodes are not siblings
     public int getDirection(Node n1, Node n2)
@@ -436,7 +416,6 @@ public class AbaloneGraph
     // Returns null if the move is not valid 
     public Node destination(Node first, Node second, int direction)
     {
-        //System.out.println("destination:" + first.getID() + ", " + second.getID() + "   direction:" + direction);
         Node next = second;
         int playerColor = -1;
         if (first.getColor() != 0)
@@ -458,10 +437,8 @@ public class AbaloneGraph
         //Counts number of pieces in a row of the color whose turn it is
         while(next!=null && next.getColor()==playerColor)
         {
-            //System.out.print("next Color: " + next.getColor() + " playerColor: " + playerColor);
             next = next.getSibling(direction);
             numPlayers++;
-            //System.out.println(" numPlayers:" + numPlayers);
         }
         //If player's pieces exceed 3 return null or pushing self off edge
         if(numPlayers > 3 || next.isEdge())
@@ -478,7 +455,6 @@ public class AbaloneGraph
         {
             next = next.getSibling(direction);
             numOpponents++;
-            //System.out.println("numOpponents:" + numPlayers);
         }
         //If number of opponents pieces is less than players pieces return 
         // the empty space after last opponents node in the row
@@ -512,7 +488,9 @@ public class AbaloneGraph
         //Find player
         int playerColor = node.getColor();
         int opponentColor = 1;
-        if (playerColor == 1)
+        if (playerColor == 0)
+            return values;
+        else if (playerColor == 1)
             opponentColor = 2;
         
         //Check each of the node's siblings opposite the edge sibling's direction to see if it can be pushed of that edge
@@ -545,19 +523,16 @@ public class AbaloneGraph
             {
                 next = next.getSibling(direction);
                 numPlayers++;
-                //System.out.println("numPlayers:" + numPlayers);
             }
             //If player's pieces exceed 3 for all directions return empty values
             if(numPlayers > 3 && i == 3 || edgeDirections[i] == -1)
             {
-                //System.out.println("Returned at exceed 3");
                 return values;
             }
 
             //If empty space is reached for all directions, return empty values
             if(next.getColor()==0  && i == 3 || edgeDirections[i] == -1)
             {
-                //System.out.println("Returned at exceed empty ends");
                 return values;
             }
             //Counts number of opponents pieces
@@ -573,13 +548,12 @@ public class AbaloneGraph
             //If number of opponents pieces is greater than players pieces return the opponent's piece that could push in the direction
             if(numPlayers<numOpponents && pushingNode != null && numPlayers < 3)
             {
-                //System.out.println("Returned at push");
                 values[0] = pushingNode.getID();
                 values[1] = edgeDirections[i];
                 return values;
             }
         }
-        //Catch all for unexpected cases
+        //Catch all
         return values;
     }
 
@@ -600,7 +574,6 @@ public class AbaloneGraph
         {
             next = next.getSibling(direction);
             numPlayers++;
-            //System.out.println("numPlayers:" + numPlayers);
         }
         //If player's pieces exceed 3 return false because it cannot push
         if(numPlayers > 3 || numPlayers < 2)
@@ -627,6 +600,7 @@ public class AbaloneGraph
 
     private void setLevels()
     {
+        //Call the on the top half
         for (int i = 0; i < graph.length/2; ++i)
         {
             if (graph[i].isEdge())
@@ -636,7 +610,7 @@ public class AbaloneGraph
             else
                 graph[i].setLevel(graph[i].minSiblingLevel() + 1);
         }
-        //Call the reverse because the first for loop messes up around the middle of the board
+        //Call the on the bottom half
         for (int i = graph.length-1; i >= graph.length/2; --i)
         {
             if (graph[i].isEdge())

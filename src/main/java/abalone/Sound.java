@@ -10,23 +10,8 @@ import javax.sound.sampled.Clip;
 public class Sound
 {
     Clip clip;
-    URL soundURL[] = new URL[5];
+    URL soundURL[] = new URL[1];
     //Can change soundURL size to use more or fewer sounds
-
-    public static void main(String[] args)
-    {
-        Sound sound = new Sound();
-        sound.setFile(4);
-        sound.play();
-        sound.loop();
-        int i = 0;
-        while (true)
-        {
-            ++i;
-            if (i / 17 == 0)
-                System.out.print(i);
-        }
-    }
 
     public Sound() 
     {
@@ -59,8 +44,4 @@ public class Sound
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
-    public void stop()
-    {
-        clip.stop();
-    }
 }
