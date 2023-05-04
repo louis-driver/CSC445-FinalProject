@@ -1,5 +1,4 @@
 package abalone;
-import javax.print.attribute.standard.Destination;
 import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -329,7 +328,7 @@ public class AbaloneGraph
         boolean canMove = true;
         int color = nodes[0].getColor();
         //Make sure not more than 3 pieces being moved
-        if(nodes.length>3)
+        if(nodes.length>3 || nodes.length<2)
             canMove=false;
         //Check if array has consistent colors
         for(int i=0; i<nodes.length; i++)
@@ -356,33 +355,37 @@ public class AbaloneGraph
             if (destNeighbors > 1)
                 canMove = false;
         }
-        //Check to see if nodes are in line 
-        if(nodes.length>2)
-        {
-            int numNeighbors=0;
-            for(int i=0; i<nodes.length-1; i++)
-            {
-                if(nodes[i].hasNeighbor(nodes[i+1]))
-                    numNeighbors++;
-                if(nodes[i].hasNeighbor(nodes[nodes.length-1]))
-                    numNeighbors++;
-            }
 
-            if(numNeighbors<2)
-                canMove=false;
+        //Check to see if nodes are in line
+        int connectionDirection = -1;
+        if (nodes.length == 3)
+        {
+            int[] positions = {nodes[0].getID(), nodes[1].getID(), nodes[2].getID()};
+            Arrays.sort(positions);
+            // Get direction the nodes are connected in
+            for (int i = 1; i < 12; i += 2)
+            {
+                if (graph[positions[0]].getSibling(i).equals(graph[positions[1]]))
+                {
+                    connectionDirection = i;
+                }
+            }
+            //Traverse in this direction to check all nodes can be traversed that way
+            if (connectionDirection == -1)
+            {
+                canMove = false;
+            }
+            else
+            {
+                if (graph[positions[1]].getSibling(connectionDirection).getID() != positions[2])
+                    canMove = false;
+            }
         }
-        else
+        else if (nodes.length == 2)
         {
-            int numNeighbors=0;
-            for(int i=0; i<nodes.length-1; i++)
-            {
-                if(nodes[i].hasNeighbor(nodes[i+1]))
-                    numNeighbors++;
-            }
-
-            if(numNeighbors<1)
-                canMove=false;
-        }   
+            if (!nodes[0].hasNeighbor(nodes[1]))
+                canMove = false;
+        }
         
         return canMove;
     }
@@ -776,6 +779,7 @@ public class AbaloneGraph
             for (int i = 0; i < possibles.size(); ++i)
             {
                 Node currNode = possibles.get(i);
+
                 int selectedNeighbors = 0;
                 for (int j = 0; j < selected.length; j++) {
                     if (currNode.hasNeighbor(selected[j]))

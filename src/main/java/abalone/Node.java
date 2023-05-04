@@ -146,17 +146,17 @@ public class Node
     //Returns boolean representing if that neighbor exists
     public boolean hasNeighbor(Node n)
     {
-        if(sibling1.equals(n))
+        if(sibling1 !=null && sibling1.equals(n))
             return true;
-        else if(sibling3.equals(n))
+        else if(sibling3 !=null && sibling3.equals(n))
             return true;
-        else if(sibling5.equals(n))
+        else if(sibling5 !=null && sibling5.equals(n))
             return true;
-        else if(sibling7.equals(n))
+        else if(sibling7 !=null && sibling7.equals(n))
             return true;
-        else if(sibling9.equals(n))
+        else if(sibling9 !=null && sibling9.equals(n))
             return true;
-        else if(sibling11.equals(n))
+        else if(sibling11 !=null && sibling11.equals(n))
             return true;
         else 
             return false;  
@@ -190,7 +190,10 @@ public class Node
         String siblings = "";
         for (int i = 1; i < 12; i+=2)
         {
-            siblings += " " + getSibling(i).getID();
+            if (getSibling(i) != null)
+                siblings += " " + getSibling(i).getID();
+            else
+                siblings += " null";
         }
         System.out.println(siblings);
     }

@@ -59,6 +59,7 @@ public class AbalonePanel extends JPanel
     private int player2Score;
     private boolean player1Turn = true;
     private boolean playingComputer = false;
+    private boolean gameOver = false;
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     //Audio
@@ -289,10 +290,12 @@ public class AbalonePanel extends JPanel
         if (player1Score >= 6)
         {
             paintWinner(g2, 1);
+            gameOver = true;
         }
         else if (player2Score >= 6)
         {
             paintWinner(g2, 2);
+            gameOver = true;
         }
 
         if (!musicStarted && musicOn)
@@ -436,7 +439,7 @@ public class AbalonePanel extends JPanel
             
             //Assign most recent three left clicks to the selected queue
             //If a left click exceeds the three, pop the head, then add
-            if (SwingUtilities.isLeftMouseButton(e) && currNode != null && (currPlayer == 1 || !playingComputer) && !forDisplay)
+            if (SwingUtilities.isLeftMouseButton(e) && currNode != null && (currPlayer == 1 || !playingComputer) && !forDisplay && !gameOver)
             {
                 //Removes a selected node if pressed again
                 if (selected.contains(currNode))

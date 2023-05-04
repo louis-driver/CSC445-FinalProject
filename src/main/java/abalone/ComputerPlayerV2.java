@@ -53,60 +53,60 @@ public class ComputerPlayerV2  extends ComputerPlayer
         updatePlayers(graph);
         int[] move = dangerEscapeBoth();
         if(move[0]!=-1){
-            System.out.println("DangerEscapeBoth Move:" + Arrays.toString(move));
+            //System.out.println("DangerEscapeBoth Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = dangerEscapeDanger();
         if(move[0]!=-1){
-            System.out.println("DangerEscapeDanger Move:" + Arrays.toString(move));
+            //System.out.println("DangerEscapeDanger Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = captureOpponent();
         if(move[0]!=-1){
-            System.out.println("CaptureOpponent Move:" + Arrays.toString(move));
+            //System.out.println("CaptureOpponent Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = edgePush();
         if(move[0]!=-1){
-            System.out.println("EdgePush Move:" + Arrays.toString(move));
+            //System.out.println("EdgePush Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = moveToCenter();
         if(move[0]!=-1){
-            System.out.println("ToCenter Move:" + Arrays.toString(move));
+            //System.out.println("ToCenter Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = edgeEscape();
         if(move[0]!=-1){
-            System.out.println("EscapeEdge Move:" + Arrays.toString(move));
+            //System.out.println("EscapeEdge Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = pushWhite();
         if(move[0]!=-1){
-            System.out.println("PushWhite Move:" + Arrays.toString(move));
+            //System.out.println("PushWhite Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = uniteLonelyFriends();
         if(move[0]!=-1){
-            System.out.println("UniteLonely Move:" + Arrays.toString(move));
+            //System.out.println("UniteLonely Move:" + Arrays.toString(move));
             return move;
         }
         if (!inLoop)
             move = uniteFriends();
         if(move[0]!=-1){
-            System.out.println("UniteFriends Move:" + Arrays.toString(move));
+            //System.out.println("UniteFriends Move:" + Arrays.toString(move));
             return move;
         }
         move = otherMove();
         if(move[0]!=-1){
-            System.out.println("Other Move:" + Arrays.toString(move));
+            //System.out.println("Other Move:" + Arrays.toString(move));
             return move;
         }
         int[] error = {-1, -1, -1};
